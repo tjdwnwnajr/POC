@@ -3,24 +3,39 @@ using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
-{
+//조절 예정 변수
+// walkSpeed, jumpPower, maxAirjumps, jumpBufferFrames, coyoteTime, dashSpeed, dashTime, dashCooldown, timeBetweenAttack,
+// sideAttackArea, upAttackArea, downAttackArea, damage
+{   // 이동관련 변수
     [Header("Move Controller")]
     [SerializeField] private float walkSpeed = 1;
     [Space(5)]
     private float xAxis;
 
+    //점프 관련 변수
     [Header("Jump Controller")]
-    [SerializeField] private float jumpPower=45;
-    [SerializeField] private Transform groundCheckPoint;
-    [SerializeField] private float groundCheckDistanceY = 0.2f;
+    [SerializeField] private float jumpPower=45; //점프 강도
+    [SerializeField] private Transform groundCheckPoint; 
+    [SerializeField] private float groundCheckDistanceY = 0.2f; //바닥 체크 x,y범위 
     [SerializeField] private float groundCheckDistanceX = 0.5f;
     [SerializeField] private LayerMask groundlayer;
     
 
-
-    private int airJumpCounter = 0;
-    [SerializeField] private int maxAirJumps;
+    
+    private int airJumpCounter = 0; //공중 점프 카운트 변수
+    [SerializeField] private int maxAirJumps; //최대 공중 점프 횟수
     [Space(5)]
+
+    //스테이트리스트 관련
+    [HideInInspector] public PlayerStateList pState;
+    //점프 버퍼 : 점프를 미리 눌러도 점프가 작동하도록 하는 변수
+    private int jumpBufferCounter = 0;
+    [Header("StateList")]
+    [SerializeField] private int jumpBufferFrames;
+
+    //coyote time : 땅에서 떨어져도 점프가 작동하도록 하는변수 
+    private float coyoteTimeCounter = 0;
+    [SerializeField] private float coyoteTime;
 
     //dash
     [Header("Dash Controller")]
@@ -37,38 +52,30 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Animator anim;
-    private SpriteRenderer spr;
+    //private SpriteRenderer spr;
 
     //카메라 스크립트에서 사용하려고
     public static PlayerController Instance;
 
-    //스테이트리스트 관련
-    [HideInInspector] public PlayerStateList pState;
-    private int jumpBufferCounter = 0;
-    [Header("StateList")]
-    [SerializeField] private int jumpBufferFrames;
+    
 
-    //coyote time
-    private float coyoteTimeCounter = 0;
-    [SerializeField] private float coyoteTime;
-
-
-    [SerializeField]private float timeBetweenAttack;
+    //////////////////공격 관련 
+    [SerializeField]private float timeBetweenAttack; //공격 속도 제한
     private float timeSinceAttack;
-    private bool attack;
     private float yAxis;
     [SerializeField] private Transform sideAttackTrans, upAttackTrans, downAttackTrans;
-    [SerializeField] private Vector2 sideAttackArea, upAttackArea, downAttackArea;
+    [SerializeField] private Vector2 sideAttackArea, upAttackArea, downAttackArea; //공격 범위
     [SerializeField] private LayerMask attackableLayer;
     [SerializeField] private float damage;
     [SerializeField] private GameObject slashEffect;
     [Space(5)]
 
+    /////반동관련 부분
     [Header("Recoil")]
-    [SerializeField] private float recoilXSpeed = 100;
+    [SerializeField] private float recoilXSpeed = 100; //반동속도
     [SerializeField] private float recoilYSpeed = 100;
     [SerializeField] private int recoilXSteps = 5;
-    [SerializeField] private int recoilYSteps = 5;
+    [SerializeField] private int recoilYSteps = 5; //반동 지속시간
     private int stepsXRecoiled, stepsYRecoiled;
 
     [Header("Health")]
@@ -95,7 +102,7 @@ public class PlayerController : MonoBehaviour
         //이동,애니메이션을 위한 초기화
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        spr = GetComponent<SpriteRenderer>();
+        //spr = GetComponent<SpriteRenderer>();
         pState = GetComponent<PlayerStateList>();
         pState.lookingRight = true;
         pState.invincible = false;
@@ -169,7 +176,7 @@ public class PlayerController : MonoBehaviour
             
         }
 
-        if (Grounded())
+        if (Grounded())//땅에 있으면 바로 대쉬가능하도록 dashed false
         {
             dashed = false;
         
@@ -195,7 +202,7 @@ public class PlayerController : MonoBehaviour
 
     //////////////점프 관련///////////////////////
   
-     bool Grounded()
+     bool Grounded() //땅이면 true아니면 false
     {   
         //좌우 발 밑, 가운데 밑이 땅인지 확인
         if(Physics2D.Raycast(groundCheckPoint.position,Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position+new Vector3(groundCheckDistanceX,0,0), Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(-groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer))
@@ -206,7 +213,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void Jump()
+    void Jump() 
     {   
         //점프 캔슬
         if (Input.GetButtonUp("Jump") && rb.linearVelocityY > 0)
@@ -214,7 +221,6 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocityY = 0;
 
             //pState.jumping = false;
-
         }
 
         //if (pState.jumping != true)
@@ -249,17 +255,44 @@ public class PlayerController : MonoBehaviour
 
   
     }
+
+    //플레이어 상태가 접지상태인지 확인하는 함수
+    void UpdateJumpVariables()
+    {
+        if (Grounded())
+        {
+            pState.jumping = false;
+            coyoteTimeCounter = coyoteTime;
+            airJumpCounter = 0;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = jumpBufferFrames;
+        }
+        else
+        {
+            jumpBufferCounter--;
+        }
+    }
+
+
+
     ///////////////////////////////공격.....
-    
+
     void GetAttack()
     {
-        attack = Input.GetMouseButtonDown(0);
+        pState.attacking = Input.GetMouseButtonDown(0);
     }
     void Attack()
     {
         timeSinceAttack += Time.deltaTime;
 
-        if (attack && timeSinceAttack >= timeBetweenAttack)
+        if (pState.attacking && timeSinceAttack >= timeBetweenAttack)
         {
             timeSinceAttack = 0;
             anim.SetTrigger("isAttack");
@@ -284,8 +317,8 @@ public class PlayerController : MonoBehaviour
     void SlashEffectAtAngle(GameObject _slashEffect, int _effectAngle, Transform _attackTransform)
     {
         _slashEffect = Instantiate(_slashEffect, _attackTransform);
-        _slashEffect.transform.eulerAngles = new Vector3(0,0,_effectAngle);
-        _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
+        _slashEffect.transform.eulerAngles = new Vector3(0,0,_effectAngle); //이펙트 종횡 방향 설정
+        _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y); //방향에 맞게 좌우 -1값 바뀌는 것
 
 
     }
@@ -314,29 +347,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //플레이어 상태가 접지상태인지 확인하는 함수
-    void UpdateJumpVariables()
-    {
-        if (Grounded())
-        {
-            pState.jumping = false;
-            coyoteTimeCounter = coyoteTime;
-            airJumpCounter = 0;
-        }
-        else
-        {
-            coyoteTimeCounter -= Time.deltaTime;
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpBufferCounter = jumpBufferFrames;
-        }
-        else
-        {
-            jumpBufferCounter--;
-        }
-    }
+    
 
 
     ////////////////Recoil
@@ -364,7 +375,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -recoilYSpeed);
             }
-            airJumpCounter = 0;
+            airJumpCounter = 0; //수정 가능 공격시 점프 가능횟수 초기화
         }
         else
         {
@@ -418,7 +429,7 @@ public class PlayerController : MonoBehaviour
         pState.invincible = true;
         ClampHealth();
         anim.SetTrigger("takeDamage");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f); //무적시간 조절
         pState.invincible = false;
 
     }
