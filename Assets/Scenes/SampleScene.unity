@@ -664,8 +664,6 @@ MonoBehaviour:
   recoilingY: 0
   lookingRight: 0
   invincible: 0
-<<<<<<< HEAD
-=======
 --- !u!1 &700741136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,7 +1941,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> parent of 3d97b4b (Revert "JSL적용")
 --- !u!1 &923012801
 GameObject:
   m_ObjectHideFlags: 0
@@ -13509,8 +13506,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
-<<<<<<< HEAD
-=======
 --- !u!95 &1890354067
 Animator:
   serializedVersion: 7
@@ -13807,7 +13802,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> parent of 3d97b4b (Revert "JSL적용")
 --- !u!1 &1954046971
 GameObject:
   m_ObjectHideFlags: 0
