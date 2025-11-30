@@ -7,10 +7,15 @@ public class PlayerController : MonoBehaviour
 // walkSpeed, jumpPower, maxAirjumps, jumpBufferFrames, coyoteTime, dashSpeed, dashTime, dashCooldown, timeBetweenAttack,
 // sideAttackArea, upAttackArea, downAttackArea, damage
 {   // 이동관련 변수
+
+    
+
     [Header("Move Controller")]
     [SerializeField] private float walkSpeed = 1;
     [Space(5)]
     private float xAxis;
+
+
 
     //점프 관련 변수
     [Header("Jump Controller")]
@@ -19,9 +24,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckDistanceY = 0.2f; //바닥 체크 x,y범위 
     [SerializeField] private float groundCheckDistanceX = 0.5f;
     [SerializeField] private LayerMask groundlayer;
-    
+    [SerializeField] private float jumpMinTime; //최소 점프 시간
+    private float jumpCountTime = 0; //점프 시간 측정 변수
+    [SerializeField] private float fallSpeedLimit = -10f;
+    [SerializeField] private float gravityUp;
+    [SerializeField] private float gravityDefault;
+    [SerializeField] private float gravityCut;
 
-    
     private int airJumpCounter = 0; //공중 점프 카운트 변수
     [SerializeField] private int maxAirJumps; //최대 공중 점프 횟수
     [Space(5)]
@@ -117,6 +126,8 @@ public class PlayerController : MonoBehaviour
         
         MoveX();
         Recoil();
+        LimitFallSpeed();
+        UpdateGravity();
     }
     // Update is called once per frame
     void Update()
@@ -139,9 +150,19 @@ public class PlayerController : MonoBehaviour
     void GetDirection()
     {
 
-        xAxis = Input.GetAxisRaw("Horizontal");
-       
-        yAxis = Input.GetAxisRaw("Vertical");
+        ///xAxis = Input.GetAxisRaw("Horizontal");
+
+        //yAxis = Input.GetAxisRaw("Vertical");
+        xAxis = DualSenseInput.Instance.Horizontal;
+        yAxis = DualSenseInput.Instance.Vertical;
+        if(xAxis == 0) {
+            xAxis = Input.GetAxisRaw("Horizontal");
+        }
+        if(yAxis == 0)
+        {
+            yAxis = Input.GetAxisRaw("Vertical");
+        }   
+
         if (xAxis >0)
         {
             //spr.flipX = xAxis < 0;
@@ -170,6 +191,7 @@ public class PlayerController : MonoBehaviour
 
         
         if (Input.GetButtonDown("Dash") && canDash && !dashed)
+        //if (DualSenseInput.Instance.DashPressed && canDash && !dashed)
         { 
             StartCoroutine(Dash());
             dashed = true;
@@ -215,13 +237,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump() 
     {   
-        //점프 캔슬
-        if (Input.GetButtonUp("Jump") && rb.linearVelocityY > 0)
-        {
-            rb.linearVelocityY = 0;
-
-            //pState.jumping = false;
-        }
+        
 
         //if (pState.jumping != true)
         //{
@@ -238,22 +254,61 @@ public class PlayerController : MonoBehaviour
         //        rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
         //    }
         //}
+        //coyoteTime은 땅에서 떨어져도 점프가 작동하도록 하는 변수 jumpBuffer는 점프를 미리 눌러도 점프가 작동하도록 하는변수
         if (!pState.jumping  && coyoteTimeCounter > 0 && jumpBufferCounter > 0)
 
         {
             rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
             pState.jumping = true;
+            jumpCountTime = 0;
         }
         else if (pState.jumping && Input.GetButtonDown("Jump") && airJumpCounter < maxAirJumps)
         {
            
             airJumpCounter++;
             rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
+            jumpCountTime = 0;
         }
+
+        //점프 캔슬
+        if(pState.jumping)
+        {
+            jumpCountTime += Time.deltaTime;
+
+            if (Input.GetButtonUp("Jump") && rb.linearVelocityY > 0) 
+            {
+                if (jumpCountTime < jumpMinTime)
+                {
+                    StartCoroutine(JumpMinTime(jumpMinTime - jumpCountTime));
+                }
+                else
+                {
+                    rb.linearVelocityY = 0;
+                }
+                //pState.jumping = false;
+            }
+        }
+        
 
         anim.SetBool("isJump", !Grounded());
 
   
+    }
+    IEnumerator JumpMinTime(float _time)
+    {
+        yield return new WaitForSeconds(_time);
+        if (rb.linearVelocityY > 0)
+        {
+            rb.linearVelocityY = 0;
+        }
+    }
+    void LimitFallSpeed()
+    {
+        // Y속도가 fallSpeedLimit보다 작으면 fallSpeedLimit로 제한
+        if (rb.linearVelocityY < fallSpeedLimit)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocityX, fallSpeedLimit);
+        }
     }
 
     //플레이어 상태가 접지상태인지 확인하는 함수
@@ -269,7 +324,7 @@ public class PlayerController : MonoBehaviour
         {
             coyoteTimeCounter -= Time.deltaTime;
         }
-
+        
         if (Input.GetButtonDown("Jump"))
         {
             jumpBufferCounter = jumpBufferFrames;
@@ -280,7 +335,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    void UpdateGravity()
+    {
+        // 상승 중
+        if (rb.linearVelocityY > 0)
+        {
+            if (Input.GetButton("Jump"))
+            {
+                // 점프 버튼 누르고 있는 동안 → 올라가는 속도 부드럽게
+                rb.gravityScale = gravityUp;
+            }
+            else
+            {
+                // 점프 버튼을 일찍 떼면 급 컷 (최소 점프 높이는 JumpMinTime이 보장)
+                rb.gravityScale = gravityCut;
+            }
+        }
+        // 낙하 중
+        else if (rb.linearVelocityY < 0)
+        {
+            rb.gravityScale = gravityDefault;
+        }
+        else
+        {
+            // 평소
+            rb.gravityScale = gravityDefault;
+        }
+    }
 
     ///////////////////////////////공격.....
 
@@ -416,6 +497,8 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float _damage)
     {
         health -= Mathf.RoundToInt(_damage);
+        if (DualSenseInput.Instance != null)
+            DualSenseInput.Instance.Vibrate(0.5f, 1.0f, 0.3f);
 
         StartCoroutine(StopTakingDamgae());
     }
