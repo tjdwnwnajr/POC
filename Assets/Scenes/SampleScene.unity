@@ -2628,50 +2628,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &704767560
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 704767562}
-  - component: {fileID: 704767561}
-  m_Layer: 0
-  m_Name: DualSensor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &704767561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704767560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbe8fb93bc6539b4294efd765537dc8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DualSenseInput
---- !u!4 &704767562
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704767560}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.181703, y: 4.23, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &748259681
 GameObject:
   m_ObjectHideFlags: 0
@@ -3696,19 +3652,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee72266a415bbe94bacc8c796e9159f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 14
-  jumpPower: 33
+  walkSpeed: 17
+  jumpPower: 32
   groundCheckPoint: {fileID: 1769829754}
   groundCheckDistanceY: 0.2
   groundCheckDistanceX: 0.5
   groundlayer:
     serializedVersion: 2
     m_Bits: 8
-  jumpMinTime: 0.19
-  fallSpeedLimit: -20
-  gravityUp: 9
-  gravityDefault: 9
-  gravityCut: 9
   maxAirJumps: 1
   pState: {fileID: 0}
   jumpBufferFrames: 8
@@ -3875,7 +3826,7 @@ Transform:
   m_GameObject: {fileID: 955345238}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.46, y: 2.25, z: 0}
+  m_LocalPosition: {x: -1.405215, y: 4.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18606,7 +18557,6 @@ GameObject:
   - component: {fileID: 1890354061}
   - component: {fileID: 1890354065}
   - component: {fileID: 1890354066}
-  - component: {fileID: 1890354067}
   m_Layer: 6
   m_Name: enemy0
   m_TagString: Untagged
@@ -18652,7 +18602,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -18734,7 +18684,7 @@ SpriteRenderer:
   m_SortingLayerID: -2123109435
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4674433079345799065, guid: 0ffa281f3b02bca41a8c727ed341af47, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -18754,8 +18704,8 @@ Transform:
   m_GameObject: {fileID: 1890354059}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.42, y: 2.27, z: 0}
-  m_LocalScale: {x: 0.9271875, y: 1.2234023, z: 1}
+  m_LocalPosition: {x: 1.06, y: 3.78, z: 0}
+  m_LocalScale: {x: 0.75, y: 1.275, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -18817,7 +18767,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -18825,28 +18775,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!95 &1890354067
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1890354059}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bcaf3a777fea673408d330b82ae4d561, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1929380194
 GameObject:
   m_ObjectHideFlags: 0
@@ -19957,7 +19885,6 @@ SceneRoots:
   - {fileID: 1430270258}
   - {fileID: 1431951915}
   - {fileID: 955345243}
-  - {fileID: 704767562}
   - {fileID: 670568374}
   - {fileID: 1890354064}
   - {fileID: 1230700909}
