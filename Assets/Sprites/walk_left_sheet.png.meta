@@ -1,19 +1,31 @@
 fileFormatVersion: 2
-guid: 0ffa281f3b02bca41a8c727ed341af47
+guid: cd0a030563ba6b845babde82d4a32184
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4674433079345799065
-    second: idle4_sheet_0
+      213: 3864830074641242239
+    second: walk_left_sheet_0
   - first:
-      213: 5463081591184083856
-    second: idle4_sheet_1
+      213: -518781171022347794
+    second: walk_left_sheet_1
   - first:
-      213: 7914299567002275428
-    second: idle4_sheet_2
+      213: 1136120906698471393
+    second: walk_left_sheet_2
   - first:
-      213: 8024949676666234207
-    second: idle4_sheet_3
+      213: 547884963243727323
+    second: walk_left_sheet_3
+  - first:
+      213: 2366707665388309985
+    second: walk_left_sheet_4
+  - first:
+      213: -307198543946334772
+    second: walk_left_sheet_5
+  - first:
+      213: -106508311208955343
+    second: walk_left_sheet_6
+  - first:
+      213: 111086748444448270
+    second: walk_left_sheet_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -57,7 +69,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
@@ -83,8 +95,8 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 0
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -109,7 +121,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: idle4_sheet_0
+      name: walk_left_sheet_0
       rect:
         serializedVersion: 2
         x: 0
@@ -124,14 +136,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 760224b61e3112fb0800000000000000
-      internalID: -4674433079345799065
+      spriteID: f78dc34e972a2a530800000000000000
+      internalID: 3864830074641242239
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idle4_sheet_1
+      name: walk_left_sheet_1
       rect:
         serializedVersion: 2
         x: 32
@@ -146,14 +158,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 09bc08533c3c0db40800000000000000
-      internalID: 5463081591184083856
+      spriteID: ee14d09064becc8f0800000000000000
+      internalID: -518781171022347794
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idle4_sheet_2
+      name: walk_left_sheet_2
       rect:
         serializedVersion: 2
         x: 64
@@ -168,14 +180,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 46ec231468d35dd60800000000000000
-      internalID: 7914299567002275428
+      spriteID: 1e738a9f1ff44cf00800000000000000
+      internalID: 1136120906698471393
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idle4_sheet_3
+      name: walk_left_sheet_3
       rect:
         serializedVersion: 2
         x: 96
@@ -190,8 +202,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f55a31286395e5f60800000000000000
-      internalID: 8024949676666234207
+      spriteID: bd99be3a87a7a9700800000000000000
+      internalID: 547884963243727323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: walk_left_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ed0aa2151c38d020800000000000000
+      internalID: 2366707665388309985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: walk_left_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccdbf884d8c9cbbf0800000000000000
+      internalID: -307198543946334772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: walk_left_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13273c8514b958ef0800000000000000
+      internalID: -106508311208955343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: walk_left_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e06d8442fc8aa8100800000000000000
+      internalID: 111086748444448270
       vertices: []
       indices: 
       edges: []
@@ -200,7 +300,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4e57d306e0cb93546a460e472afb6f03
+    spriteID: ec0ff247cb8acfb4f8e5e99a55d95077
     internalID: 0
     vertices: []
     indices: 
@@ -212,10 +312,14 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      idle4_sheet_0: -4674433079345799065
-      idle4_sheet_1: 5463081591184083856
-      idle4_sheet_2: 7914299567002275428
-      idle4_sheet_3: 8024949676666234207
+      walk_left_sheet_0: 3864830074641242239
+      walk_left_sheet_1: -518781171022347794
+      walk_left_sheet_2: 1136120906698471393
+      walk_left_sheet_3: 547884963243727323
+      walk_left_sheet_4: 2366707665388309985
+      walk_left_sheet_5: -307198543946334772
+      walk_left_sheet_6: -106508311208955343
+      walk_left_sheet_7: 111086748444448270
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
