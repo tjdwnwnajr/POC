@@ -17,6 +17,7 @@ public class CameraFollow : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float slowZoomTime = 0.3f;
     [SerializeField] private float burstZoomTime = 0.15f;
+    [SerializeField] private float zoominTime = 0.3f;
     private bool isZooming;
     private Camera cam;
 
@@ -40,15 +41,22 @@ public class CameraFollow : MonoBehaviour
         
         transform.position = Vector3.Lerp(transform.position, PlayerController.Instance.transform.position + offset, followSpeed);
     }
-    public void OnZoom(InputAction.CallbackContext ctx)
+    public void OnZoomIn(InputAction.CallbackContext ctx)
     {
         if (ctx.performed && !isZooming)
         {
-            StartCoroutine(ZoomSequence());
+            StartCoroutine(ZoomInSequence());
+        }
+    }
+    public void OnZoomOut(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed && !isZooming)
+        {
+            StartCoroutine(ZoomOutSequence());
         }
     }
 
-    IEnumerator ZoomSequence()
+    IEnumerator ZoomOutSequence()
     {
         isZooming = true;
 
@@ -73,6 +81,23 @@ public class CameraFollow : MonoBehaviour
         }
 
         cam.orthographicSize = maxSize;
+        isZooming = false;
+    }
+
+    IEnumerator ZoomInSequence()
+    {
+        isZooming = true;
+
+        float t = 0f;
+        float from = cam.orthographicSize;
+
+        while (t < zoominTime)
+        {
+            t += Time.deltaTime;
+            cam.orthographicSize = Mathf.Lerp(from, startSize, t / zoominTime);
+            yield return null;
+        }
+
         isZooming = false;
     }
 }

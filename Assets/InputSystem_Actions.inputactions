@@ -97,12 +97,21 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Zoom",
+                    "name": "ZoomIn",
                     "type": "Button",
                     "id": "4ad35d17-171d-4022-9423-ef23f0147959",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ZoomOut",
+                    "type": "Button",
+                    "id": "2e29d1d3-2201-4ad3-998c-2e85345dc079",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -518,10 +527,10 @@
                     "name": "",
                     "id": "489bcf2d-03dc-45c1-824c-f8984578c406",
                     "path": "<Gamepad>/rightStick/down",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Zoom",
+                    "action": "ZoomIn",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -529,10 +538,32 @@
                     "name": "",
                     "id": "c144ba53-49f5-4cd1-bf96-43d1b5c186c3",
                     "path": "<Keyboard>/backquote",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Zoom",
+                    "action": "ZoomIn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "518f2782-6e6d-4833-853e-c743baf8002c",
+                    "path": "<Keyboard>/minus",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ZoomOut",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "648062ce-1f7a-449b-bbc5-a67899cce112",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "ZoomOut",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
