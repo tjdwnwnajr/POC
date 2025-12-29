@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 //조절 예정 변수
@@ -9,7 +10,7 @@ public class PlayerController : MonoBehaviour
 {   // 이동관련 변수
 
     
-
+    private Vector2 moveInput;
     [Header("Move Controller")]
     [SerializeField] private float walkSpeed = 1;
     [Space(5)]
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
 
 
     //점프 관련 변수
+    private bool jumpPressed;
+    private bool jumpKeyDown;
+    private bool jumpKeyUp;
     [Header("Jump Controller")]
     [SerializeField] private float jumpPower=45; //점프 강도
     [SerializeField] private Transform groundCheckPoint; 
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float coyoteTime;
 
     //dash
+    private bool dashKeyDown;
     [Header("Dash Controller")]
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
@@ -61,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Animator anim;
-    //private SpriteRenderer spr;
+  
 
     //카메라 스크립트에서 사용하려고
     public static PlayerController Instance;
@@ -69,6 +74,7 @@ public class PlayerController : MonoBehaviour
     
 
     //////////////////공격 관련 
+    private bool attackKeyDown;
     [SerializeField]private float timeBetweenAttack; //공격 속도 제한
     private float timeSinceAttack;
     private float yAxis;
@@ -111,7 +117,6 @@ public class PlayerController : MonoBehaviour
         //이동,애니메이션을 위한 초기화
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        //spr = GetComponent<SpriteRenderer>();
         pState = GetComponent<PlayerStateList>();
         pState.lookingRight = true;
         pState.invincible = false;
@@ -142,26 +147,79 @@ public class PlayerController : MonoBehaviour
         
     }
 
-
+    void LateUpdate()
+    {
+        jumpKeyDown = false;
+        jumpKeyUp = false;
+        dashKeyDown = false;
+        attackKeyDown = false;
+    }
     //사용자함수
     /////////////////////////////////////////////////////////
-    
+
     //이동방향 입력함수
+
+    public void OnMove(InputAction.CallbackContext ctx)
+    {
+        moveInput = ctx.ReadValue<Vector2>();
+    }
+
+    public void OnJump(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            jumpKeyDown = true;
+            jumpKeyUp = false;
+        }
+        if (ctx.canceled)
+        {
+            jumpKeyUp = true;
+            jumpKeyDown = false;
+        }
+            jumpPressed = ctx.performed;
+    }
+    public void OnDash(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            dashKeyDown = true;
+        }
+        if (ctx.canceled)
+        {
+            dashKeyDown = false;
+        }
+    }
+
+    public void OnAttack(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            attackKeyDown = true;
+        }
+        if (ctx.canceled)
+        {
+            attackKeyDown = false;
+        }
+    }
+
+
+
+
     void GetDirection()
     {
 
         ///xAxis = Input.GetAxisRaw("Horizontal");
 
         //yAxis = Input.GetAxisRaw("Vertical");
-        xAxis = DualSenseInput.Instance.Horizontal;
-        yAxis = DualSenseInput.Instance.Vertical;
-        if(xAxis == 0) {
-            xAxis = Input.GetAxisRaw("Horizontal");
-        }
-        if(yAxis == 0)
-        {
-            yAxis = Input.GetAxisRaw("Vertical");
-        }   
+        xAxis = moveInput.x;
+        yAxis = moveInput.y;
+        //if(xAxis == 0) {
+        //    xAxis = Input.GetAxisRaw("Horizontal");
+        //}
+        //if(yAxis == 0)
+        //{
+        //    yAxis = Input.GetAxisRaw("Vertical");
+        //}   
 
         if (xAxis >0)
         {
@@ -190,7 +248,7 @@ public class PlayerController : MonoBehaviour
     {
 
         
-        if (Input.GetButtonDown("Dash") && canDash && !dashed)
+        if (dashKeyDown && canDash && !dashed)
         //if (DualSenseInput.Instance.DashPressed && canDash && !dashed)
         { 
             StartCoroutine(Dash());
@@ -262,7 +320,7 @@ public class PlayerController : MonoBehaviour
             pState.jumping = true;
             jumpCountTime = 0;
         }
-        else if (pState.jumping && Input.GetButtonDown("Jump") && airJumpCounter < maxAirJumps)
+        else if (pState.jumping && /*Input.GetButtonDown("Jump")*/ jumpKeyDown && airJumpCounter < maxAirJumps)
         {
            
             airJumpCounter++;
@@ -275,7 +333,7 @@ public class PlayerController : MonoBehaviour
         {
             jumpCountTime += Time.deltaTime;
 
-            if (Input.GetButtonUp("Jump") && rb.linearVelocityY > 0) 
+            if (jumpKeyUp/*Input.GetButtonUp("Jump")*/ && rb.linearVelocityY > 0) 
             {
                 if (jumpCountTime < jumpMinTime)
                 {
@@ -325,7 +383,7 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter -= Time.deltaTime;
         }
         
-        if (Input.GetButtonDown("Jump"))
+        if (jumpKeyDown)//Input.GetButtonDown("Jump")|| DualSenseInput.Instance.JumpDown)
         {
             jumpBufferCounter = jumpBufferFrames;
         }
@@ -340,7 +398,7 @@ public class PlayerController : MonoBehaviour
         // 상승 중
         if (rb.linearVelocityY > 0)
         {
-            if (Input.GetButton("Jump"))
+            if (jumpPressed)//Input.GetButton("Jump")|| DualSenseInput.Instance.JumpPressed)
             {
                 // 점프 버튼 누르고 있는 동안 → 올라가는 속도 부드럽게
                 rb.gravityScale = gravityUp;
@@ -367,7 +425,7 @@ public class PlayerController : MonoBehaviour
 
     void GetAttack()
     {
-        pState.attacking = Input.GetMouseButtonDown(0);
+        pState.attacking = attackKeyDown;//Input.GetMouseButtonDown(0);
     }
     void Attack()
     {
