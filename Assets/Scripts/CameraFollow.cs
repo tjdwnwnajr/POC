@@ -1,14 +1,10 @@
+using Cinemachine;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] private float followSpeed = 0.1f;
-
-    [SerializeField] private Vector3 offset;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
     [Header("Zoom Values")]
     [SerializeField] private float startSize = 6f;
     [SerializeField] private float slowZoomTarget = 12f;
@@ -19,13 +15,20 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float burstZoomTime = 0.15f;
     [SerializeField] private float zoominTime = 0.3f;
     private bool isZooming;
-    private Camera cam;
+
+    private CinemachineVirtualCamera cam;
+
+
 
     void Awake()
     {
-        cam = GetComponent<Camera>();
-        cam.orthographicSize = startSize;
+        cam = GetComponent<CinemachineVirtualCamera>();
+        cam.m_Lens.OrthographicSize = startSize;
+
+
+
     }
+
     void Start()
     {
         
@@ -36,11 +39,7 @@ public class CameraFollow : MonoBehaviour
     {
        
     }
-    private void LateUpdate()
-    {
-        
-        transform.position = Vector3.Lerp(transform.position, PlayerController.Instance.transform.position + offset, followSpeed);
-    }
+  
     public void OnZoomIn(InputAction.CallbackContext ctx)
     {
         if (ctx.performed && !isZooming)
@@ -61,26 +60,26 @@ public class CameraFollow : MonoBehaviour
         isZooming = true;
 
         float t = 0f;
-        float from = cam.orthographicSize;
+        float from = cam.m_Lens.OrthographicSize;
 
         while (t < slowZoomTime)
         {
             t += Time.deltaTime;
-            cam.orthographicSize = Mathf.Lerp(from, slowZoomTarget, t / slowZoomTime);
+            cam.m_Lens.OrthographicSize = Mathf.Lerp(from, slowZoomTarget, t / slowZoomTime);
             yield return null;
         }
 
         t = 0f;
-        from = cam.orthographicSize;
+        from = cam.m_Lens.OrthographicSize;
 
         while (t < burstZoomTime)
         {
             t += Time.deltaTime;
-            cam.orthographicSize = Mathf.Lerp(from, maxSize, t / burstZoomTime);
+            cam.m_Lens.OrthographicSize = Mathf.Lerp(from, maxSize, t / burstZoomTime);
             yield return null;
         }
 
-        cam.orthographicSize = maxSize;
+        cam.m_Lens.OrthographicSize = maxSize;
         isZooming = false;
     }
 
@@ -89,12 +88,12 @@ public class CameraFollow : MonoBehaviour
         isZooming = true;
 
         float t = 0f;
-        float from = cam.orthographicSize;
+        float from = cam.m_Lens.OrthographicSize;
 
         while (t < zoominTime)
         {
             t += Time.deltaTime;
-            cam.orthographicSize = Mathf.Lerp(from, startSize, t / zoominTime);
+            cam.m_Lens.OrthographicSize = Mathf.Lerp(from, startSize, t / zoominTime);
             yield return null;
         }
 

@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 // sideAttackArea, upAttackArea, downAttackArea, damage
 {   // 이동관련 변수
 
+    //private CameraTarget _cameraFollowObject;
+    //[SerializeField] private GameObject _cameraFollowGo; 
     
     private Vector2 moveInput;
     [Header("Move Controller")]
@@ -110,6 +112,8 @@ public class PlayerController : MonoBehaviour
             Instance = this;
         }
         health = maxhealth;
+
+       
         
     }
     void Start()
@@ -121,7 +125,8 @@ public class PlayerController : MonoBehaviour
         pState.lookingRight = true;
         pState.invincible = false;
         gravity = rb.gravityScale;    
-       
+        //_cameraFollowObject = _cameraFollowGo.GetComponent<CameraTarget>();
+
     }
 
     private void FixedUpdate()
@@ -199,11 +204,26 @@ public class PlayerController : MonoBehaviour
         if (ctx.canceled)
         {
             attackKeyDown = false;
+            
         }
     }
 
 
-
+    private void Turn()
+    {
+        if(pState.lookingRight)
+        {
+            Vector3 rotator = new Vector3(transform.rotation.x,0f,transform.rotation.z); 
+            transform.rotation = Quaternion.Euler(rotator); 
+            //_cameraFollowObject.CallTurn();
+        }
+        else
+        {
+            Vector3 rotator = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
+            transform.rotation = Quaternion.Euler(rotator);
+            //_cameraFollowObject.CallTurn();
+        }
+    }
 
     void GetDirection()
     {
@@ -225,13 +245,15 @@ public class PlayerController : MonoBehaviour
         {
             //spr.flipX = xAxis < 0;
             
-            transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
+            //transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
             pState.lookingRight = true;
+            Turn();
         }
         else if(xAxis < 0)
         {
-            transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
+            //transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
             pState.lookingRight = false;
+            Turn();
         }
     }
     
