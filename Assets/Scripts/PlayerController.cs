@@ -11,7 +11,10 @@ public class PlayerController : MonoBehaviour
 
     //private CameraTarget _cameraFollowObject;
     //[SerializeField] private GameObject _cameraFollowGo; 
-    
+    //Camera manager
+    private float _fallSpeedYDampingChangeThreshold;
+
+
     private Vector2 moveInput;
     [Header("Move Controller")]
     [SerializeField] private float walkSpeed = 1;
@@ -124,9 +127,9 @@ public class PlayerController : MonoBehaviour
         pState = GetComponent<PlayerStateList>();
         pState.lookingRight = true;
         pState.invincible = false;
-        gravity = rb.gravityScale;    
+        gravity = rb.gravityScale;
         //_cameraFollowObject = _cameraFollowGo.GetComponent<CameraTarget>();
-
+        _fallSpeedYDampingChangeThreshold = CameraManager.Instance._fallSpeedYDampingChangeThresholde;
     }
 
     private void FixedUpdate()
@@ -149,7 +152,16 @@ public class PlayerController : MonoBehaviour
 
         GetAttack();
         Attack();
-        
+        if(rb.linearVelocityY< _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
+        {
+            CameraManager.Instance.LerpYDamping(true);
+        }
+        if(rb.linearVelocityY >= 0 && CameraManager.Instance.LerpedFromPlayerFalling && !CameraManager.Instance.IsLerpingYDamping)
+        {
+            
+            CameraManager.Instance.LerpYDamping(false);
+            CameraManager.Instance.LerpedFromPlayerFalling = false;
+        }
     }
 
     void LateUpdate()
