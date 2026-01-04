@@ -152,14 +152,17 @@ public class PlayerController : MonoBehaviour
 
         GetAttack();
         Attack();
+        //낙하속도가 임계값보다 작아야함, 카메라 y반응속도가 이미 조절중인 상태가 아니어야함, 이미 낙하상태로 조절된 상태가 아니어야함
         if(rb.linearVelocityY< _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
         {
             CameraManager.Instance.LerpYDamping(true);
         }
+        //낙하중이 아니어야함, 카메라y반응속도가 낙하로 조정되어있어야함,카메라 y반응속도가 조절중인 상태가 아니어야함
         if(rb.linearVelocityY >= 0 && CameraManager.Instance.LerpedFromPlayerFalling && !CameraManager.Instance.IsLerpingYDamping)
         {
-            
+            //원래로 복귀
             CameraManager.Instance.LerpYDamping(false);
+            //낙하로 조정된 상태가 아님을 알리기 위해 false로 설정
             CameraManager.Instance.LerpedFromPlayerFalling = false;
         }
     }
