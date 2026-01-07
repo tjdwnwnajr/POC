@@ -1,30 +1,29 @@
 using UnityEngine;
 
-public class RopeGyroSwing : MonoBehaviour
+public class RopeSwingForce : MonoBehaviour
 {
-    public Rigidbody2D swingTarget;   // 위쪽 체인 Rigidbody
-    public float gyroSensitivity = 0.02f;
-    public float maxTorque = 15f;
-    public float deadZone = 2f;
+    public float swingForce = 8f;   // 흔들리는 힘 세기
+
+    private Rigidbody2D rb;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void FixedUpdate()
     {
-        // JoyShockLibrary 자이로
-        var imu = JSL.JslGetIMUState(0);
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            // 현재 움직이는 방향 기준으로 좌우 힘
+            float dir = Mathf.Sign(rb.linearVelocity.x);
 
-        float gyroY = imu.gyroY;
+            // 거의 안 움직일 때는 기본 방향
+            if (Mathf.Abs(dir) < 0.1f)
+                dir = 1f;
 
-        // 작은 떨림 제거
-        if (Mathf.Abs(gyroY) < deadZone)
-            return;
-
-        // 자이로 → 토크
-        float torque = gyroY * gyroSensitivity;
-
-        // 폭주 방지
-        torque = Mathf.Clamp(torque, -maxTorque, maxTorque);
-
-        // 회전력 적용
-        swingTarget.AddTorque(-torque, ForceMode2D.Force);
+            Vector2 force = Vector2.right * dir * swingForce;
+            rb.AddForce(force, ForceMode2D.Force);
+        }
     }
 }
