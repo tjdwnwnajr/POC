@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 144046494}
   m_Layer: 0
   m_Name: ball
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -292,7 +292,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144046488}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -315,7 +315,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -391,7 +391,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee5e32d5df0a014c87cffc5226780d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RopeSwingForce
-  swingForce: 10
+  swingTarget: {fileID: 144046491}
+  forceMultiplier: 0.8
+  deadZone: 3
+  maxForce: 20
 --- !u!1 &187816056
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,7 +516,7 @@ GameObject:
   - component: {fileID: 286534690}
   m_Layer: 0
   m_Name: anchor
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -885,7 +888,7 @@ GameObject:
   - component: {fileID: 636823797}
   m_Layer: 0
   m_Name: ball_chain
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -924,7 +927,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee5e32d5df0a014c87cffc5226780d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RopeGyroSwing
-  swingForce: 8
+  swingTarget: {fileID: 0}
+  forceMultiplier: 0.8
+  deadZone: 3
+  maxForce: 20
 --- !u!1 &653211696
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,7 +997,7 @@ GameObject:
   - component: {fileID: 676740555}
   m_Layer: 0
   m_Name: chain (1)
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1056,7 +1062,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 676740553}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1079,7 +1085,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1250,6 +1256,7 @@ GameObject:
   - component: {fileID: 955345244}
   - component: {fileID: 955345245}
   - component: {fileID: 955345246}
+  - component: {fileID: 955345247}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1269,8 +1276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee72266a415bbe94bacc8c796e9159f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 14
-  jumpPower: 33
+  isRope: 0
+  walkSpeed: 8
+  jumpPower: 18
   groundCheckPoint: {fileID: 1769829754}
   groundCheckDistanceY: 0.2
   groundCheckDistanceX: 0.5
@@ -1279,9 +1287,9 @@ MonoBehaviour:
     m_Bits: 8
   jumpMinTime: 0.13
   fallSpeedLimit: -20
-  gravityUp: 9
-  gravityDefault: 9
-  gravityCut: 9
+  gravityUp: 4
+  gravityDefault: 4
+  gravityCut: 4
   maxAirJumps: 1
   pState: {fileID: 0}
   jumpBufferFrames: 8
@@ -1684,11 +1692,46 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 955345239}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnRope
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 79eeb741-d66d-4cc7-8647-5737001052b9
+    m_ActionName: Player/Rope
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!255 &955345247
+FixedJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955345238}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: -13.07, y: 10.26}
+  m_DampingRatio: 0
+  m_Frequency: 0
 --- !u!1 &1041234530
 GameObject:
   m_ObjectHideFlags: 0
@@ -9868,7 +9911,7 @@ GameObject:
   - component: {fileID: 1575350536}
   m_Layer: 0
   m_Name: chain (3)
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9933,7 +9976,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575350534}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -9956,7 +9999,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -10185,7 +10228,7 @@ GameObject:
   - component: {fileID: 1697500497}
   m_Layer: 0
   m_Name: chain
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10250,7 +10293,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1697500495}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -10273,7 +10316,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -10481,7 +10524,7 @@ GameObject:
   - component: {fileID: 1815331853}
   m_Layer: 0
   m_Name: chain (4)
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10546,7 +10589,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1815331851}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -10569,7 +10612,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -10670,7 +10713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1890354061
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -36555,7 +36598,7 @@ GameObject:
   - component: {fileID: 2098428093}
   m_Layer: 0
   m_Name: chain (2)
-  m_TagString: Untagged
+  m_TagString: Rope
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36620,7 +36663,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098428091}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -36643,7 +36686,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

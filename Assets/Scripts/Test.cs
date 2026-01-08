@@ -1,29 +1,28 @@
 using UnityEngine;
 
-public class RopeSwingForce : MonoBehaviour
+public class RopeGyroForceSwing : MonoBehaviour
 {
-    public float swingForce = 8f;   // 흔들리는 힘 세기
-
-    private Rigidbody2D rb;
-
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
+    public Rigidbody2D swingTarget;   // Chain_01
+    public float forceMultiplier = 0.8f;
+    public float deadZone = 3f;
+    public float maxForce = 20f;
 
     void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            // 현재 움직이는 방향 기준으로 좌우 힘
-            float dir = Mathf.Sign(rb.linearVelocity.x);
+        var imu = JSL.JslGetIMUState(0);
+        float gyroY = imu.gyroY;
 
-            // 거의 안 움직일 때는 기본 방향
-            if (Mathf.Abs(dir) < 0.1f)
-                dir = 1f;
+        // 노이즈 제거
+        if (Mathf.Abs(gyroY) < deadZone)
+            return;
 
-            Vector2 force = Vector2.right * dir * swingForce;
-            rb.AddForce(force, ForceMode2D.Force);
-        }
+        // 자이로 → 수평 힘
+        float forceX = gyroY * forceMultiplier;
+        forceX = Mathf.Clamp(forceX, -maxForce, maxForce);
+
+        //  오른쪽 / 왼쪽으로 밀기
+        Vector2 force = new Vector2(forceX, 0f);
+
+        swingTarget.AddForce(force, ForceMode2D.Force);
     }
 }

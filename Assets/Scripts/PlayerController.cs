@@ -15,6 +15,13 @@ public class PlayerController : MonoBehaviour
     private float _fallSpeedYDampingChangeThreshold;
 
 
+    //로프 매달리기
+    [HideInInspector]public bool isRope = false;
+    private FixedJoint2D playerJoint;
+    private bool ropeKeyPressed;
+    private bool canCatch = false;
+    private Rigidbody2D ropeRb;
+
     private Vector2 moveInput;
     [Header("Move Controller")]
     [SerializeField] private float walkSpeed = 1;
@@ -28,8 +35,8 @@ public class PlayerController : MonoBehaviour
     private bool jumpKeyDown;
     private bool jumpKeyUp;
     [Header("Jump Controller")]
-    [SerializeField] private float jumpPower=45; //점프 강도
-    [SerializeField] private Transform groundCheckPoint; 
+    [SerializeField] private float jumpPower = 45; //점프 강도
+    [SerializeField] private Transform groundCheckPoint;
     [SerializeField] private float groundCheckDistanceY = 0.2f; //바닥 체크 x,y범위 
     [SerializeField] private float groundCheckDistanceX = 0.5f;
     [SerializeField] private LayerMask groundlayer;
@@ -66,21 +73,21 @@ public class PlayerController : MonoBehaviour
     private bool dashed;
     [SerializeField] GameObject dashEffect;
     [Space(5)]
-    
+
 
 
     private Rigidbody2D rb;
     private Animator anim;
-  
+
 
     //카메라 스크립트에서 사용하려고
     public static PlayerController Instance;
 
-    
+
 
     //////////////////공격 관련 
     private bool attackKeyDown;
-    [SerializeField]private float timeBetweenAttack; //공격 속도 제한
+    [SerializeField] private float timeBetweenAttack; //공격 속도 제한
     private float timeSinceAttack;
     private float yAxis;
     [SerializeField] private Transform sideAttackTrans, upAttackTrans, downAttackTrans;
@@ -106,7 +113,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
@@ -116,8 +123,8 @@ public class PlayerController : MonoBehaviour
         }
         health = maxhealth;
 
-       
-        
+
+
     }
     void Start()
     {
@@ -125,6 +132,10 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         pState = GetComponent<PlayerStateList>();
+        playerJoint = GetComponent<FixedJoint2D>();
+
+        playerJoint.enabled = false;
+
         pState.lookingRight = true;
         pState.invincible = false;
         gravity = rb.gravityScale;
@@ -134,8 +145,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        GetDirection();
         if (pState.dashing) return;
+        if (isRope) return;
+        GetDirection();
         
         MoveX();
         Recoil();
@@ -145,20 +157,27 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isRope)
+        {
+            ReleaseRope();
+            return;
+        }
         Jump();
         UpdateJumpVariables();
         StartDash();
 
         GetAttack();
         Attack();
+        CatchRope();
+        
+
         //낙하속도가 임계값보다 작아야함, 카메라 y반응속도가 이미 조절중인 상태가 아니어야함, 이미 낙하상태로 조절된 상태가 아니어야함
-        if(rb.linearVelocityY< _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
+        if (rb.linearVelocityY < _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
         {
             CameraManager.Instance.LerpYDamping(true);
         }
         //낙하중이 아니어야함, 카메라y반응속도가 낙하로 조정되어있어야함,카메라 y반응속도가 조절중인 상태가 아니어야함
-        if(rb.linearVelocityY >= 0 && CameraManager.Instance.LerpedFromPlayerFalling && !CameraManager.Instance.IsLerpingYDamping)
+        if (rb.linearVelocityY >= 0 && CameraManager.Instance.LerpedFromPlayerFalling && !CameraManager.Instance.IsLerpingYDamping)
         {
             //원래로 복귀
             CameraManager.Instance.LerpYDamping(false);
@@ -182,6 +201,7 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
+        Debug.Log(moveInput.x);
     }
 
     public void OnJump(InputAction.CallbackContext ctx)
@@ -196,7 +216,7 @@ public class PlayerController : MonoBehaviour
             jumpKeyUp = true;
             jumpKeyDown = false;
         }
-            jumpPressed = ctx.performed;
+        jumpPressed = ctx.performed;
     }
     public void OnDash(InputAction.CallbackContext ctx)
     {
@@ -219,17 +239,29 @@ public class PlayerController : MonoBehaviour
         if (ctx.canceled)
         {
             attackKeyDown = false;
-            
+
         }
     }
 
+    public void OnRope(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            ropeKeyPressed = true;
+
+        }
+        if (ctx.canceled)
+        {
+            ropeKeyPressed = false;
+        }
+    }
 
     private void Turn()
     {
-        if(pState.lookingRight)
+        if (pState.lookingRight)
         {
-            Vector3 rotator = new Vector3(transform.rotation.x,0f,transform.rotation.z); 
-            transform.rotation = Quaternion.Euler(rotator); 
+            Vector3 rotator = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
+            transform.rotation = Quaternion.Euler(rotator);
             //_cameraFollowObject.CallTurn();
         }
         else
@@ -256,27 +288,27 @@ public class PlayerController : MonoBehaviour
         //    yAxis = Input.GetAxisRaw("Vertical");
         //}   
 
-        if (xAxis >0)
+        if (xAxis > 0)
         {
             //spr.flipX = xAxis < 0;
-            
+
             //transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
             pState.lookingRight = true;
             Turn();
         }
-        else if(xAxis < 0)
+        else if (xAxis < 0)
         {
             //transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
             pState.lookingRight = false;
             Turn();
         }
     }
-    
+
     //이동 함수
     void MoveX()
     {
-        rb.linearVelocity = new Vector2 (xAxis *  walkSpeed, rb.linearVelocityY);
-        
+        rb.linearVelocity = new Vector2(xAxis * walkSpeed, rb.linearVelocityY);
+
         anim.SetBool("isWalk", rb.linearVelocityX != 0);
     }
 
@@ -284,19 +316,19 @@ public class PlayerController : MonoBehaviour
     void StartDash()
     {
 
-        
+
         if (dashKeyDown && canDash && !dashed)
         //if (DualSenseInput.Instance.DashPressed && canDash && !dashed)
-        { 
+        {
             StartCoroutine(Dash());
             dashed = true;
-            
+
         }
 
         if (Grounded())//땅에 있으면 바로 대쉬가능하도록 dashed false
         {
             dashed = false;
-        
+
         }
     }
 
@@ -318,11 +350,11 @@ public class PlayerController : MonoBehaviour
     }
 
     //////////////점프 관련///////////////////////
-  
-     bool Grounded() //땅이면 true아니면 false
-    {   
+
+    bool Grounded() //땅이면 true아니면 false
+    {
         //좌우 발 밑, 가운데 밑이 땅인지 확인
-        if(Physics2D.Raycast(groundCheckPoint.position,Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position+new Vector3(groundCheckDistanceX,0,0), Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(-groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer))
+        if (Physics2D.Raycast(groundCheckPoint.position, Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(-groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer))
         {
             return true;
         }
@@ -330,27 +362,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void Jump() 
-    {   
-        
+    void Jump()
+    {
 
-        //if (pState.jumping != true)
-        //{
-        //    //점프
-        //    if (coyoteTimeCounter > 0 && jumpBufferCounter>0)
-        //    {
-        //        rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
-        //        pState.jumping = true;
-        //    }
-        //    else if (!Grounded() &&Input.GetButtonDown("Jump")&&airJumpCounter < maxAirJumps)
-        //    {
-        //        pState.jumping = true;
-        //        airJumpCounter++;
-        //        rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
-        //    }
-        //}
         //coyoteTime은 땅에서 떨어져도 점프가 작동하도록 하는 변수 jumpBuffer는 점프를 미리 눌러도 점프가 작동하도록 하는변수
-        if (!pState.jumping  && coyoteTimeCounter > 0 && jumpBufferCounter > 0)
+        if (!pState.jumping && coyoteTimeCounter > 0 && jumpBufferCounter > 0)
 
         {
             rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
@@ -359,18 +375,18 @@ public class PlayerController : MonoBehaviour
         }
         else if (pState.jumping && /*Input.GetButtonDown("Jump")*/ jumpKeyDown && airJumpCounter < maxAirJumps)
         {
-           
+
             airJumpCounter++;
             rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
             jumpCountTime = 0;
         }
 
         //점프 캔슬
-        if(pState.jumping)
+        if (pState.jumping)
         {
             jumpCountTime += Time.deltaTime;
 
-            if (jumpKeyUp/*Input.GetButtonUp("Jump")*/ && rb.linearVelocityY > 0) 
+            if (jumpKeyUp/*Input.GetButtonUp("Jump")*/ && rb.linearVelocityY > 0)
             {
                 if (jumpCountTime < jumpMinTime)
                 {
@@ -383,11 +399,11 @@ public class PlayerController : MonoBehaviour
                 //pState.jumping = false;
             }
         }
-        
+
 
         anim.SetBool("isJump", !Grounded());
 
-  
+
     }
     IEnumerator JumpMinTime(float _time)
     {
@@ -419,7 +435,7 @@ public class PlayerController : MonoBehaviour
         {
             coyoteTimeCounter -= Time.deltaTime;
         }
-        
+
         if (jumpKeyDown)//Input.GetButtonDown("Jump")|| DualSenseInput.Instance.JumpDown)
         {
             jumpBufferCounter = jumpBufferFrames;
@@ -435,9 +451,9 @@ public class PlayerController : MonoBehaviour
         // 상승 중
         if (rb.linearVelocityY > 0)
         {
-            if (jumpPressed)//Input.GetButton("Jump")|| DualSenseInput.Instance.JumpPressed)
+            if (jumpPressed)
             {
-                // 점프 버튼 누르고 있는 동안 → 올라가는 속도 부드럽게
+                // 점프 버튼 누르고 있는 동안 올라가는 속도 부드럽게
                 rb.gravityScale = gravityUp;
             }
             else
@@ -473,19 +489,20 @@ public class PlayerController : MonoBehaviour
             timeSinceAttack = 0;
             anim.SetTrigger("isAttack");
 
-            if (yAxis == 0 || yAxis < 0 && Grounded()) {
-                Hit(sideAttackTrans, sideAttackArea,ref pState.recoilingX,recoilXSpeed);
+            if (yAxis == 0 || yAxis < 0 && Grounded())
+            {
+                Hit(sideAttackTrans, sideAttackArea, ref pState.recoilingX, recoilXSpeed);
                 Instantiate(slashEffect, sideAttackTrans);
             }
-            else if(yAxis > 0)
+            else if (yAxis > 0)
             {
                 Hit(upAttackTrans, upAttackArea, ref pState.recoilingY, recoilYSpeed);
                 SlashEffectAtAngle(slashEffect, 90, upAttackTrans);
             }
-            else if (yAxis < 0&&!Grounded())
+            else if (yAxis < 0 && !Grounded())
             {
-                Hit(downAttackTrans, downAttackArea,ref pState.recoilingY, recoilYSpeed); 
-                SlashEffectAtAngle(slashEffect,-90, downAttackTrans);
+                Hit(downAttackTrans, downAttackArea, ref pState.recoilingY, recoilYSpeed);
+                SlashEffectAtAngle(slashEffect, -90, downAttackTrans);
             }
         }
 
@@ -493,7 +510,7 @@ public class PlayerController : MonoBehaviour
     void SlashEffectAtAngle(GameObject _slashEffect, int _effectAngle, Transform _attackTransform)
     {
         _slashEffect = Instantiate(_slashEffect, _attackTransform);
-        _slashEffect.transform.eulerAngles = new Vector3(0,0,_effectAngle); //이펙트 종횡 방향 설정
+        _slashEffect.transform.eulerAngles = new Vector3(0, 0, _effectAngle); //이펙트 종횡 방향 설정
         _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y); //방향에 맞게 좌우 -1값 바뀌는 것
 
 
@@ -502,7 +519,7 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(sideAttackTrans.position,sideAttackArea);
+        Gizmos.DrawWireCube(sideAttackTrans.position, sideAttackArea);
         Gizmos.DrawWireCube(upAttackTrans.position, upAttackArea);
         Gizmos.DrawWireCube(downAttackTrans.position, downAttackArea);
 
@@ -511,19 +528,21 @@ public class PlayerController : MonoBehaviour
     {
         Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attacktrans.position, _attackarea, 0, attackableLayer);
 
-        if (objectsToHit.Length > 0) {
+        if (objectsToHit.Length > 0)
+        {
             _recoilDir = true;
         }
-        for (int i = 0; i < objectsToHit.Length; i++) {
+        for (int i = 0; i < objectsToHit.Length; i++)
+        {
             if (objectsToHit[i].GetComponent<Enemy>() != null) { }
             {
-                objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized,_recoilStrength);
+                objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilStrength);
             }
         }
     }
 
 
-    
+
 
 
     ////////////////Recoil
@@ -566,7 +585,7 @@ public class PlayerController : MonoBehaviour
         {
             StopRecoilX();
         }
-        if(pState.recoilingY&&stepsYRecoiled< recoilYSteps)
+        if (pState.recoilingY && stepsYRecoiled < recoilYSteps)
         {
             stepsYRecoiled++;
         }
@@ -599,7 +618,7 @@ public class PlayerController : MonoBehaviour
     }
     void ClampHealth()
     {
-        health = Mathf.Clamp(health,0,maxhealth);//현재 체력,최소, 최대
+        health = Mathf.Clamp(health, 0, maxhealth);//현재 체력,최소, 최대
 
     }
     IEnumerator StopTakingDamgae()
@@ -610,5 +629,42 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1f); //무적시간 조절
         pState.invincible = false;
 
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Rope"))
+        {
+            ropeRb = collision.gameObject.GetComponent<Rigidbody2D>();
+            canCatch = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Rope"))
+        {
+            ropeRb = null;
+            canCatch = false;
+        }
+
+    }
+   
+    private void CatchRope()
+    {
+        if(canCatch&&ropeKeyPressed && !isRope)
+        {
+            isRope = true;
+            playerJoint.enabled = true;
+            playerJoint.connectedBody = ropeRb;
+        }
+    }
+    private void ReleaseRope()
+    {
+        if(isRope && !ropeKeyPressed)
+        {
+            isRope = false;
+            playerJoint.enabled = false;
+            playerJoint.connectedBody = null;
+        }
     }
 }
