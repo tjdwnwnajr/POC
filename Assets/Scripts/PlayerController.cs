@@ -43,9 +43,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpMinTime; //최소 점프 시간
     private float jumpCountTime = 0; //점프 시간 측정 변수
     [SerializeField] private float fallSpeedLimit = -10f;
-    [SerializeField] private float gravityUp;
-    [SerializeField] private float gravityDefault;
-    [SerializeField] private float gravityCut;
+    //중력 관련
+    [SerializeField] float gravityUp = 1.2f;        // 상승 중 기본 중력
+    [SerializeField] float gravityHang = 0.3f;      // 정점 체공 중력 (핵심)
+    [SerializeField] float gravityFall = 2.0f;      // 낙하 중 중력
+
+    [SerializeField] float hangVelocityThreshold = 0.15f; // 정점 판정
+    [SerializeField] float gravitySmoothSpeed = 10f;
+
+
+    //[SerializeField] private float gravityUp;
+    //[SerializeField] private float gravityDefault;
+    //[SerializeField] private float gravityCut;
+
+    
 
     private int airJumpCounter = 0; //공중 점프 카운트 변수
     [SerializeField] private int maxAirJumps; //최대 공중 점프 횟수
@@ -108,6 +119,9 @@ public class PlayerController : MonoBehaviour
     [Header("Health")]
     [SerializeField] public int maxhealth;
     [SerializeField] public int health;
+
+    //블럭움직이기
+    [HideInInspector] public float rotateInput;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -202,6 +216,15 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = ctx.ReadValue<Vector2>();
         Debug.Log(moveInput.x);
+    }
+
+    public void OnRotate(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            rotateInput = context.ReadValue<float>();
+        else if (context.canceled)
+            rotateInput = 0f;
+
     }
 
     public void OnJump(InputAction.CallbackContext ctx)
@@ -448,31 +471,35 @@ public class PlayerController : MonoBehaviour
 
     void UpdateGravity()
     {
-        // 상승 중
-        if (rb.linearVelocityY > 0)
+        float vy = rb.linearVelocityY;
+
+        // 목표 중력
+        float targetGravity;
+
+        // 1. 상승 중
+        if (vy > hangVelocityThreshold)
         {
-            if (jumpPressed)
-            {
-                // 점프 버튼 누르고 있는 동안 올라가는 속도 부드럽게
-                rb.gravityScale = gravityUp;
-            }
-            else
-            {
-                // 점프 버튼을 일찍 떼면 급 컷 (최소 점프 높이는 JumpMinTime이 보장)
-                rb.gravityScale = gravityCut;
-            }
+            targetGravity = gravityUp;
         }
-        // 낙하 중
-        else if (rb.linearVelocityY < 0)
+        // 2. 정점 근처 (체공)
+        else if (Mathf.Abs(vy) <= hangVelocityThreshold)
         {
-            rb.gravityScale = gravityDefault;
+            targetGravity = gravityHang;
         }
+        // 3. 낙하 중
         else
         {
-            // 평소
-            rb.gravityScale = gravityDefault;
+            targetGravity = gravityFall;
         }
+
+        // 중력 부드럽게 전환
+        rb.gravityScale = Mathf.Lerp(
+            rb.gravityScale,
+            targetGravity,
+            gravitySmoothSpeed * Time.deltaTime
+        );
     }
+
 
     ///////////////////////////////공격.....
 
