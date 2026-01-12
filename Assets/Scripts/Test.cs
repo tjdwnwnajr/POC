@@ -6,7 +6,12 @@ public class RopeGyroForceSwing : MonoBehaviour
     public float forceMultiplier = 0.8f;
     public float deadZone = 3f;
     public float maxForce = 20f;
+    public Vector2 lastVelocity;
+    public float lastAngularVelocity;
+   
 
+
+   
     void FixedUpdate()
     {
         var imu = JSL.JslGetIMUState(0);
@@ -24,5 +29,7 @@ public class RopeGyroForceSwing : MonoBehaviour
         Vector2 force = new Vector2(forceX, 0f);
 
         swingTarget.AddForce(force, ForceMode2D.Force);
+        lastVelocity = swingTarget.linearVelocity;
+        lastAngularVelocity = swingTarget.angularVelocity;
     }
 }

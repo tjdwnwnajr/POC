@@ -13,7 +13,11 @@ public class RotateBlock : MonoBehaviour
     public float angularDamping = 10f;           // 감속력
     float angularSpeed;
     float input;
-
+    bool inputCheck;
+    float checkTimer;
+    public float checkRotation;
+    public bool isComplete = false;
+    float angle;
     void Awake()
     {
         
@@ -25,38 +29,77 @@ public class RotateBlock : MonoBehaviour
     }
     void Update()
     {
+       
 
-
-
-        if (isActive)
+        inputCheck = playerInput.checkPressed;
+        if (!isComplete)
         {
-            input = playerInput.rotateInput;
-        }
-        else input = 0f;
-        // 1. 입력 → 가속
-        if (Mathf.Abs(input) > 0.01f)
-        {
-            angularSpeed += input * rotationAcceleration * Time.deltaTime;
+            if (isActive)
+            {
+                input = playerInput.rotateInput;
+            }
+            else input = 0f;
+            // 1. 입력 → 가속
+            if (Mathf.Abs(input) > 0.01f)
+            {
+                angularSpeed += input * rotationAcceleration * Time.deltaTime;
+            }
+            else
+            {
+                // 2. 입력 없으면 감속
+                angularSpeed = Mathf.Lerp(
+                    angularSpeed,
+                    0f,
+                    angularDamping * Time.deltaTime
+                );
+            }
+
+            // 3. 최대 속도 제한
+            angularSpeed = Mathf.Clamp(
+                angularSpeed,
+                -maxAngularSpeed,
+                maxAngularSpeed
+            );
+
+            // 4. 회전 적용
+            transform.Rotate(0f, 0f, angularSpeed * Time.deltaTime);
+
+            
+            if (inputCheck)
+            {
+                if(CheckRotate(5f))
+                {
+                    checkTimer += Time.deltaTime;
+
+                    if (checkTimer >= 2f)
+                    {
+                        isComplete = true;
+                    }
+                }
+                else
+                {
+                    checkTimer = 0f;
+                }
+            }
         }
         else
         {
-            // 2. 입력 없으면 감속
-            angularSpeed = Mathf.Lerp(
-                angularSpeed,
-                0f,
-                angularDamping * Time.deltaTime
-            );
+            checkTimer = 0f;
         }
+    }
+    private bool CheckRotate(float tolerance)
+    {
+        angle = Mathf.DeltaAngle(0f, transform.eulerAngles.z);
 
-        // 3. 최대 속도 제한
-        angularSpeed = Mathf.Clamp(
-            angularSpeed,
-            -maxAngularSpeed,
-            maxAngularSpeed
-        );
+        
+        float step = 90f;                // 주기 (예: 90도)
+        tolerance = 5f;                  // 허용 오차
 
-        // 4. 회전 적용
-        transform.Rotate(0f, 0f, angularSpeed * Time.deltaTime);
+        float mod = Mathf.Repeat(angle - checkRotation, step);
+        Debug.Log("mod: "  + mod);
+        bool isMatch = mod <= tolerance || mod >= step - tolerance;
+
+        return isMatch;
     }
 
 

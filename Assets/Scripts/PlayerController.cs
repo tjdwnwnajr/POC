@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     private bool ropeKeyPressed;
     private bool canCatch = false;
     private Rigidbody2D ropeRb;
+    public Rigidbody2D swingRb;
+    [SerializeField] float ropeReleaseForce = 1.2f;
+    [SerializeField] float ropeUpBoost = 0.3f;
+
 
     private Vector2 moveInput;
     [Header("Move Controller")]
@@ -122,7 +126,7 @@ public class PlayerController : MonoBehaviour
 
     //블럭움직이기
     [HideInInspector] public float rotateInput;
-
+    [HideInInspector] public bool checkPressed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -159,6 +163,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         if (pState.dashing) return;
         if (isRope) return;
         GetDirection();
@@ -226,7 +231,13 @@ public class PlayerController : MonoBehaviour
             rotateInput = 0f;
 
     }
-
+    public void OnCheck(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            checkPressed = true;
+        else if (context.canceled)
+            checkPressed = false;
+    }
     public void OnJump(InputAction.CallbackContext ctx)
     {
         if (ctx.started)
@@ -690,8 +701,17 @@ public class PlayerController : MonoBehaviour
         if(isRope && !ropeKeyPressed)
         {
             isRope = false;
+
+            Vector2 ropeVelocity = swingRb.linearVelocity;
+            Debug.Log("ropeVelocity: " + ropeVelocity);
+            Vector2 impulse = ropeVelocity * ropeReleaseForce;
+            impulse.y += Mathf.Abs(ropeVelocity.x) * ropeUpBoost;
+
+            
+
             playerJoint.enabled = false;
             playerJoint.connectedBody = null;
+            rb.AddForce(impulse, ForceMode2D.Impulse);
         }
     }
 }
