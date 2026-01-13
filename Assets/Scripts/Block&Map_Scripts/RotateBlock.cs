@@ -74,6 +74,9 @@ public class RotateBlock : MonoBehaviour
                     if (checkTimer >= 2f)
                     {
                         isComplete = true;
+                        
+                        
+                        
                     }
                 }
                 else

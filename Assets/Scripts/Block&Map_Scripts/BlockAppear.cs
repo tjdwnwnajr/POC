@@ -8,7 +8,7 @@ public class BlockAppear : MonoBehaviour
     private bool isActive = false;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D col;
-
+    private bool isVibrate =false;
     void Start()
     {
         block = this.gameObject;
@@ -25,8 +25,14 @@ public class BlockAppear : MonoBehaviour
         isActive = RotateBlock.isComplete;
         spriteRenderer.enabled = isActive;
         col.enabled = isActive;
+        if(isActive&&!isVibrate)
+        {
+            DualSenseInput.Instance.Vibrate(0.35f, 0.15f, 0.12f);
+            isVibrate = true;
+        }
 
 
-        
     }
+
+    
 }

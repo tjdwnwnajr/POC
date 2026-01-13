@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -165,7 +166,11 @@ public class PlayerController : MonoBehaviour
     {
 
         if (pState.dashing) return;
-        if (isRope) return;
+        if (isRope)
+        {
+            ReleaseRope();
+            return;
+        }
         GetDirection();
         
         MoveX();
@@ -176,18 +181,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isRope)
+        if (!isRope)
         {
-            ReleaseRope();
-            return;
-        }
-        Jump();
-        UpdateJumpVariables();
-        StartDash();
+            Jump();
+            UpdateJumpVariables();
+            StartDash();
 
-        GetAttack();
-        Attack();
-        CatchRope();
+            GetAttack();
+            Attack();
+            CatchRope();
+        }
+        
         
 
         //낙하속도가 임계값보다 작아야함, 카메라 y반응속도가 이미 조절중인 상태가 아니어야함, 이미 낙하상태로 조절된 상태가 아니어야함
@@ -700,18 +704,24 @@ public class PlayerController : MonoBehaviour
     {
         if(isRope && !ropeKeyPressed)
         {
-            isRope = false;
+            
 
-            Vector2 ropeVelocity = swingRb.linearVelocity;
-            Debug.Log("ropeVelocity: " + ropeVelocity);
-            Vector2 impulse = ropeVelocity * ropeReleaseForce;
-            impulse.y += Mathf.Abs(ropeVelocity.x) * ropeUpBoost;
+            Vector2 ropeVelocity = swingRb.linearVelocity*5f;
 
+            
             
 
             playerJoint.enabled = false;
             playerJoint.connectedBody = null;
-            rb.AddForce(impulse, ForceMode2D.Impulse);
+
+           
+            rb.linearVelocity = new Vector2(ropeVelocity.x, ropeVelocity.y);
+            if (Grounded())
+            {
+                isRope = false;
+            }
+
         }
     }
+    
 }

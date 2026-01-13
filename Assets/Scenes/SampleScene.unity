@@ -209,7 +209,6 @@ GameObject:
   - component: {fileID: 144046492}
   - component: {fileID: 144046491}
   - component: {fileID: 144046490}
-  - component: {fileID: 144046494}
   m_Layer: 0
   m_Name: ball
   m_TagString: Rope
@@ -379,24 +378,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &144046494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144046488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ee5e32d5df0a014c87cffc5226780d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RopeSwingForce
-  swingTarget: {fileID: 144046491}
-  forceMultiplier: 0.8
-  deadZone: 3
-  maxForce: 20
-  lastVelocity: {x: 0, y: 0}
-  lastAngularVelocity: 0
 --- !u!1 &187816056
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,7 +547,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.45}
-  m_ConnectedAnchor: {x: -3.73, y: 15.3}
+  m_ConnectedAnchor: {x: -9.54, y: 8.04}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -904,7 +885,7 @@ Transform:
   m_GameObject: {fileID: 636823795}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.73, y: 14.85, z: 0}
+  m_LocalPosition: {x: -9.54, y: 7.59, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -924,12 +905,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 636823795}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ee5e32d5df0a014c87cffc5226780d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RopeGyroSwing
-  swingTarget: {fileID: 0}
+  swingTarget: {fileID: 144046491}
   forceMultiplier: 0.8
   deadZone: 3
   maxForce: 20
@@ -1049,7 +1030,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 1.0000005}
-  m_ConnectedAnchor: {x: 0, y: -0.7777786}
+  m_ConnectedAnchor: {x: 0, y: -0.7777776}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -10124,7 +10105,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 1}
-  m_ConnectedAnchor: {x: 0, y: -0.77777654}
+  m_ConnectedAnchor: {x: 0, y: -0.7777786}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -10290,6 +10271,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraTarget
   _playerTransform: {fileID: 955345243}
   _flipRotationTime: 0.5
+  _player: {fileID: 0}
+  _isRight: 0
 --- !u!1 &1646574104
 GameObject:
   m_ObjectHideFlags: 3
@@ -10888,7 +10871,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 1}
-  m_ConnectedAnchor: {x: 0, y: -0.7777786}
+  m_ConnectedAnchor: {x: 0, y: -0.7777776}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -36962,7 +36945,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 1}
-  m_ConnectedAnchor: {x: 0, y: -0.7777786}
+  m_ConnectedAnchor: {x: 0, y: -0.7777776}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -37140,15 +37123,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1919357100436958054, guid: 2a499305b5dddea4f8c52d5301b7a9f9, type: 3}
       propertyPath: angularDamping
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1919357100436958054, guid: 2a499305b5dddea4f8c52d5301b7a9f9, type: 3}
       propertyPath: maxAngularSpeed
-      value: 180
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: 1919357100436958054, guid: 2a499305b5dddea4f8c52d5301b7a9f9, type: 3}
       propertyPath: rotationAcceleration
-      value: 180
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: 6717073191861726367, guid: 2a499305b5dddea4f8c52d5301b7a9f9, type: 3}
       propertyPath: m_BodyType
@@ -37243,6 +37226,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8711441808775386173, guid: ce2e9638650052344a76648b10f5f149, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 324e09fde0dd9794389305296ff4f946, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
