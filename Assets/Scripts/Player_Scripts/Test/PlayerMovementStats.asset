@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ea62616d1619a548b4dbe52fcb0438e, type: 3}
   m_Name: PlayerMovementStats
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementStats
-  MaxWalkSpeed: 12.5
+  MaxWalkSpeed: 10
   GroundAcceleration: 5
-  GroundDeceleration: 5
+  GroundDeceleration: 20
   AirAcceleration: 5
   AirDeceleration: 5
   MaxRunSpeed: 20
@@ -24,3 +24,23 @@ MonoBehaviour:
   GroundDetectionRayLength: 0.02
   HeadDetectionRayLength: 0.02
   HeadWidth: 0.75
+  JumpHeight: 6.5
+  JumpHeightCompensationFacor: 1.054
+  TimeTillJumpApex: 0.35
+  GravityOnReleaseMultiplier: 2
+  MaxFallSpeed: 26
+  NumberOfJumpsAllowed: 2
+  TimeForUpwardsCancel: 0.027
+  ApexThreshold: 0.97
+  ApexHangTime: 0.075
+  JumpBufferTime: 0.125
+  JumpCoyoteTime: 0.1
+  DebugShowIsGroundedBox: 0
+  DebugShowHeadBumpBox: 0
+  ShowWalkJumpArc: 1
+  ShowRunJumpArc: 0
+  StopOnCollsion: 1
+  DrawRight: 1
+  StopOnCollision: 1
+  ArcResolution: 20
+  VisualizationSteps: 90

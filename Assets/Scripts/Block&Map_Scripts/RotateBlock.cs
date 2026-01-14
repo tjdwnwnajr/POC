@@ -31,7 +31,7 @@ public class RotateBlock : MonoBehaviour
     {
        
 
-        inputCheck = playerInput.checkPressed;
+        //inputCheck = playerInput.checkPressed;
         if (!isComplete)
         {
             if (isActive)
