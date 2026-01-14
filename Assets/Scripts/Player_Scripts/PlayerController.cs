@@ -158,19 +158,14 @@ public class PlayerController : MonoBehaviour
         pState.lookingRight = true;
         pState.invincible = false;
         gravity = rb.gravityScale;
-        //_cameraFollowObject = _cameraFollowGo.GetComponent<CameraTarget>();
         _fallSpeedYDampingChangeThreshold = CameraManager.Instance._fallSpeedYDampingChangeThresholde;
     }
 
     private void FixedUpdate()
     {
 
-        if (pState.dashing) return;
-        if (isRope)
-        {
-            ReleaseRope();
-            return;
-        }
+        //if (pState.dashing) return;
+        
         GetDirection();
         
         MoveX();
@@ -185,14 +180,18 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
             UpdateJumpVariables();
-            StartDash();
+            //StartDash();
 
             GetAttack();
             Attack();
             CatchRope();
         }
-        
-        
+        if (isRope)
+        {
+            ReleaseRope();
+            return;
+        }
+
 
         //낙하속도가 임계값보다 작아야함, 카메라 y반응속도가 이미 조절중인 상태가 아니어야함, 이미 낙하상태로 조절된 상태가 아니어야함
         if (rb.linearVelocityY < _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
