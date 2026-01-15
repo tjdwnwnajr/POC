@@ -46,29 +46,35 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckDistanceY = 0.2f; //바닥 체크 x,y범위 
     [SerializeField] private float groundCheckDistanceX = 0.5f;
     [SerializeField] private LayerMask groundlayer;
+
+    //점프 최소 보장
     [SerializeField] private float jumpMinTime; //최소 점프 시간
     private float jumpCountTime = 0; //점프 시간 측정 변수
-    [SerializeField] private float fallSpeedLimit = -10f;
-    //중력 관련
-    [SerializeField] float gravityUp = 1.2f;        // 상승 중 기본 중력
-    [SerializeField] float gravityHang = 0.3f;      // 정점 체공 중력 (핵심)
-    [SerializeField] float gravityFall = 2.0f;      // 낙하 중 중력
+    private bool jumpCancelImmediate;
+    
 
-    [SerializeField] float hangVelocityThreshold = 0.15f; // 정점 판정
-    [SerializeField] float gravitySmoothSpeed = 10f;
-
+    //이단 점프
+    private bool jumpwasPressed = false;
     private int airJumpCounter = 0; //공중 점프 카운트 변수
     [SerializeField] private int maxAirJumps; //최대 공중 점프 횟수
-    [Space(5)]
-
     
     //점프 버퍼 : 점프를 미리 눌러도 점프가 작동하도록 하는 변수
-    private int jumpBufferCounter = 0;
-    [SerializeField] private int jumpBufferFrames;
+    private float jumpBufferCounter = 0;
+    [SerializeField] private float jumpBufferTime;
 
     //coyote time : 땅에서 떨어져도 점프가 작동하도록 하는변수 
     private float coyoteTimeCounter = 0;
     [SerializeField] private float coyoteTime;
+
+
+    //중력 관련
+    [SerializeField] private float fallSpeedLimit = -10f;
+    [SerializeField] float gravityUp = 1.2f;        // 상승 중 기본 중력
+    [SerializeField] float gravityHang = 0.3f;      // 정점 체공 중력 (핵심)
+    [SerializeField] float gravityFall = 2.0f;      // 낙하 중 중력
+    [SerializeField] float hangVelocityThreshold = 0.15f; // 정점 판정
+    [SerializeField] float gravitySmoothSpeed = 10f;
+
 
     //dash
     private bool dashKeyDown;
@@ -145,29 +151,34 @@ public class PlayerController : MonoBehaviour
     {
 
         //if (pState.dashing) return;
+        if (!PlayerStateList.isRope)
+        {
+            MoveX();
+            Jump();
+            LimitFallSpeed();
+            UpdateGravity();
+            Recoil();
+        }
         
-        GetDirection();
-        MoveX();
-        Recoil();
-        LimitFallSpeed();
-        UpdateGravity();
+        
+
     }
     // Update is called once per frame
     void Update()
     {
-        if (!isRope)
+        if (!PlayerStateList.isRope)
         {
-            Jump();
+            GetDirection();
             UpdateJumpVariables();
             //StartDash();
 
             GetAttack();
             Attack();
-            CatchRope();
+            //CatchRope();
         }
         if (isRope)
         {
-            ReleaseRope();
+            //ReleaseRope();
             return;
         }
 
@@ -204,21 +215,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //public void OnAttack(InputAction.CallbackContext ctx)
-    //{
-    //    if (ctx.started)
-    //    {
-    //        attackKeyDown = true;
-    //    }
-    //    if (ctx.canceled)
-    //    {
-    //        attackKeyDown = false;
-
-    //    }
-    //}
-
-   
-
+ 
     private void Turn()
     {
         if (pState.lookingRight)
@@ -314,58 +311,76 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-
-    void Jump()
+    void UpdateJumpVariables()
     {
+        bool isGrounded = Grounded();
+        //착지상태
+        if (isGrounded)
+        {
+            jumpCancelImmediate = false;
+            pState.jumping = false;
+            coyoteTimeCounter = coyoteTime;
+            airJumpCounter = 0;
+        }
+        //점프 중
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+        //눌렀을때
+        if (InputManager.JumpWasPressed)
+        {
+            jumpwasPressed = true;
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+        //뗐을때
+        if (InputManager.JumpWasReleased && pState.jumping && rb.linearVelocityY > 0)
+        {
+            jumpCancelImmediate = true;
+        }
 
-        //coyoteTime은 땅에서 떨어져도 점프가 작동하도록 하는 변수 jumpBuffer는 점프를 미리 눌러도 점프가 작동하도록 하는변수
+        anim.SetBool("isJump", !isGrounded);
+    }
+
+
+    private void Jump()
+    {
+        jumpCountTime += Time.fixedDeltaTime;
+        //지면에서 점프 시작
         if (!pState.jumping && coyoteTimeCounter > 0 && jumpBufferCounter > 0)
 
         {
             rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
             pState.jumping = true;
             jumpCountTime = 0;
+            jumpwasPressed = false;
         }
-        else if (pState.jumping && /*Input.GetButtonDown("Jump")*/ InputManager.JumpWasPressed && airJumpCounter < maxAirJumps)
+        //이단 점프
+        else if (pState.jumping && jumpwasPressed && airJumpCounter < maxAirJumps)
         {
-
-            airJumpCounter++;
             rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
+            airJumpCounter++;
             jumpCountTime = 0;
+            jumpwasPressed = false;
         }
 
         //점프 캔슬
-        if (pState.jumping)
+        if (jumpCancelImmediate)
         {
-            jumpCountTime += Time.deltaTime;
-
-            if (InputManager.JumpWasReleased/*Input.GetButtonUp("Jump")*/ && rb.linearVelocityY > 0)
+            
+            if (jumpCountTime >= jumpMinTime)
             {
-                if (jumpCountTime < jumpMinTime)
-                {
-                    StartCoroutine(JumpMinTime(jumpMinTime - jumpCountTime));
-                }
-                else
-                {
-                    rb.linearVelocityY = 0;
-                }
-                //pState.jumping = false;
+                jumpCancelImmediate = false;
+                rb.linearVelocityY = 0;
             }
-        }
-
-
-        anim.SetBool("isJump", !Grounded());
-
-
-    }
-    IEnumerator JumpMinTime(float _time)
-    {
-        yield return new WaitForSeconds(_time);
-        if (rb.linearVelocityY > 0)
-        {
-            rb.linearVelocityY = 0;
+            
         }
     }
+
     void LimitFallSpeed()
     {
         // Y속도가 fallSpeedLimit보다 작으면 fallSpeedLimit로 제한
@@ -375,29 +390,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //플레이어 상태가 접지상태인지 확인하는 함수
-    void UpdateJumpVariables()
-    {
-        if (Grounded())
-        {
-            pState.jumping = false;
-            coyoteTimeCounter = coyoteTime;
-            airJumpCounter = 0;
-        }
-        else
-        {
-            coyoteTimeCounter -= Time.deltaTime;
-        }
-
-        if (InputManager.JumpWasPressed)//Input.GetButtonDown("Jump")|| DualSenseInput.Instance.JumpDown)
-        {
-            jumpBufferCounter = jumpBufferFrames;
-        }
-        else
-        {
-            jumpBufferCounter--;
-        }
-    }
+    
 
     void UpdateGravity()
     {
@@ -426,7 +419,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = Mathf.Lerp(
             rb.gravityScale,
             targetGravity,
-            gravitySmoothSpeed * Time.deltaTime
+            gravitySmoothSpeed * Time.fixedDeltaTime
         );
     }
 
