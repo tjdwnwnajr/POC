@@ -516,4 +516,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    #region Rope
+    public void SetVerticalVelocity(float velocity)
+    {
+        VerticalVelocity = velocity;
+
+        // 속도에 따라 상태 설정
+        if (velocity > 0f)
+        {
+            _isJumping = true;
+            _isFalling = false;
+        }
+        else if (velocity < 0f)
+        {
+            _isJumping = false;
+            _isFalling = true;
+        }
+    }
+        #endregion
 }

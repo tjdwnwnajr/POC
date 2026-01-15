@@ -10,9 +10,14 @@ public class PlayerController : MonoBehaviour
 // sideAttackArea, upAttackArea, downAttackArea, damage
 {   // 이동관련 변수
 
-    //private CameraTarget _cameraFollowObject;
-    //[SerializeField] private GameObject _cameraFollowGo; 
-    //Camera manager
+
+
+    private Rigidbody2D rb;
+    private Animator anim;
+    public static PlayerController Instance;
+    [HideInInspector] public PlayerStateList pState;
+
+    //cam var
     private float _fallSpeedYDampingChangeThreshold;
 
 
@@ -26,19 +31,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float ropeReleaseForce = 1.2f;
     [SerializeField] float ropeUpBoost = 0.3f;
 
-
+    //movement var
     private Vector2 moveInput;
     [Header("Move Controller")]
     [SerializeField] private float walkSpeed = 1;
-    [Space(5)]
     private float xAxis;
 
 
 
     //점프 관련 변수
-    private bool jumpPressed;
-    private bool jumpKeyDown;
-    private bool jumpKeyUp;
     [Header("Jump Controller")]
     [SerializeField] private float jumpPower = 45; //점프 강도
     [SerializeField] private Transform groundCheckPoint;
@@ -56,22 +57,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float hangVelocityThreshold = 0.15f; // 정점 판정
     [SerializeField] float gravitySmoothSpeed = 10f;
 
-
-    //[SerializeField] private float gravityUp;
-    //[SerializeField] private float gravityDefault;
-    //[SerializeField] private float gravityCut;
-
-    
-
     private int airJumpCounter = 0; //공중 점프 카운트 변수
     [SerializeField] private int maxAirJumps; //최대 공중 점프 횟수
     [Space(5)]
 
-    //스테이트리스트 관련
-    [HideInInspector] public PlayerStateList pState;
+    
     //점프 버퍼 : 점프를 미리 눌러도 점프가 작동하도록 하는 변수
     private int jumpBufferCounter = 0;
-    [Header("StateList")]
     [SerializeField] private int jumpBufferFrames;
 
     //coyote time : 땅에서 떨어져도 점프가 작동하도록 하는변수 
@@ -91,18 +83,8 @@ public class PlayerController : MonoBehaviour
     [Space(5)]
 
 
-
-    private Rigidbody2D rb;
-    private Animator anim;
-
-
-    //카메라 스크립트에서 사용하려고
-    public static PlayerController Instance;
-
-
-
     //////////////////공격 관련 
-    private bool attackKeyDown;
+    
     [SerializeField] private float timeBetweenAttack; //공격 속도 제한
     private float timeSinceAttack;
     private float yAxis;
@@ -125,9 +107,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public int maxhealth;
     [SerializeField] public int health;
 
-    //블럭움직이기
-    [HideInInspector] public float rotateInput;
-    [HideInInspector] public bool checkPressed;
+  
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -167,7 +147,6 @@ public class PlayerController : MonoBehaviour
         //if (pState.dashing) return;
         
         GetDirection();
-        
         MoveX();
         Recoil();
         LimitFallSpeed();
@@ -208,53 +187,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void LateUpdate()
-    {
-        jumpKeyDown = false;
-        jumpKeyUp = false;
-        dashKeyDown = false;
-        attackKeyDown = false;
-    }
+  
     //사용자함수
     /////////////////////////////////////////////////////////
 
-    //이동방향 입력함수
-
-    public void OnMove(InputAction.CallbackContext ctx)
-    {
-        moveInput = ctx.ReadValue<Vector2>();
-        Debug.Log(moveInput.x);
-    }
-
-    public void OnRotate(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-            rotateInput = context.ReadValue<float>();
-        else if (context.canceled)
-            rotateInput = 0f;
-
-    }
-    public void OnCheck(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-            checkPressed = true;
-        else if (context.canceled)
-            checkPressed = false;
-    }
-    public void OnJump(InputAction.CallbackContext ctx)
-    {
-        if (ctx.started)
-        {
-            jumpKeyDown = true;
-            jumpKeyUp = false;
-        }
-        if (ctx.canceled)
-        {
-            jumpKeyUp = true;
-            jumpKeyDown = false;
-        }
-        jumpPressed = ctx.performed;
-    }
+    
     public void OnDash(InputAction.CallbackContext ctx)
     {
         if (ctx.started)
@@ -267,31 +204,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnAttack(InputAction.CallbackContext ctx)
-    {
-        if (ctx.started)
-        {
-            attackKeyDown = true;
-        }
-        if (ctx.canceled)
-        {
-            attackKeyDown = false;
+    //public void OnAttack(InputAction.CallbackContext ctx)
+    //{
+    //    if (ctx.started)
+    //    {
+    //        attackKeyDown = true;
+    //    }
+    //    if (ctx.canceled)
+    //    {
+    //        attackKeyDown = false;
 
-        }
-    }
+    //    }
+    //}
 
-    public void OnRope(InputAction.CallbackContext ctx)
-    {
-        if (ctx.started)
-        {
-            ropeKeyPressed = true;
-
-        }
-        if (ctx.canceled)
-        {
-            ropeKeyPressed = false;
-        }
-    }
+   
 
     private void Turn()
     {
@@ -312,30 +238,20 @@ public class PlayerController : MonoBehaviour
     void GetDirection()
     {
 
-        ///xAxis = Input.GetAxisRaw("Horizontal");
 
-        //yAxis = Input.GetAxisRaw("Vertical");
-        xAxis = moveInput.x;
-        yAxis = moveInput.y;
-        //if(xAxis == 0) {
-        //    xAxis = Input.GetAxisRaw("Horizontal");
-        //}
-        //if(yAxis == 0)
-        //{
-        //    yAxis = Input.GetAxisRaw("Vertical");
-        //}   
+        xAxis = InputManager.Movement.x;
+        yAxis = InputManager.Movement.y;
+        
 
         if (xAxis > 0)
         {
-            //spr.flipX = xAxis < 0;
-
-            //transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
+           
             pState.lookingRight = true;
             Turn();
         }
         else if (xAxis < 0)
         {
-            //transform.localScale = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
+           
             pState.lookingRight = false;
             Turn();
         }
@@ -410,7 +326,7 @@ public class PlayerController : MonoBehaviour
             pState.jumping = true;
             jumpCountTime = 0;
         }
-        else if (pState.jumping && /*Input.GetButtonDown("Jump")*/ jumpKeyDown && airJumpCounter < maxAirJumps)
+        else if (pState.jumping && /*Input.GetButtonDown("Jump")*/ InputManager.JumpWasPressed && airJumpCounter < maxAirJumps)
         {
 
             airJumpCounter++;
@@ -423,7 +339,7 @@ public class PlayerController : MonoBehaviour
         {
             jumpCountTime += Time.deltaTime;
 
-            if (jumpKeyUp/*Input.GetButtonUp("Jump")*/ && rb.linearVelocityY > 0)
+            if (InputManager.JumpWasReleased/*Input.GetButtonUp("Jump")*/ && rb.linearVelocityY > 0)
             {
                 if (jumpCountTime < jumpMinTime)
                 {
@@ -473,7 +389,7 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter -= Time.deltaTime;
         }
 
-        if (jumpKeyDown)//Input.GetButtonDown("Jump")|| DualSenseInput.Instance.JumpDown)
+        if (InputManager.JumpWasPressed)//Input.GetButtonDown("Jump")|| DualSenseInput.Instance.JumpDown)
         {
             jumpBufferCounter = jumpBufferFrames;
         }
@@ -519,7 +435,7 @@ public class PlayerController : MonoBehaviour
 
     void GetAttack()
     {
-        pState.attacking = attackKeyDown;//Input.GetMouseButtonDown(0);
+        pState.attacking = InputManager.AttackWasPressed;
     }
     void Attack()
     {

@@ -6,7 +6,7 @@ public class RotateBlock : MonoBehaviour
     
 
     bool isActive;
-    private PlayerController playerInput;
+    //private PlayerController playerInput;
 
     public float rotationAcceleration = 180f; // 입력 시 가속
     public float maxAngularSpeed = 180f;       // 최대 회전 속도
@@ -24,7 +24,7 @@ public class RotateBlock : MonoBehaviour
     }
     private void Start()
     {
-        playerInput = PlayerController.Instance;
+        //playerInput = PlayerController.Instance;
         isActive = false;
     }
     void Update()
@@ -36,7 +36,8 @@ public class RotateBlock : MonoBehaviour
         {
             if (isActive)
             {
-                input = playerInput.rotateInput;
+                //input = playerInput.rotateInput;
+                input = InputManager.Rotate;
             }
             else input = 0f;
             // 1. 입력 → 가속
@@ -65,7 +66,8 @@ public class RotateBlock : MonoBehaviour
             transform.Rotate(0f, 0f, angularSpeed * Time.deltaTime);
 
             
-            if (inputCheck)
+            //if (inputCheck)
+            if(InputManager.CheckIsHeld)
             {
                 if(CheckRotate(5f))
                 {
