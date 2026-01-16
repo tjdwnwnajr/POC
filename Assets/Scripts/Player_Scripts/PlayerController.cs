@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
     {
 
         //if (pState.dashing) return;
-        if (!PlayerStateList.isRope)
+        if (PlayerStateList.canMove)
         {
             MoveX();
             Jump();
@@ -166,7 +166,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PlayerStateList.isRope)
+        PlayerStateList.isGrounded = Grounded();
+        if (PlayerStateList.canMove)
         {
             GetDirection();
             UpdateJumpVariables();
@@ -301,11 +302,12 @@ public class PlayerController : MonoBehaviour
 
     //////////////Á¡ÇÁ °ü·Ã///////////////////////
 
-    bool Grounded() //¶¥ÀÌ¸é true¾Æ´Ï¸é false
+    public bool Grounded() //¶¥ÀÌ¸é true¾Æ´Ï¸é false
     {
         //ÁÂ¿ì ¹ß ¹Ø, °¡¿îµ¥ ¹ØÀÌ ¶¥ÀÎÁö È®ÀÎ
         if (Physics2D.Raycast(groundCheckPoint.position, Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(-groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer))
         {
+
             return true;
         }
         return false;
@@ -313,9 +315,9 @@ public class PlayerController : MonoBehaviour
 
     void UpdateJumpVariables()
     {
-        bool isGrounded = Grounded();
+        PlayerStateList.isGrounded = Grounded();
         //ÂøÁö»óÅÂ
-        if (isGrounded)
+        if (PlayerStateList.isGrounded)
         {
             jumpCancelImmediate = false;
             pState.jumping = false;
@@ -343,7 +345,7 @@ public class PlayerController : MonoBehaviour
             jumpCancelImmediate = true;
         }
 
-        anim.SetBool("isJump", !isGrounded);
+        anim.SetBool("isJump", !PlayerStateList.isGrounded);
     }
 
 

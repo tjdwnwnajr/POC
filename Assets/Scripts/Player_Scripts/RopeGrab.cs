@@ -9,6 +9,11 @@ public class RopeGrab : MonoBehaviour
     private Rigidbody2D rb;
     private HingeJoint2D ropeJoint;
 
+    [SerializeField] private float forceMultiplier;
+    [SerializeField] private float forceMultiplierY;
+    [SerializeField] private float maxForce;
+    private Rigidbody2D swingTarget;
+
     // 잡을 수 있는 밧줄 후보들
     private List<Rigidbody2D> nearbyRopes = new List<Rigidbody2D>();
 
@@ -25,8 +30,15 @@ public class RopeGrab : MonoBehaviour
         }
         if(ropeJoint != null && InputManager.RopeWasReleased)
         {
+            rb.linearVelocity = new Vector2(rb.linearVelocityX, rb.linearVelocityY * forceMultiplierY);
             ReleaseRope();
         }
+        CheckRebound();
+        if (PlayerStateList.isRope)
+        {
+            Swing();
+        }
+
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -56,6 +68,7 @@ public class RopeGrab : MonoBehaviour
         if (nearbyRopes.Count == 0) return;
 
         Rigidbody2D target = FindClosestRope();
+        swingTarget = target;
         if (target == null) return;
 
         
@@ -92,6 +105,7 @@ public class RopeGrab : MonoBehaviour
         ropeJoint.connectedAnchor =
         rope.transform.InverseTransformPoint(transform.position);
         PlayerStateList.isRope = true;
+        PlayerStateList.canMove = false;
         
     }
     void ReleaseRope()
@@ -101,5 +115,39 @@ public class RopeGrab : MonoBehaviour
         Destroy(ropeJoint);
         ropeJoint = null;
         PlayerStateList.isRope = false;
+    }
+    private void CheckRebound()
+    {
+        if (PlayerStateList.isGrounded)
+        {
+            Debug.Log("착지");
+            PlayerStateList.canMove = true;
+        }
+    }
+    
+    private void Swing()
+    {
+        float input = 0f;
+
+        if (Input.GetKey(KeyCode.U))
+            input = 1f;
+        else if (Input.GetKey(KeyCode.I))
+            input = -1f;
+
+        // 입력 없으면 힘 안 줌
+        if (Mathf.Abs(input) < 0.01f)
+            return;
+
+        // "키보드 gyro"로 사용
+        float gyroY = input * 10f; // ← 감도
+
+        // 자이로 → 수평 힘
+        float forceX = gyroY * forceMultiplier;
+        forceX = Mathf.Clamp(forceX, -maxForce, maxForce);
+
+        //  오른쪽 / 왼쪽으로 밀기
+        Vector2 force = new Vector2(-forceX, 0f);
+
+        swingTarget.AddForce(force, ForceMode2D.Force);
     }
 }
