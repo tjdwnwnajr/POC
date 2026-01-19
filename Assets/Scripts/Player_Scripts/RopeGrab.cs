@@ -1,5 +1,6 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class RopeGrab : MonoBehaviour
 {
@@ -8,11 +9,16 @@ public class RopeGrab : MonoBehaviour
 
     private Rigidbody2D rb;
     private HingeJoint2D ropeJoint;
-
+    [SerializeField] private Vector2 anchorVector;
     [SerializeField] private float forceMultiplier;
+    [SerializeField] private float forceMultiplierX;
     [SerializeField] private float forceMultiplierY;
+    [SerializeField] private float maxVelocityX;
+    [SerializeField] private float maxVelocityY;
     [SerializeField] private float maxForce;
+    [SerializeField] private float deadZone;
     private Rigidbody2D swingTarget;
+    
 
     // 잡을 수 있는 밧줄 후보들
     private List<Rigidbody2D> nearbyRopes = new List<Rigidbody2D>();
@@ -21,23 +27,56 @@ public class RopeGrab : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
-
+    private void FixedUpdate()
+    {
+        if (PlayerStateList.isRope)
+        {
+            Swing();
+        }
+    }
     void Update()
     {
+
+        //if (InputManager.AttackWasPressed)
+        //{
+        //    StartCoroutine("CheckGyro");
+        //}
+        
         if (InputManager.RopeIsHeld&&!PlayerStateList.isRope)
         {
             TryGrabRope();
         }
         if(ropeJoint != null && InputManager.RopeWasReleased)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocityX, rb.linearVelocityY * forceMultiplierY);
+            float finalX = rb.linearVelocityX * forceMultiplierX;
+            float finalY = rb.linearVelocityY * forceMultiplierY;
+            finalX = Mathf.Clamp(finalX, -maxVelocityX, maxVelocityX);
+            finalY = Mathf.Clamp(finalY, -maxVelocityY, maxVelocityY);
+            Vector2 finalVelocity = new Vector2(finalX,finalY);
+
+            rb.linearVelocity = finalVelocity;
             ReleaseRope();
         }
         CheckRebound();
-        if (PlayerStateList.isRope)
+        
+
+    }
+    IEnumerator CheckGyro()
+    {
+        while (true)
         {
-            Swing();
+            yield return new WaitForSeconds(1f);
+            var imu = JSL.JslGetIMUState(0);
+            float gyroY = imu.gyroY;
+            float gyroX = imu.gyroX;
+            float gyroZ = imu.gyroZ;
+            float accelX = imu.accelX;
+            float accelZ = imu.accelZ;
+            float accelY = imu.accelY;
+            Debug.Log("gyroX: " + gyroX + "gyroY: " + gyroY + "gyroZ: " + gyroZ + "accelX: " + accelX + "accelY: " + accelY + "accelZ: " + accelZ);
+
         }
+
 
     }
 
@@ -101,7 +140,7 @@ public class RopeGrab : MonoBehaviour
         ropeJoint.connectedBody = rope;
         ropeJoint.autoConfigureConnectedAnchor = false;
 
-        ropeJoint.anchor = new Vector2(0f, 0.8f);
+        ropeJoint.anchor = anchorVector;
         ropeJoint.connectedAnchor =
         rope.transform.InverseTransformPoint(transform.position);
         PlayerStateList.isRope = true;
@@ -127,19 +166,16 @@ public class RopeGrab : MonoBehaviour
     
     private void Swing()
     {
-        float input = 0f;
+        var imu = JSL.JslGetIMUState(0);
+        float gyroY = imu.gyroY;
 
-        if (Input.GetKey(KeyCode.U))
-            input = 1f;
-        else if (Input.GetKey(KeyCode.I))
-            input = -1f;
-
-        // 입력 없으면 힘 안 줌
-        if (Mathf.Abs(input) < 0.01f)
+        // 노이즈 제거
+        if (Mathf.Abs(gyroY) < deadZone)
             return;
 
-        // "키보드 gyro"로 사용
-        float gyroY = input * 10f; // ← 감도
+      
+        Debug.Log("Gyro: " + gyroY);
+        
 
         // 자이로 → 수평 힘
         float forceX = gyroY * forceMultiplier;
