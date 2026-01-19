@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
+using UnityEditor.PackageManager.UI;
 
 public class RotateBlock : MonoBehaviour
 {
-    
+    [SerializeField] private ScreenShakeProfile profile;
 
     bool isActive;
-    //private PlayerController playerInput;
-
+    private CinemachineImpulseSource impulseSource;
     public float rotationAcceleration = 180f; // 입력 시 가속
     public float maxAngularSpeed = 180f;       // 최대 회전 속도
     public float angularDamping = 10f;           // 감속력
@@ -24,67 +25,75 @@ public class RotateBlock : MonoBehaviour
     }
     private void Start()
     {
-        //playerInput = PlayerController.Instance;
+        impulseSource = GetComponent<CinemachineImpulseSource>();
         isActive = false;
+
     }
     void Update()
     {
-       
-
-        //inputCheck = playerInput.checkPressed;
         if (!isComplete)
         {
-            if (isActive)
-            {
-                //input = playerInput.rotateInput;
-                input = InputManager.Rotate;
-            }
-            else input = 0f;
-            // 1. 입력 → 가속
-            if (Mathf.Abs(input) > 0.01f)
-            {
-                angularSpeed += input * rotationAcceleration * Time.deltaTime;
-            }
-            else
-            {
-                // 2. 입력 없으면 감속
-                angularSpeed = Mathf.Lerp(
-                    angularSpeed,
-                    0f,
-                    angularDamping * Time.deltaTime
-                );
-            }
+            UpdateInput();
+            Rotate();
+            CheckCompletion();
+        }
 
-            // 3. 최대 속도 제한
-            angularSpeed = Mathf.Clamp(
+        if (isComplete)
+        {
+            return;
+        }
+       
+    }
+
+    private void UpdateInput()
+    {
+        if (isActive)
+            input = InputManager.Rotate;
+        else
+            input = 0f;
+    }
+
+    private void Rotate()
+    {
+        if (Mathf.Abs(input) > 0.01f)
+        {
+            angularSpeed += input * rotationAcceleration * Time.deltaTime;
+        }
+        else
+        {
+            // 감속
+            angularSpeed = Mathf.Lerp(
                 angularSpeed,
-                -maxAngularSpeed,
-                maxAngularSpeed
+                0f,
+                angularDamping * Time.deltaTime
             );
+        }
 
-            // 4. 회전 적용
-            transform.Rotate(0f, 0f, angularSpeed * Time.deltaTime);
+        // 최대 속도 제한
+        angularSpeed = Mathf.Clamp(
+            angularSpeed,
+            -maxAngularSpeed,
+            maxAngularSpeed
+        );
 
-            
-            //if (inputCheck)
-            if(InputManager.CheckIsHeld)
+        // 회전 적용
+        transform.Rotate(0f, 0f, angularSpeed * Time.deltaTime);
+    }
+    private void CheckCompletion()
+    {
+        if (!InputManager.CheckIsHeld)
+        {
+            checkTimer = 0f;
+            return;
+        }
+
+        if (CheckRotate(5f))
+        {
+            checkTimer += Time.deltaTime;
+
+            if (checkTimer >= 2f)
             {
-                if(CheckRotate(5f))
-                {
-                    checkTimer += Time.deltaTime;
-
-                    if (checkTimer >= 2f)
-                    {
-                        isComplete = true;
-                        
-                        
-                        
-                    }
-                }
-                else
-                {
-                    checkTimer = 0f;
-                }
+                Complete();
             }
         }
         else
@@ -92,6 +101,20 @@ public class RotateBlock : MonoBehaviour
             checkTimer = 0f;
         }
     }
+    private void Complete()
+    {
+        isComplete = true;
+        checkTimer = 0f;
+
+        angularSpeed = 0f;
+
+        // 카메라 흔들림 같은 연출
+        //CameraShakeManager.instance.CameraShake(cinemachineImpulseSource);
+        CameraShakeManager.instance.ScreenShakeFromProfile(profile, impulseSource);
+
+    }
+
+
     private bool CheckRotate(float tolerance)
     {
         angle = Mathf.DeltaAngle(0f, transform.eulerAngles.z);
@@ -101,7 +124,6 @@ public class RotateBlock : MonoBehaviour
         tolerance = 5f;                  // 허용 오차
 
         float mod = Mathf.Repeat(angle - checkRotation, step);
-        Debug.Log("mod: "  + mod);
         bool isMatch = mod <= tolerance || mod >= step - tolerance;
 
         return isMatch;
