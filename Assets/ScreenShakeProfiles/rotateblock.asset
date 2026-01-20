@@ -12,3 +12,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38cdbb9ff909494baeb7cf87d12a308, type: 3}
   m_Name: rotateblock
   m_EditorClassIdentifier: Assembly-CSharp::ScreenShakeProfile
+  impactTime: 1
+  impactForce: 1
+  defaultVelocity: {x: -1, y: 0, z: 0}
+  impulseCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.25170073
+      outSlope: 0.25170073
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.19952698
+      value: 1.0502211
+      inSlope: -0.0008523978
+      outSlope: -0.0008523978
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13317409
+      outWeight: 0.25028032
+    - serializedVersion: 3
+      time: 0.3996138
+      value: 0.9504389
+      inSlope: -0.0018989295
+      outSlope: -0.0018989295
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.60076445
+      value: 1.0499877
+      inSlope: 0.006697692
+      outSlope: 0.006697692
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.09517036
+    - serializedVersion: 3
+      time: 0.8015688
+      value: 0.9498421
+      inSlope: -0.011668537
+      outSlope: -0.011668537
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.2342584
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.25277227
+      outSlope: 0.25277227
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  useCustomCurve: 0
+  shapes: 3
+  listenerAmplistude: 1
+  listenerFrequency: 1
+  listenerDuration: 1

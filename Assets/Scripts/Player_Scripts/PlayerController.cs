@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
     {
 
         //if (pState.dashing) return;
-        if (PlayerStateList.canMove)
+        if (PlayerStateList.canMove&&!PlayerStateList.isView)
         {
             MoveX();
             Jump();
@@ -159,15 +159,25 @@ public class PlayerController : MonoBehaviour
             UpdateGravity();
             Recoil();
         }
-        
-        
+        if (PlayerStateList.isView)
+        {
+            Debug.Log("고정");
+            LockPosition();
+        }
+        else if (!PlayerStateList.isView)
+        {
+            UnLockPosition();
+        }
+       
+
 
     }
     // Update is called once per frame
     void Update()
-    {
+    { 
         PlayerStateList.isGrounded = Grounded();
-        if (PlayerStateList.canMove)
+        
+        if (PlayerStateList.canMove&&!PlayerStateList.isView)
         {
             GetDirection();
             UpdateJumpVariables();
@@ -177,12 +187,7 @@ public class PlayerController : MonoBehaviour
             Attack();
             //CatchRope();
         }
-        if (isRope)
-        {
-            //ReleaseRope();
-            return;
-        }
-
+        
 
         //낙하속도가 임계값보다 작아야함, 카메라 y반응속도가 이미 조절중인 상태가 아니어야함, 이미 낙하상태로 조절된 상태가 아니어야함
         if (rb.linearVelocityY < _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
@@ -216,7 +221,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
- 
+    private void LockPosition()
+    {
+        
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+    }
+    private void UnLockPosition()
+    {
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+    }
     private void Turn()
     {
         if (pState.lookingRight)

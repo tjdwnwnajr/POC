@@ -12,6 +12,7 @@ public class DisappearBlock : MonoBehaviour
     [SerializeField] float rotateSpeed = 20f;     // Èçµé¸² ¼Óµµ
     Quaternion startRotation;
 
+    [HideInInspector] public bool isDisappear = false;
     SpriteRenderer sr;
     Collider2D col;
 
@@ -49,8 +50,10 @@ public class DisappearBlock : MonoBehaviour
     {
         // 1. Èçµé¸²
         float t = 0f;
+        isDisappear = true;
         while (t < shakeDuration)
         {
+
             t += Time.deltaTime;
 
             float angle = Mathf.Sin(Time.time * rotateSpeed) * maxRotateAngle;
@@ -87,5 +90,6 @@ public class DisappearBlock : MonoBehaviour
         transform.position = startPos;
         sr.enabled = true;
         col.enabled = true;
+        isDisappear = false;
     }
 }

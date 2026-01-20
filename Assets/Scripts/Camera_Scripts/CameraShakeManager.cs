@@ -34,7 +34,15 @@ public class CameraShakeManager : MonoBehaviour
         //change the impulse source settings
         impulseDefinition.m_ImpulseDuration = profile.impactTime;
         impulseSource.m_DefaultVelocity = profile.defaultVelocity;
-        impulseDefinition.m_CustomImpulseShape = profile.impulseCurve;
+        if (profile.useCustomCurve)
+        {
+            impulseDefinition.m_CustomImpulseShape = profile.impulseCurve;
+        }
+        else
+        {
+            impulseDefinition.m_ImpulseShape = profile.shapes;
+        }
+        
 
         //change the impulse listener settings
         impulseListener.m_ReactionSettings.m_AmplitudeGain = profile.listenerAmplistude;

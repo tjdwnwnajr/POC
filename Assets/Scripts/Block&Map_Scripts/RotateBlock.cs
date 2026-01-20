@@ -2,16 +2,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
 using UnityEditor.PackageManager.UI;
+using UnityEngine.UIElements;
 
 public class RotateBlock : MonoBehaviour
 {
-    [SerializeField] private ScreenShakeProfile profile;
 
+    [Header("Rotation Settings")]
     bool isActive;
-    private CinemachineImpulseSource impulseSource;
-    public float rotationAcceleration = 180f; // 입력 시 가속
-    public float maxAngularSpeed = 180f;       // 최대 회전 속도
-    public float angularDamping = 10f;           // 감속력
+    public float rotationAcceleration = 270f; // 입력 시 가속
+    public float maxAngularSpeed =270f;       // 최대 회전 속도
+    public float angularDamping = 0.5f;           // 감속력
     float angularSpeed;
     float input;
     bool inputCheck;
@@ -19,13 +19,15 @@ public class RotateBlock : MonoBehaviour
     public float checkRotation;
     public bool isComplete = false;
     float angle;
+
+   
     void Awake()
     {
         
     }
     private void Start()
     {
-        impulseSource = GetComponent<CinemachineImpulseSource>();
+      
         isActive = false;
 
     }
@@ -42,7 +44,8 @@ public class RotateBlock : MonoBehaviour
         {
             return;
         }
-       
+
+        
     }
 
     private void UpdateInput()
@@ -81,25 +84,29 @@ public class RotateBlock : MonoBehaviour
     }
     private void CheckCompletion()
     {
-        if (!InputManager.CheckIsHeld)
+        if (isActive)
         {
-            checkTimer = 0f;
-            return;
-        }
-
-        if (CheckRotate(5f))
-        {
-            checkTimer += Time.deltaTime;
-
-            if (checkTimer >= 2f)
+            if (!InputManager.CheckIsHeld)
             {
-                Complete();
+                checkTimer = 0f;
+                return;
+            }
+
+            if (CheckRotate(5f))
+            {
+                checkTimer += Time.deltaTime;
+
+                if (checkTimer >= 2f)
+                {
+                    Complete();
+                }
+            }
+            else
+            {
+                checkTimer = 0f;
             }
         }
-        else
-        {
-            checkTimer = 0f;
-        }
+        
     }
     private void Complete()
     {
@@ -108,11 +115,14 @@ public class RotateBlock : MonoBehaviour
 
         angularSpeed = 0f;
 
+        
+
         // 카메라 흔들림 같은 연출
-        //CameraShakeManager.instance.CameraShake(cinemachineImpulseSource);
-        CameraShakeManager.instance.ScreenShakeFromProfile(profile, impulseSource);
+        
+        
 
     }
+   
 
 
     private bool CheckRotate(float tolerance)
