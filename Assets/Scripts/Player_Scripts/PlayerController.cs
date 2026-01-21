@@ -24,13 +24,7 @@ public class PlayerController : MonoBehaviour
     //로프 매달리기
     [HideInInspector]public bool isRope = false;
     
-    private bool ropeKeyPressed;
-    private bool canCatch = false;
-    private Rigidbody2D ropeRb;
-    public Rigidbody2D swingRb;
-    [SerializeField] float ropeReleaseForce = 1.2f;
-    [SerializeField] float ropeUpBoost = 0.3f;
-
+    
     //movement var
     private Vector2 moveInput;
     [Header("Move Controller")]
@@ -597,24 +591,9 @@ public class PlayerController : MonoBehaviour
         pState.invincible = false;
 
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Rope"))
-        {
-            ropeRb = collision.gameObject.GetComponent<Rigidbody2D>();
-            canCatch = true;
-        }
-    }
+ 
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Rope"))
-        {
-            ropeRb = null;
-            canCatch = false;
-        }
-
-    }
+ 
    
  
 }

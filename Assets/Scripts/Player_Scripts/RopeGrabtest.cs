@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class RopeGrabtest : MonoBehaviour
 {
-    [Header("Rope")]
+   
     [SerializeField] private LayerMask ropeLayer;
 
-    private Rigidbody2D rb;
-    private HingeJoint2D ropeJoint;
-    [SerializeField] private Vector2 anchorVector;
+    
+
+    [Header("Swing Settings")]
     [SerializeField] private float forceMultiplier;
     [SerializeField] private float forceMultiplierX;
     [SerializeField] private float forceMultiplierY;
@@ -18,13 +18,16 @@ public class RopeGrabtest : MonoBehaviour
     [SerializeField] private float maxForce;
     [SerializeField] private float deadZone;
 
+    [Header("Hand Settings")]
+    public handCheck hand;
     public Vector2 handPos;
     [SerializeField] private float ropePosX;
     [SerializeField] private float ropePosY;
-    private bool grabSucceed = false;
-    public handCheck hand;
 
-    private Rigidbody2D swingTarget;
+
+
+    private Rigidbody2D rb;
+    [SerializeField]private Rigidbody2D swingTarget;
     
     
 
@@ -39,31 +42,21 @@ public class RopeGrabtest : MonoBehaviour
     {
         if (PlayerStateList.isRope)
         {
-            
-           
+            Swing();
         }
     }
     void Update()
     {
 
-
-        
-        
         if (InputManager.RopeIsHeld&&!PlayerStateList.isRope)
         {
-            TryGrabRope();
-            
+            TryGrabRope();            
         }
-        if (grabSucceed)
+        if (InputManager.RopeWasReleased && PlayerStateList.isRope)
         {
-            transform.position = new Vector2(ropePosX, ropePosY);
-            
+            ReleaseRope();
         }
-
-
-      
-        
-
+        CheckRebound();
     }
   
     void OnTriggerEnter2D(Collider2D col)
@@ -93,7 +86,8 @@ public class RopeGrabtest : MonoBehaviour
         if (nearbyRopes.Count == 0) return;
 
         Rigidbody2D target = FindClosestRope();
-        swingTarget = target;
+        
+       
         if (target == null) return;
 
         
@@ -123,19 +117,34 @@ public class RopeGrabtest : MonoBehaviour
 
     void Grab(Rigidbody2D rope)
     {
+        
+
         ropePosX = rope.position.x;
         ropePosY = handPos.y;
-        grabSucceed = true;
+        transform.position = new Vector2(ropePosX, ropePosY);
+
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        transform.SetParent(rope.transform);
+        
+        
         PlayerStateList.isRope = true;
         PlayerStateList.canMove = false;
         
     }
     void ReleaseRope()
     {
-        if (ropeJoint == null) return;
+        //속도 저장
+        Vector2 releaseVelocity = rb.linearVelocity;
 
-        Destroy(ropeJoint);
-        ropeJoint = null;
+        releaseVelocity.x *= forceMultiplierX;
+        releaseVelocity.y *= forceMultiplierY;
+
+        releaseVelocity.x = Mathf.Clamp(releaseVelocity.x, -maxVelocityX, maxVelocityX);
+        releaseVelocity.y = Mathf.Clamp(releaseVelocity.y, -maxVelocityY, maxVelocityY);
+        
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.linearVelocity = releaseVelocity;
+        transform.SetParent(null);
         PlayerStateList.isRope = false;
     }
     private void CheckRebound()
