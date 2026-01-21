@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     //로프 매달리기
     [HideInInspector]public bool isRope = false;
-    private FixedJoint2D playerJoint;
+    
     private bool ropeKeyPressed;
     private bool canCatch = false;
     private Rigidbody2D ropeRb;
@@ -137,9 +137,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         pState = GetComponent<PlayerStateList>();
-        playerJoint = GetComponent<FixedJoint2D>();
-
-        playerJoint.enabled = false;
+       
 
         pState.lookingRight = true;
         pState.invincible = false;
@@ -618,37 +616,5 @@ public class PlayerController : MonoBehaviour
 
     }
    
-    private void CatchRope()
-    {
-        if(canCatch&&ropeKeyPressed && !isRope)
-        {
-            isRope = true;
-            playerJoint.enabled = true;
-            playerJoint.connectedBody = ropeRb;
-        }
-    }
-    private void ReleaseRope()
-    {
-        if(isRope && !ropeKeyPressed)
-        {
-            
-
-            Vector2 ropeVelocity = swingRb.linearVelocity*5f;
-
-            
-            
-
-            playerJoint.enabled = false;
-            playerJoint.connectedBody = null;
-
-           
-            rb.linearVelocity = new Vector2(ropeVelocity.x, ropeVelocity.y);
-            if (Grounded())
-            {
-                isRope = false;
-            }
-
-        }
-    }
-    
+ 
 }

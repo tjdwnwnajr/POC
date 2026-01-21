@@ -19,6 +19,7 @@ public class RopeGrab : MonoBehaviour
     [SerializeField] private float deadZone;
     private Rigidbody2D swingTarget;
     
+    
 
     // 잡을 수 있는 밧줄 후보들
     private List<Rigidbody2D> nearbyRopes = new List<Rigidbody2D>();
@@ -177,7 +178,7 @@ public class RopeGrab : MonoBehaviour
         Debug.Log("Gyro: " + gyroY);
         
 
-        // 자이로 → 수평 힘
+        // 자이로  수평 힘
         float forceX = gyroY * forceMultiplier;
         forceX = Mathf.Clamp(forceX, -maxForce, maxForce);
 
