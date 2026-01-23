@@ -16,16 +16,22 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float zoominTime = 0.3f;
     private bool isZooming;
 
-    private CinemachineVirtualCamera cam;
-
+    [Header("Virtual Camera")]
+    public CinemachineVirtualCamera cam;
+    [Header("Offset Settings")]
+    private CinemachineCameraOffset offset;
+    private Vector3 defaultOffset;
+    private bool offsetMode = false;
+    private Coroutine moveCoroutine;
+    private float lookbtnCount;
 
 
     void Awake()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
+        offset = cam.GetComponent<CinemachineCameraOffset>();
         cam.m_Lens.OrthographicSize = startSize;
-
-
+        defaultOffset = offset.m_Offset;
 
     }
 
@@ -37,7 +43,31 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        if (!PlayerStateList.isView)
+        {
+            if (InputManager.LookWasPressed)
+            {
+                lookbtnCount = 0;
+                offsetMode = false;
+            }
+            if (InputManager.LookIsHeld && !offsetMode)
+            {
+                lookbtnCount += Time.deltaTime;
+                if (lookbtnCount > 1.0f)
+                {
+                    offsetMode = true;
+                    LookOffset(InputManager.LookDirection);
+                }
+            }
+         
+            if (InputManager.LookWasReleased)
+            {
+                lookbtnCount = 0;
+                offsetMode = false;
+                LookOffset(defaultOffset);
+            }
+        }
+
     }
   
     public void OnZoomIn(InputAction.CallbackContext ctx)
@@ -98,5 +128,29 @@ public class CameraFollow : MonoBehaviour
         }
 
         isZooming = false;
+    }
+
+    private void LookOffset(Vector2 direction)
+    {
+        if (moveCoroutine != null)
+            StopCoroutine(moveCoroutine);
+        Vector3 d = new Vector3(direction.x*5, direction.y*8, 0f);
+        moveCoroutine = StartCoroutine(MoveOffset(d));
+    }
+
+    private IEnumerator MoveOffset(Vector3 targetOffset)
+    {
+        Vector3 startOffset = offset.m_Offset;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / 0.3f;
+            offset.m_Offset =
+                Vector3.Lerp(startOffset, targetOffset, t);
+            yield return null;
+        }
+
+        offset.m_Offset = targetOffset;
     }
 }
