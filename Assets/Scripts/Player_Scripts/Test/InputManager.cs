@@ -23,6 +23,14 @@ public class InputManager : MonoBehaviour
     //Attack
     public static bool AttackWasPressed;
 
+    //Look
+    public static bool LookWasPressed;
+    public static bool LookIsHeld;
+    public static bool LookWasReleased;
+    public static Vector2 LookDirection;
+    //UseTools
+    public static bool UseToolWasPressed;
+
     private InputAction _moveAction;
     private InputAction _jumpAction;
     private InputAction _runAction;
@@ -30,6 +38,8 @@ public class InputManager : MonoBehaviour
     private InputAction _rotateAction;
     private InputAction _checkAction;
     private InputAction _attackAction;
+    private InputAction _lookAction;
+    private InputAction _useTool;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -43,6 +53,9 @@ public class InputManager : MonoBehaviour
         _rotateAction = PlayerInput.actions["Rotate"];
         _checkAction = PlayerInput.actions["Check"];
         _attackAction = PlayerInput.actions["Attack"];
+        _lookAction = PlayerInput.actions["Look"];
+        _useTool = PlayerInput.actions["Use"];
+
     }
 
     // Update is called once per frame
@@ -65,5 +78,12 @@ public class InputManager : MonoBehaviour
         CheckIsHeld = _checkAction.IsPressed();
 
         AttackWasPressed = _attackAction.WasPressedThisFrame();
+
+        LookDirection = _lookAction.ReadValue<Vector2>();
+        LookWasPressed = _lookAction.WasPressedThisFrame();
+        LookIsHeld = _lookAction.IsPressed();
+        LookWasReleased = _lookAction.WasReleasedThisFrame();
+
+        UseToolWasPressed = _useTool.WasPressedThisFrame();
     }
 }
