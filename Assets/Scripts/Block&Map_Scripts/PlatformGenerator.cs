@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Cinemachine;
 
 [System.Serializable]
 public class PlatformData
@@ -12,16 +13,24 @@ public class PlatformData
 public class PlatformGenerator : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private KeyCode activateKey = KeyCode.P;  // 발판 생성을 시작하는 키
     [SerializeField] private PlatformData[] platforms = new PlatformData[0];
 
     [Header("Visual")]
     [SerializeField] private bool showDebugMessages = true;
 
+    [Header("Camera Shake")]
+    private CinemachineImpulseSource impulseSource;
+    [SerializeField] private ScreenShakeProfile profile;
+    [SerializeField] private bool shakeOn;
+
     private Coroutine platformCoroutine;
     private bool canTrigger = false;
     private bool isGenerating = false;
 
+    private void Start()
+    {
+        impulseSource = GetComponent<CinemachineImpulseSource>();
+    }
     private void Update()
     {
         if (canTrigger&&InputManager.UseToolWasPressed)
@@ -38,6 +47,7 @@ public class PlatformGenerator : MonoBehaviour
         if (isGenerating) return;
 
         isGenerating = true;
+
         platformCoroutine = StartCoroutine(GeneratePlatformsSequence());
 
     }
@@ -52,7 +62,8 @@ public class PlatformGenerator : MonoBehaviour
 
             // 지연시간만큼 대기
             yield return new WaitForSeconds(platformData.delayBeforeSpawn);
-
+            DualSenseInput.Instance.Vibrate(0.15f, 0.15f, 0.07f);
+            CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
             // 발판 활성화
             if (platformData.platformObject != null)
             {

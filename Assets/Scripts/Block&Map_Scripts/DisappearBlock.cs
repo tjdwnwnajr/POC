@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using UnityEngine;
 
@@ -10,19 +11,26 @@ public class DisappearBlock : MonoBehaviour
     [Header("Rotation Shake")]
     [SerializeField] float maxRotateAngle = 8f;   // 최대 기울기 (도)
     [SerializeField] float rotateSpeed = 20f;     // 흔들림 속도
-    Quaternion startRotation;
+    private Quaternion startRotation;
 
-    [HideInInspector] public bool isDisappear = false;
-    SpriteRenderer sr;
-    Collider2D col;
 
-    Vector3 startPos;
-    bool triggered;
+    [Header("Camera Shake")]
+    private CinemachineImpulseSource impulseSource;
+    [SerializeField] private ScreenShakeProfile profile;
+    [SerializeField] private bool shakeOn;
+
+
+    private SpriteRenderer sr;
+    private Collider2D col;
+
+    private Vector3 startPos;
+    private bool triggered;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<Collider2D>();
+        impulseSource = GetComponent<CinemachineImpulseSource>();
         startPos = transform.position;
         startRotation = transform.rotation;
     }
@@ -39,6 +47,8 @@ public class DisappearBlock : MonoBehaviour
             if (contact.normal.y < -0.5f)
             {
                 triggered = true;
+                if(shakeOn)
+                    CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
                 StartCoroutine(PlatformRoutine());
                 break;
             }
@@ -50,7 +60,6 @@ public class DisappearBlock : MonoBehaviour
     {
         // 1. 흔들림
         float t = 0f;
-        isDisappear = true;
         while (t < shakeDuration)
         {
 
@@ -90,6 +99,5 @@ public class DisappearBlock : MonoBehaviour
         transform.position = startPos;
         sr.enabled = true;
         col.enabled = true;
-        isDisappear = false;
     }
 }

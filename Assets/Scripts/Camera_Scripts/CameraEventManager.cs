@@ -3,75 +3,25 @@ using UnityEngine;
 
 public class CameraEventManager : MonoBehaviour
 {
+    public static CameraEventManager instance;
     [Header("Camera Offset")]
     public CameraEventFocus cameraEventFocus;
-    [SerializeField] private Transform offsetTarget;
-    [SerializeField] private bool offsetOn;
-    [Header("Camera Shake")]
-    private CinemachineImpulseSource impulseSource;
-    [SerializeField] private ScreenShakeProfile profile;
-    [SerializeField] private bool shakeOn;
-    [Header("Mission Complete")]
-    [SerializeField] private RotateBlock missionblock;
-    [SerializeField] private DisappearBlock disappearBlock;
-    private bool isComplete =false;
-    private bool isDisappear = false;
-    //종료 변수
-    private bool isEnd = false;
 
-    private void Start()
+    private void Awake()
     {
-        impulseSource = GetComponent<CinemachineImpulseSource>();        
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
     }
-
-    private void Update()
-    {
-        if (missionblock != null)
-        {
-            isComplete = missionblock.isComplete;
-        }
-        if (disappearBlock != null)
-        {
-            isDisappear = disappearBlock.isDisappear;
-        }
-
-        if (!isEnd)
-        { 
-            if (isComplete)
-            {
-                if (offsetOn)
-                {
-                    CameraOffsetEvent();
-                }
-                if (shakeOn)
-                {
-                    CameraShakeEvent();
-                }
-                isEnd = true;
-            }
-            
-            if (isDisappear)
-            {
-                if (shakeOn)
-                {
-                    CameraShakeEvent();
-                }
-            }
-            
-        }
-        if (disappearBlock != null)
-        {
-            isEnd = isDisappear;
-            Debug.Log(isDisappear);
-        }
-
-    }
-    private void CameraOffsetEvent()
+    public void CameraOffsetEvent(Transform startPos, Transform targetPos)
     {
         if (cameraEventFocus != null)
         {
             PlayerStateList.isView = true;
-            cameraEventFocus.FocusEvent(transform, offsetTarget);
+            cameraEventFocus.FocusEvent(startPos, targetPos);
             Invoke(nameof(ReturnCamera), 2f);
         }
 
@@ -79,14 +29,14 @@ public class CameraEventManager : MonoBehaviour
     private void ReturnCamera()
     {
         cameraEventFocus.ReturnToPlayer();
-        PlayerStateList.ViewMode(false);
+        PlayerStateList.isView = false;
     }
 
-    private void CameraShakeEvent()
+    public void CameraShakeEvent(ScreenShakeProfile profile, CinemachineImpulseSource impulseSource)
     {
         CameraShakeManager.instance.ScreenShakeFromProfile(profile, impulseSource);
 
     }
 
-    
+
 }

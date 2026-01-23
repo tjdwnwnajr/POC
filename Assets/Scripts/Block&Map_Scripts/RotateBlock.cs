@@ -20,14 +20,21 @@ public class RotateBlock : MonoBehaviour
     public bool isComplete = false;
     float angle;
 
-   
+    [Header("Camera Offset")]
+    [SerializeField] private Transform targetPos;
+    [SerializeField] private bool offsetOn;
+    [Header("Camera Shake")]
+    private CinemachineImpulseSource impulseSource;
+    [SerializeField] private ScreenShakeProfile profile;
+    [SerializeField] private bool shakeOn;
+
     void Awake()
     {
         
     }
     private void Start()
     {
-      
+        impulseSource = GetComponent<CinemachineImpulseSource>();
         isActive = false;
 
     }
@@ -115,10 +122,11 @@ public class RotateBlock : MonoBehaviour
 
         angularSpeed = 0f;
 
-        
-
         // 카메라 흔들림 같은 연출
-        
+        if(shakeOn)
+            CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
+        if (offsetOn)
+            CameraEventManager.instance.CameraOffsetEvent(transform, targetPos);
         
 
     }
