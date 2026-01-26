@@ -7,7 +7,7 @@ public class PlayerStateList : MonoBehaviour
     public bool attacking;
     public bool recoilingX = false;
     public bool recoilingY = false;
-    public bool lookingRight;
+    public static bool lookingRight =false;
     public bool invincible;
     public static bool isRope = false;
     public static bool isGrounded = true;

@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
         pState = GetComponent<PlayerStateList>();
        
 
-        pState.lookingRight = true;
+        PlayerStateList.lookingRight = true;
         pState.invincible = false;
         gravity = rb.gravityScale;
         _fallSpeedYDampingChangeThreshold = CameraManager.Instance._fallSpeedYDampingChangeThresholde;
@@ -228,7 +228,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Turn()
     {
-        if (pState.lookingRight)
+        if (PlayerStateList.lookingRight)
         {
             Vector3 rotator = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotator);
@@ -252,14 +252,14 @@ public class PlayerController : MonoBehaviour
 
         if (xAxis > 0)
         {
-           
-            pState.lookingRight = true;
+
+            PlayerStateList.lookingRight = true;
             Turn();
         }
         else if (xAxis < 0)
         {
-           
-            pState.lookingRight = false;
+
+            PlayerStateList.lookingRight = false;
             Turn();
         }
     }
@@ -511,7 +511,7 @@ public class PlayerController : MonoBehaviour
     {
         if (pState.recoilingX)
         {
-            if (pState.lookingRight)
+            if (PlayerStateList.lookingRight)
             {
                 rb.linearVelocity = new Vector2(-recoilXSpeed, 0);
             }

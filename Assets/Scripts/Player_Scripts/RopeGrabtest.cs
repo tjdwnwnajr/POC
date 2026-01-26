@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class RopeGrabtest : MonoBehaviour
 {
-   
+    private Animator anim;
     [SerializeField] private LayerMask ropeLayer;
-
+    private bool canGrab;
     
 
     [Header("Swing Settings")]
@@ -37,6 +37,7 @@ public class RopeGrabtest : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
     private void FixedUpdate()
     {
@@ -47,88 +48,49 @@ public class RopeGrabtest : MonoBehaviour
     }
     void Update()
     {
-
-        if (InputManager.RopeIsHeld&&!PlayerStateList.isRope)
+        anim.SetBool("isRope",PlayerStateList.isRope);
+        if (InputManager.RopeIsHeld&&!PlayerStateList.isRope&&hand.canGrab)
         {
-            TryGrabRope();            
+            //TryGrabRope();            
+            Grab(hand.hangedRope);
         }
         if (InputManager.RopeWasReleased && PlayerStateList.isRope)
         {
             ReleaseRope();
+            StartCoroutine(ResetRotation());
         }
         CheckRebound();
     }
-  
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (((1 << col.gameObject.layer) & ropeLayer) == 0) return;
 
-        Rigidbody2D ropeRb = col.attachedRigidbody;
-        if (ropeRb != null && !nearbyRopes.Contains(ropeRb))
-        {
-            nearbyRopes.Add(ropeRb);
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D col)
-    {
-        if (((1 << col.gameObject.layer) & ropeLayer) == 0) return;
-
-        Rigidbody2D ropeRb = col.attachedRigidbody;
-        if (ropeRb != null)
-        {
-            nearbyRopes.Remove(ropeRb);
-        }
-    }
-
-    void TryGrabRope()
-    {
-        if (nearbyRopes.Count == 0) return;
-
-        Rigidbody2D target = FindClosestRope();
-        
-       
-        if (target == null) return;
-
-        
-        Grab(target);
-    }
-
-    Rigidbody2D FindClosestRope()
-    {
-        float minDist = float.MaxValue;
-        Rigidbody2D closest = null;
-
-        foreach (var rope in nearbyRopes)
-        {
-            if (rope == null) continue;
-            handPos = new Vector2(hand.grabX, hand.grabY);
-
-            float dist = Vector2.Distance(handPos, rope.position);
-            if (dist < minDist)
-            {
-                minDist = dist;
-                closest = rope;
-            }
-        }
-
-        return closest;
-    }
+   
 
     void Grab(Rigidbody2D rope)
     {
         
 
-        ropePosX = rope.position.x;
-        ropePosY = handPos.y;
-        transform.position = new Vector2(ropePosX, ropePosY);
+        ropePosX = rope.gameObject.transform.position.x;
+        //handPos = new Vector2(hand.grabX, hand.grabY);
 
+        ropePosY = hand.handPos.y;
+        transform.position = new Vector2(ropePosX, ropePosY);
+        
+        
         rb.bodyType = RigidbodyType2D.Kinematic;
         transform.SetParent(rope.transform);
-        
-        
+        float rotateZ = rope.gameObject.transform.rotation.z;
+        if (PlayerStateList.lookingRight)
+        {
+            transform.localRotation = Quaternion.identity;
+        }
+        else 
+        {
+            transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+        }
+        swingTarget = rope;
+
         PlayerStateList.isRope = true;
         PlayerStateList.canMove = false;
+        
         
     }
     void ReleaseRope()
@@ -146,6 +108,7 @@ public class RopeGrabtest : MonoBehaviour
         rb.linearVelocity = releaseVelocity;
         transform.SetParent(null);
         PlayerStateList.isRope = false;
+        
     }
     private void CheckRebound()
     {
@@ -166,7 +129,7 @@ public class RopeGrabtest : MonoBehaviour
             return;
 
       
-        Debug.Log("Gyro: " + gyroY);
+        //Debug.Log("Gyro: " + gyroY);
         
 
         // 자이로  수평 힘
@@ -175,7 +138,37 @@ public class RopeGrabtest : MonoBehaviour
 
         //  오른쪽 / 왼쪽으로 밀기
         Vector2 force = new Vector2(-forceX, 0f);
-
+        Transform chainRoot = transform.parent.parent;
+        Transform childchain = chainRoot.GetChild(9);
+      
+        
         swingTarget.AddForce(force, ForceMode2D.Force);
     }
+    IEnumerator ResetRotation()
+    {
+        float duration = 0.2f;
+        float t = 0f;
+        Quaternion startRot = transform.rotation;
+        Quaternion targetRot = Quaternion.identity; // (0,0,0)
+        if (PlayerStateList.lookingRight)
+        {
+            startRot = transform.rotation;
+            targetRot = Quaternion.identity; // (0,0,0)
+        }
+        else 
+        {
+            startRot = transform.rotation;
+            targetRot = Quaternion.Euler(0f, -180f, 0f);
+        }
+
+            while (t < 1f)
+            {
+                t += Time.deltaTime / duration;
+                transform.rotation = Quaternion.Lerp(startRot, targetRot, t);
+                yield return null;
+            }
+
+        transform.rotation = targetRot; // 오차 보정
+    }
+
 }

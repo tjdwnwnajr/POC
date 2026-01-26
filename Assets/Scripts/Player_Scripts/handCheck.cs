@@ -5,14 +5,28 @@ public class handCheck : MonoBehaviour
     
     public float grabY;
     public float grabX;
-    
-    void OnTriggerEnter2D(Collider2D col)
+    public Vector2 handPos;
+    public bool canGrab;
+    public Rigidbody2D hangedRope;
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        Vector2 contactPoint =
-            col.ClosestPoint(transform.position);
-        grabY = contactPoint.y;
-        grabX = contactPoint.x;
+        if(collision.gameObject.layer == 7)
+        {
+            //Vector2 contactPoint = 
+            //    collision.ClosestPoint(transform.position);
+            //grabY = contactPoint.y;
+            //grabX = contactPoint.x;
+            handPos = transform.position;
+            hangedRope = collision.gameObject.GetComponent<Rigidbody2D>();
+            canGrab = true;
+            
+        }
 
-        Debug.Log("Á¢ÃË ¿ùµå ÁÂÇ¥: " + contactPoint);
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        canGrab = false;
+        handPos = new Vector2(0, 0);
+        hangedRope = null;
     }
 }
