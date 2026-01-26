@@ -167,7 +167,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.013256073, y: -0.03540945}
+  m_Offset: {x: -0.013256073, y: -0.018692017}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -177,7 +177,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.82365036, y: 2.3963137}
+  m_Size: {x: 0.63640976, y: 1.8947849}
   m_EdgeRadius: 0
 --- !u!50 &3474039861710039994
 Rigidbody2D:
@@ -299,7 +299,6 @@ MonoBehaviour:
   attacking: 0
   recoilingX: 0
   recoilingY: 0
-  lookingRight: 0
   invincible: 0
 --- !u!114 &7085768265843195921
 MonoBehaviour:
@@ -308,7 +307,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2632467401589156532}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afe03079cc3aa564d90e1548e668222a, type: 3}
   m_Name: 
@@ -316,12 +315,14 @@ MonoBehaviour:
   ropeLayer:
     serializedVersion: 2
     m_Bits: 128
-  forceMultiplier: 5
-  forceMultiplierX: 1.5
-  forceMultiplierY: 5
+  smoothing: 0.6
+  maxGyroValue: 500
+  forceMultiplier: 15
+  forceMultiplierX: 5
+  forceMultiplierY: 10
   maxVelocityX: 20
   maxVelocityY: 20
-  maxForce: 15
+  maxForce: 30
   deadZone: 10
   hand: {fileID: 5265131666137365663}
   handPos: {x: 0, y: 0}
@@ -335,7 +336,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2632467401589156532}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3091d4cee906aa94ba1065da7a6e8a92, type: 3}
   m_Name: 
@@ -363,7 +364,7 @@ GameObject:
   - component: {fileID: 2993973952369834313}
   - component: {fileID: 5265131666137365663}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: handPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -378,8 +379,8 @@ Transform:
   m_GameObject: {fileID: 4350330918853289367}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.026682, y: -0.09, z: 0}
-  m_LocalScale: {x: 1.7125, y: 1, z: 1}
+  m_LocalPosition: {x: -0.088566, y: 0.403, z: 0}
+  m_LocalScale: {x: 3.3650627, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8739747821140874420}
@@ -418,7 +419,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.03744793, y: 0.0149793625}
+  m_Offset: {x: 0.02, y: 0.15}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -428,7 +429,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.23605919, y: 0.19112206}
+  m_Size: {x: 0.18, y: 0.37}
   m_EdgeRadius: 0
 --- !u!114 &5265131666137365663
 MonoBehaviour:
@@ -444,6 +445,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::handCheck
   grabY: 0
   grabX: 0
+  handPos: {x: 0, y: 0}
+  canGrab: 0
+  hangedRope: {fileID: 0}
 --- !u!1 &4479097423849455100
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +475,7 @@ Transform:
   m_GameObject: {fileID: 4479097423849455100}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.186, z: 0}
+  m_LocalPosition: {x: 0, y: -0.947, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

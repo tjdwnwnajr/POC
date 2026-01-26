@@ -7,7 +7,12 @@ public class RopeGrabtest : MonoBehaviour
     private Animator anim;
     [SerializeField] private LayerMask ropeLayer;
     private bool canGrab;
-    
+
+    private float smoothedValue = 0f;
+
+    [Header("Gyro Mapping")]
+    [SerializeField] private float smoothing = 0.6f;
+    [SerializeField] private float maxGyroValue = 500f;
 
     [Header("Swing Settings")]
     [SerializeField] private float forceMultiplier;
@@ -87,7 +92,7 @@ public class RopeGrabtest : MonoBehaviour
             transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
         }
         swingTarget = rope;
-
+        smoothedValue = 0f;
         PlayerStateList.isRope = true;
         PlayerStateList.canMove = false;
         
@@ -96,7 +101,7 @@ public class RopeGrabtest : MonoBehaviour
     void ReleaseRope()
     {
         //속도 저장
-        Vector2 releaseVelocity = rb.linearVelocity;
+        Vector2 releaseVelocity = swingTarget.linearVelocity;
 
         releaseVelocity.x *= forceMultiplierX;
         releaseVelocity.y *= forceMultiplierY;
@@ -106,6 +111,7 @@ public class RopeGrabtest : MonoBehaviour
         
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.linearVelocity = releaseVelocity;
+        Debug.Log(rb.linearVelocity);
         transform.SetParent(null);
         PlayerStateList.isRope = false;
         
@@ -123,9 +129,10 @@ public class RopeGrabtest : MonoBehaviour
     {
         var imu = JSL.JslGetIMUState(0);
         float gyroY = imu.gyroY;
+        float mappedGyro = MapGyroTo50Range(gyroY);
 
         // 노이즈 제거
-        if (Mathf.Abs(gyroY) < deadZone)
+        if (Mathf.Abs(mappedGyro) < deadZone)
             return;
 
       
@@ -133,16 +140,31 @@ public class RopeGrabtest : MonoBehaviour
         
 
         // 자이로  수평 힘
-        float forceX = gyroY * forceMultiplier;
+        float forceX = mappedGyro * forceMultiplier;
         forceX = Mathf.Clamp(forceX, -maxForce, maxForce);
 
         //  오른쪽 / 왼쪽으로 밀기
         Vector2 force = new Vector2(-forceX, 0f);
-        Transform chainRoot = transform.parent.parent;
-        Transform childchain = chainRoot.GetChild(9);
+       
       
         
         swingTarget.AddForce(force, ForceMode2D.Force);
+    }
+    private float MapGyroTo50Range(float rawGyroY)
+    {
+        // 1. 데드존 제거
+        if (Mathf.Abs(rawGyroY) < deadZone)
+        {
+            rawGyroY = 0f;
+        }
+
+        // 2. 스무딩
+        smoothedValue = Mathf.Lerp(smoothedValue, rawGyroY, smoothing);
+
+        // 3. -500~500을 -50~50으로 변환
+        float mapped = Mathf.Clamp(smoothedValue / maxGyroValue * 50f, -50f, 50f);
+
+        return mapped;
     }
     IEnumerator ResetRotation()
     {

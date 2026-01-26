@@ -166,7 +166,15 @@ public class PlayerController : MonoBehaviour
     }
     // Update is called once per frame
     void Update()
-    { 
+    {
+        Vector3 center = groundCheckPoint.position;
+        Vector3 right = center + new Vector3(groundCheckDistanceX, 0, 0);
+        Vector3 left = center + new Vector3(-groundCheckDistanceX, 0, 0);
+
+        // Ray ½Ã°¢È­
+        Debug.DrawRay(center, Vector2.down * groundCheckDistanceY, Color.red);
+        Debug.DrawRay(right, Vector2.down * groundCheckDistanceY, Color.red);
+        Debug.DrawRay(left, Vector2.down * groundCheckDistanceY, Color.red);
         PlayerStateList.isGrounded = Grounded();
         
         if (PlayerStateList.canMove&&!PlayerStateList.isView)
