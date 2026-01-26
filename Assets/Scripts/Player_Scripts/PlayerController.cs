@@ -1,14 +1,14 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
-//Á¶Àı ¿¹Á¤ º¯¼ö
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 // walkSpeed, jumpPower, maxAirjumps, jumpBufferFrames, coyoteTime, dashSpeed, dashTime, dashCooldown, timeBetweenAttack,
 // sideAttackArea, upAttackArea, downAttackArea, damage
-{   // ÀÌµ¿°ü·Ã º¯¼ö
+{   // ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 
 
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private float _fallSpeedYDampingChangeThreshold;
 
 
-    //·ÎÇÁ ¸Å´Ş¸®±â
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Å´Ş¸ï¿½ï¿½ï¿½
     [HideInInspector]public bool isRope = false;
     
     
@@ -33,40 +33,40 @@ public class PlayerController : MonoBehaviour
 
 
 
-    //Á¡ÇÁ °ü·Ã º¯¼ö
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [Header("Jump Controller")]
-    [SerializeField] private float jumpPower = 45; //Á¡ÇÁ °­µµ
+    [SerializeField] private float jumpPower = 45; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private Transform groundCheckPoint;
-    [SerializeField] private float groundCheckDistanceY = 0.2f; //¹Ù´Ú Ã¼Å© x,y¹üÀ§ 
+    [SerializeField] private float groundCheckDistanceY = 0.2f; //ï¿½Ù´ï¿½ Ã¼Å© x,yï¿½ï¿½ï¿½ï¿½ 
     [SerializeField] private float groundCheckDistanceX = 0.5f;
     [SerializeField] private LayerMask groundlayer;
 
-    //Á¡ÇÁ ÃÖ¼Ò º¸Àå
-    [SerializeField] private float jumpMinTime; //ÃÖ¼Ò Á¡ÇÁ ½Ã°£
-    private float jumpCountTime = 0; //Á¡ÇÁ ½Ã°£ ÃøÁ¤ º¯¼ö
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private float jumpMinTime; //ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+    private float jumpCountTime = 0; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private bool jumpCancelImmediate;
     
 
-    //ÀÌ´Ü Á¡ÇÁ
+    //ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½
     private bool jumpwasPressed = false;
-    private int airJumpCounter = 0; //°øÁß Á¡ÇÁ Ä«¿îÆ® º¯¼ö
-    [SerializeField] private int maxAirJumps; //ÃÖ´ë °øÁß Á¡ÇÁ È½¼ö
+    private int airJumpCounter = 0; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private int maxAirJumps; //ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È½ï¿½ï¿½
     
-    //Á¡ÇÁ ¹öÆÛ : Á¡ÇÁ¸¦ ¹Ì¸® ´­·¯µµ Á¡ÇÁ°¡ ÀÛµ¿ÇÏµµ·Ï ÇÏ´Â º¯¼ö
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ûµï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
     private float jumpBufferCounter = 0;
     [SerializeField] private float jumpBufferTime;
 
-    //coyote time : ¶¥¿¡¼­ ¶³¾îÁ®µµ Á¡ÇÁ°¡ ÀÛµ¿ÇÏµµ·Ï ÇÏ´Âº¯¼ö 
+    //coyote time : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ûµï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½Ï´Âºï¿½ï¿½ï¿½ 
     private float coyoteTimeCounter = 0;
     [SerializeField] private float coyoteTime;
 
 
-    //Áß·Â °ü·Ã
+    //ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private float fallSpeedLimit = -10f;
-    [SerializeField] float gravityUp = 1.2f;        // »ó½Â Áß ±âº» Áß·Â
-    [SerializeField] float gravityHang = 0.3f;      // Á¤Á¡ Ã¼°ø Áß·Â (ÇÙ½É)
-    [SerializeField] float gravityFall = 2.0f;      // ³«ÇÏ Áß Áß·Â
-    [SerializeField] float hangVelocityThreshold = 0.15f; // Á¤Á¡ ÆÇÁ¤
+    [SerializeField] float gravityUp = 1.2f;        // ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½âº» ï¿½ß·ï¿½
+    [SerializeField] float gravityHang = 0.3f;      // ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ ï¿½ß·ï¿½ (ï¿½Ù½ï¿½)
+    [SerializeField] float gravityFall = 2.0f;      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ß·ï¿½
+    [SerializeField] float hangVelocityThreshold = 0.15f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] float gravitySmoothSpeed = 10f;
 
 
@@ -83,24 +83,24 @@ public class PlayerController : MonoBehaviour
     [Space(5)]
 
 
-    //////////////////°ø°İ °ü·Ã 
+    //////////////////ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
     
-    [SerializeField] private float timeBetweenAttack; //°ø°İ ¼Óµµ Á¦ÇÑ
+    [SerializeField] private float timeBetweenAttack; //ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
     private float timeSinceAttack;
     private float yAxis;
     [SerializeField] private Transform sideAttackTrans, upAttackTrans, downAttackTrans;
-    [SerializeField] private Vector2 sideAttackArea, upAttackArea, downAttackArea; //°ø°İ ¹üÀ§
+    [SerializeField] private Vector2 sideAttackArea, upAttackArea, downAttackArea; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private LayerMask attackableLayer;
     [SerializeField] private float damage;
     [SerializeField] private GameObject slashEffect;
     [Space(5)]
 
-    /////¹İµ¿°ü·Ã ºÎºĞ
+    /////ï¿½İµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½
     [Header("Recoil")]
-    [SerializeField] private float recoilXSpeed = 100; //¹İµ¿¼Óµµ
+    [SerializeField] private float recoilXSpeed = 100; //ï¿½İµï¿½ï¿½Óµï¿½
     [SerializeField] private float recoilYSpeed = 100;
     [SerializeField] private int recoilXSteps = 5;
-    [SerializeField] private int recoilYSteps = 5; //¹İµ¿ Áö¼Ó½Ã°£
+    [SerializeField] private int recoilYSteps = 5; //ï¿½İµï¿½ ï¿½ï¿½ï¿½Ó½Ã°ï¿½
     private int stepsXRecoiled, stepsYRecoiled;
 
     [Header("Health")]
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
-        //ÀÌµ¿,¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ ÃÊ±âÈ­
+        //ï¿½Ìµï¿½,ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         pState = GetComponent<PlayerStateList>();
@@ -149,11 +149,18 @@ public class PlayerController : MonoBehaviour
             Jump();
             LimitFallSpeed();
             UpdateGravity();
+            //Recoil();
+        }
+
+        // í•­ìƒ ì‹¤í–‰
+        if (!PlayerStateList.isView)
+        {
             Recoil();
         }
+
         if (PlayerStateList.isView)
         {
-            Debug.Log("°íÁ¤");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½");
             LockPosition();
         }
         else if (!PlayerStateList.isView)
@@ -171,7 +178,7 @@ public class PlayerController : MonoBehaviour
         Vector3 right = center + new Vector3(groundCheckDistanceX, 0, 0);
         Vector3 left = center + new Vector3(-groundCheckDistanceX, 0, 0);
 
-        // Ray ½Ã°¢È­
+        // Ray ï¿½Ã°ï¿½È­
         Debug.DrawRay(center, Vector2.down * groundCheckDistanceY, Color.red);
         Debug.DrawRay(right, Vector2.down * groundCheckDistanceY, Color.red);
         Debug.DrawRay(left, Vector2.down * groundCheckDistanceY, Color.red);
@@ -189,23 +196,23 @@ public class PlayerController : MonoBehaviour
         }
         
 
-        //³«ÇÏ¼Óµµ°¡ ÀÓ°è°ªº¸´Ù ÀÛ¾Æ¾ßÇÔ, Ä«¸Ş¶ó y¹İÀÀ¼Óµµ°¡ ÀÌ¹Ì Á¶ÀıÁßÀÎ »óÅÂ°¡ ¾Æ´Ï¾î¾ßÇÔ, ÀÌ¹Ì ³«ÇÏ»óÅÂ·Î Á¶ÀıµÈ »óÅÂ°¡ ¾Æ´Ï¾î¾ßÇÔ
+        //ï¿½ï¿½ï¿½Ï¼Óµï¿½ï¿½ï¿½ ï¿½Ó°è°ªï¿½ï¿½ï¿½ï¿½ ï¿½Û¾Æ¾ï¿½ï¿½ï¿½, Ä«ï¿½Ş¶ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½Æ´Ï¾ï¿½ï¿½ï¿½ï¿½, ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½Ï»ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½Æ´Ï¾ï¿½ï¿½ï¿½ï¿½
         if (rb.linearVelocityY < _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
         {
             CameraManager.Instance.LerpYDamping(true);
         }
-        //³«ÇÏÁßÀÌ ¾Æ´Ï¾î¾ßÇÔ, Ä«¸Ş¶óy¹İÀÀ¼Óµµ°¡ ³«ÇÏ·Î Á¶Á¤µÇ¾îÀÖ¾î¾ßÇÔ,Ä«¸Ş¶ó y¹İÀÀ¼Óµµ°¡ Á¶ÀıÁßÀÎ »óÅÂ°¡ ¾Æ´Ï¾î¾ßÇÔ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¾ï¿½ï¿½ï¿½ï¿½, Ä«ï¿½Ş¶ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½,Ä«ï¿½Ş¶ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½Æ´Ï¾ï¿½ï¿½ï¿½ï¿½
         if (rb.linearVelocityY >= 0 && CameraManager.Instance.LerpedFromPlayerFalling && !CameraManager.Instance.IsLerpingYDamping)
         {
-            //¿ø·¡·Î º¹±Í
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             CameraManager.Instance.LerpYDamping(false);
-            //³«ÇÏ·Î Á¶Á¤µÈ »óÅÂ°¡ ¾Æ´ÔÀ» ¾Ë¸®±â À§ÇØ false·Î ¼³Á¤
+            //ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½Æ´ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ falseï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             CameraManager.Instance.LerpedFromPlayerFalling = false;
         }
     }
 
   
-    //»ç¿ëÀÚÇÔ¼ö
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½
     /////////////////////////////////////////////////////////
 
     
@@ -272,9 +279,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //ÀÌµ¿ ÇÔ¼ö
+    //ï¿½Ìµï¿½ ï¿½Ô¼ï¿½
     void MoveX()
     {
+        if (pState.recoilingX) return; // ë„‰ë°± ì¤‘ ì´ë™ ì°¨ë‹¨
+
         rb.linearVelocity = new Vector2(xAxis * walkSpeed, rb.linearVelocityY);
 
         anim.SetBool("isWalk", rb.linearVelocityX != 0);
@@ -293,7 +302,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (Grounded())//¶¥¿¡ ÀÖÀ¸¸é ¹Ù·Î ´ë½¬°¡´ÉÇÏµµ·Ï dashed false
+        if (Grounded())//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ë½¬ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ dashed false
         {
             dashed = false;
 
@@ -317,11 +326,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    //////////////Á¡ÇÁ °ü·Ã///////////////////////
+    //////////////ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½///////////////////////
 
-    public bool Grounded() //¶¥ÀÌ¸é true¾Æ´Ï¸é false
+    public bool Grounded() //ï¿½ï¿½ï¿½Ì¸ï¿½ trueï¿½Æ´Ï¸ï¿½ false
     {
-        //ÁÂ¿ì ¹ß ¹Ø, °¡¿îµ¥ ¹ØÀÌ ¶¥ÀÎÁö È®ÀÎ
+        //ï¿½Â¿ï¿½ ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½îµ¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         if (Physics2D.Raycast(groundCheckPoint.position, Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer) || Physics2D.Raycast(groundCheckPoint.position + new Vector3(-groundCheckDistanceX, 0, 0), Vector2.down, groundCheckDistanceY, groundlayer))
         {
 
@@ -333,7 +342,7 @@ public class PlayerController : MonoBehaviour
     void UpdateJumpVariables()
     {
         PlayerStateList.isGrounded = Grounded();
-        //ÂøÁö»óÅÂ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (PlayerStateList.isGrounded)
         {
             jumpCancelImmediate = false;
@@ -341,12 +350,12 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
             airJumpCounter = 0;
         }
-        //Á¡ÇÁ Áß
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         else
         {
             coyoteTimeCounter -= Time.deltaTime;
         }
-        //´­·¶À»¶§
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (InputManager.JumpWasPressed)
         {
             jumpwasPressed = true;
@@ -356,7 +365,7 @@ public class PlayerController : MonoBehaviour
         {
             jumpBufferCounter -= Time.deltaTime;
         }
-        //¶ÃÀ»¶§
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (InputManager.JumpWasReleased && pState.jumping && rb.linearVelocityY > 0)
         {
             jumpCancelImmediate = true;
@@ -369,7 +378,7 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         jumpCountTime += Time.fixedDeltaTime;
-        //Áö¸é¿¡¼­ Á¡ÇÁ ½ÃÀÛ
+        //ï¿½ï¿½ï¿½é¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (!pState.jumping && coyoteTimeCounter > 0 && jumpBufferCounter > 0)
 
         {
@@ -378,7 +387,7 @@ public class PlayerController : MonoBehaviour
             jumpCountTime = 0;
             jumpwasPressed = false;
         }
-        //ÀÌ´Ü Á¡ÇÁ
+        //ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½
         else if (pState.jumping && jumpwasPressed && airJumpCounter < maxAirJumps)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocityX, jumpPower);
@@ -387,7 +396,7 @@ public class PlayerController : MonoBehaviour
             jumpwasPressed = false;
         }
 
-        //Á¡ÇÁ Äµ½½
+        //ï¿½ï¿½ï¿½ï¿½ Äµï¿½ï¿½
         if (jumpCancelImmediate)
         {
             
@@ -402,7 +411,7 @@ public class PlayerController : MonoBehaviour
 
     void LimitFallSpeed()
     {
-        // Y¼Óµµ°¡ fallSpeedLimitº¸´Ù ÀÛÀ¸¸é fallSpeedLimit·Î Á¦ÇÑ
+        // Yï¿½Óµï¿½ï¿½ï¿½ fallSpeedLimitï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ fallSpeedLimitï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (rb.linearVelocityY < fallSpeedLimit)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocityX, fallSpeedLimit);
@@ -415,26 +424,26 @@ public class PlayerController : MonoBehaviour
     {
         float vy = rb.linearVelocityY;
 
-        // ¸ñÇ¥ Áß·Â
+        // ï¿½ï¿½Ç¥ ï¿½ß·ï¿½
         float targetGravity;
 
-        // 1. »ó½Â Áß
+        // 1. ï¿½ï¿½ï¿½ ï¿½ï¿½
         if (vy > hangVelocityThreshold)
         {
             targetGravity = gravityUp;
         }
-        // 2. Á¤Á¡ ±ÙÃ³ (Ã¼°ø)
+        // 2. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã³ (Ã¼ï¿½ï¿½)
         else if (Mathf.Abs(vy) <= hangVelocityThreshold)
         {
             targetGravity = gravityHang;
         }
-        // 3. ³«ÇÏ Áß
+        // 3. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         else
         {
             targetGravity = gravityFall;
         }
 
-        // Áß·Â ºÎµå·´°Ô ÀüÈ¯
+        // ï¿½ß·ï¿½ ï¿½Îµå·´ï¿½ï¿½ ï¿½ï¿½È¯
         rb.gravityScale = Mathf.Lerp(
             rb.gravityScale,
             targetGravity,
@@ -443,7 +452,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    ///////////////////////////////°ø°İ.....
+    ///////////////////////////////ï¿½ï¿½ï¿½ï¿½.....
 
     void GetAttack()
     {
@@ -479,8 +488,8 @@ public class PlayerController : MonoBehaviour
     void SlashEffectAtAngle(GameObject _slashEffect, int _effectAngle, Transform _attackTransform)
     {
         _slashEffect = Instantiate(_slashEffect, _attackTransform);
-        _slashEffect.transform.eulerAngles = new Vector3(0, 0, _effectAngle); //ÀÌÆåÆ® Á¾È¾ ¹æÇâ ¼³Á¤
-        _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y); //¹æÇâ¿¡ ¸Â°Ô ÁÂ¿ì -1°ª ¹Ù²î´Â °Í
+        _slashEffect.transform.eulerAngles = new Vector3(0, 0, _effectAngle); //ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¾ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y); //ï¿½ï¿½ï¿½â¿¡ ï¿½Â°ï¿½ ï¿½Â¿ï¿½ -1ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ ï¿½ï¿½
 
 
     }
@@ -539,7 +548,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -recoilYSpeed);
             }
-            airJumpCounter = 0; //¼öÁ¤ °¡´É °ø°İ½Ã Á¡ÇÁ °¡´ÉÈ½¼ö ÃÊ±âÈ­
+            airJumpCounter = 0; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½İ½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         }
         else
         {
@@ -587,7 +596,7 @@ public class PlayerController : MonoBehaviour
     }
     void ClampHealth()
     {
-        health = Mathf.Clamp(health, 0, maxhealth);//ÇöÀç Ã¼·Â,ÃÖ¼Ò, ÃÖ´ë
+        health = Mathf.Clamp(health, 0, maxhealth);//ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½,ï¿½Ö¼ï¿½, ï¿½Ö´ï¿½
 
     }
     IEnumerator StopTakingDamgae()
@@ -595,13 +604,27 @@ public class PlayerController : MonoBehaviour
         pState.invincible = true;
         ClampHealth();
         anim.SetTrigger("takeDamage");
-        yield return new WaitForSeconds(1f); //¹«Àû½Ã°£ Á¶Àı
+        yield return new WaitForSeconds(1f); //ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
         pState.invincible = false;
 
     }
- 
 
- 
-   
- 
+
+    public void TriggerRecoilX()
+    {
+        // ì´ë¯¸ ë„‰ë°± ì¤‘ì´ë©´ ìƒˆë¡œ ê°±ì‹ í•˜ê³  ì‹¶ë‹¤ë©´ ì´ˆê¸°í™”
+        stepsXRecoiled = 0;
+        pState.recoilingX = true;
+    }
+
+    public void TriggerRecoilYUp()
+    {
+        // ìœ„ë¡œ íŠ•ê¸°ê³  ì‹¶ì„ ë•Œ(ì„ íƒ)
+        stepsYRecoiled = 0;
+        yAxis = -1f;              // Recoil()ì—ì„œ yAxis<0ì´ë©´ ìœ„ë¡œ ë°€ì–´ì¤Œ
+        pState.recoilingY = true;
+    }
+
+
+
 }
