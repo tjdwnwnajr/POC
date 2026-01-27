@@ -1870,6 +1870,23 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &589932822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5374458638616112861, guid: f880d0bce70e2bc4f9218511a5d50a25, type: 3}
+  m_PrefabInstance: {fileID: 1552382996}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &589932826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589932822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe8fb93bc6539b4294efd765537dc8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DualSenseInput
 --- !u!1 &1320682231
 GameObject:
   m_ObjectHideFlags: 0
@@ -2122,7 +2139,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1452486705}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6afdf54dd2f4411428ed2ab8804cac22, type: 3}
   m_Name: 
@@ -2189,7 +2206,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5374458638616112861, guid: f880d0bce70e2bc4f9218511a5d50a25, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 589932826}
   m_SourcePrefab: {fileID: 100100000, guid: f880d0bce70e2bc4f9218511a5d50a25, type: 3}
 --- !u!1001 &1649385423
 PrefabInstance:
@@ -2918,8 +2938,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: chainMoveSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
       propertyPath: forceMultiplier
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: lessMultiplierX
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: moreMultiplierX
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
       propertyPath: forceMultiplierX
@@ -2928,6 +2960,26 @@ PrefabInstance:
     - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
       propertyPath: forceMultiplierY
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: gyroRangeMappings.Array.data[0].forceOutput
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: gyroRangeMappings.Array.data[1].forceOutput
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: gyroRangeMappings.Array.data[2].forceOutput
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: gyroRangeMappings.Array.data[3].forceOutput
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
+      propertyPath: gyroRangeMappings.Array.data[4].forceOutput
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7645024899639662650, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3608,6 +3660,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4329841230930415675, guid: f51e930f6bb8d154bbf9dcc89e115dea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5390620149824658107, guid: f51e930f6bb8d154bbf9dcc89e115dea, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7998191771097243061, guid: f51e930f6bb8d154bbf9dcc89e115dea, type: 3}

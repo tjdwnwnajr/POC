@@ -8,9 +8,9 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "351f2ccd-1f9f-44bf-9bec-d62ac5c5f408",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "NormalizeVector2",
                     "interactions": "",
                     "initialStateCheck": true
@@ -154,6 +154,24 @@
                     "name": "Use",
                     "type": "Button",
                     "id": "9c66cdd0-c0d4-4d1e-85d9-8152c6c4a67e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RopeUp",
+                    "type": "Button",
+                    "id": "cd09dc28-5274-45e6-afea-84760dadff7f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "RopeDown",
+                    "type": "Button",
+                    "id": "399e68a8-2475-4101-a5b1-457d8a82e253",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -807,6 +825,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Use",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f5ff72b2-4798-4e19-ab46-81f973d1253c",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RopeUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4faf3fa-dbbf-4b3b-99e9-a093f6c32b05",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RopeDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

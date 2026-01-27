@@ -77,7 +77,7 @@ public class handCheck : MonoBehaviour
             if (rope == null) continue;
 
             float distance = Vector2.Distance(transform.position, rope.position);
-            Debug.Log(rope.position);
+            //Debug.Log(rope.position);
             if (distance < minDistance)
             {
                 minDistance = distance;

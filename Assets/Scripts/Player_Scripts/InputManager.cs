@@ -30,6 +30,9 @@ public class InputManager : MonoBehaviour
     public static Vector2 LookDirection;
     //UseTools
     public static bool UseToolWasPressed;
+    //RopeUpandDown
+    public static bool UpWasPressed;
+    public static bool DownWasPressed;
 
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -40,7 +43,8 @@ public class InputManager : MonoBehaviour
     private InputAction _attackAction;
     private InputAction _lookAction;
     private InputAction _useTool;
-
+    private InputAction _RopeUpAction;
+    private InputAction _RopeDownAction;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -55,7 +59,8 @@ public class InputManager : MonoBehaviour
         _attackAction = PlayerInput.actions["Attack"];
         _lookAction = PlayerInput.actions["Look"];
         _useTool = PlayerInput.actions["Use"];
-
+        _RopeUpAction = PlayerInput.actions["RopeUp"];
+        _RopeDownAction = PlayerInput.actions["RopeDown"];
     }
 
     // Update is called once per frame
@@ -85,5 +90,8 @@ public class InputManager : MonoBehaviour
         LookWasReleased = _lookAction.WasReleasedThisFrame();
 
         UseToolWasPressed = _useTool.WasPressedThisFrame();
+
+        UpWasPressed = _RopeUpAction.WasPressedThisFrame();
+        DownWasPressed = _RopeDownAction.WasPressedThisFrame();
     }
 }
