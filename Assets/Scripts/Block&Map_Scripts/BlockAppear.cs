@@ -7,6 +7,7 @@ public class BlockAppear : MonoBehaviour
     private GameObject block;
     [Header("Appear Block")]
     [SerializeField]private RotateBlock RotateBlock;
+    [SerializeField] private GyroRotateBlock missionblock;
     private bool isActive = false;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D col;
@@ -27,7 +28,14 @@ public class BlockAppear : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        isActive = RotateBlock.isComplete;
+        if (RotateBlock != null)
+        {
+            isActive = RotateBlock.isComplete;
+        }
+        else if (missionblock != null)
+        {
+            isActive = missionblock.isComplete;
+        }
         spriteRenderer.enabled = isActive;
         col.enabled = isActive;
         if(isActive&&!isVibrate)
