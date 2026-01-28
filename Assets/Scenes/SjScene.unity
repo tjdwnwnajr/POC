@@ -2939,7 +2939,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
       propertyPath: chainMoveSpeed
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7085768265843195921, guid: a75ff98769fb4aa41b64e74c2ffbb89c, type: 3}
       propertyPath: forceMultiplier
