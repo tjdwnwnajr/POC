@@ -49,5 +49,8 @@ TagManager:
   - name: forward
     uniqueID: 2171857861
     locked: 0
+  - name: Player
+    uniqueID: 527245205
+    locked: 0
   m_RenderingLayers:
   - Default
