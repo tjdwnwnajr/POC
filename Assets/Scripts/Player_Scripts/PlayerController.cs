@@ -107,7 +107,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public int maxhealth;
     [SerializeField] public int health;
 
-  
+
+    [Header("Wind (Buoyancy Style)")]
+    public bool inWind;
+    [HideInInspector] public float windBottomY;
+    [HideInInspector] public float windTopY;
+
+    // 바람 가속(아래 강 / 위 약)
+    public float windMaxAccel = 40f;     // 바닥에서의 "위로 가속" (게임 스케일에 맞게)
+    public float windPower = 2.0f;       // 1이면 선형, 2~3이면 아래쪽이 훨씬 강해짐
+
+    // 안정화
+    public float windVerticalDamping = 6f;  // 수직 속도 감쇠(부력 안정화)
+    public float windMaxUpSpeed = 8f;       // 최대 상승 속도 캡
+    public float windMinDownSpeedInWind = -20f; // 바람 안에서 낙하가 너무 빨라지는 것 방지(선택)
+
+    // 바람 진입/이탈 부드럽게
+    public float windBlendSpeed = 10f;
+    private float windBlend;
+
+
+    private WindZone2D currentWindZone;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -147,8 +167,11 @@ public class PlayerController : MonoBehaviour
         {
             MoveX();
             Jump();
-            LimitFallSpeed();
-            UpdateGravity();
+
+            UpdateGravity();       
+            LimitFallSpeed();      
+
+            ApplyWindBuoyancy();
             //Recoil();
         }
 
@@ -403,7 +426,8 @@ public class PlayerController : MonoBehaviour
             if (jumpCountTime >= jumpMinTime)
             {
                 jumpCancelImmediate = false;
-                rb.linearVelocityY = 0;
+                if (!inWind)
+                    rb.linearVelocityY = 0;
             }
             
         }
@@ -625,6 +649,54 @@ public class PlayerController : MonoBehaviour
         pState.recoilingY = true;
     }
 
+    //public void UpdateGravityInWind() => rb.gravityScale = Mathf.Lerp(
+    //        rb.gravityScale,
+    //        windGravity,
+    //        windGravitySmooth * Time.fixedDeltaTime
+    //    );
 
+    public void StartWind(WindZone2D zone, float bottomY, float topY)
+    {
+        currentWindZone = zone;
+        inWind = true;
+        windBottomY = bottomY;
+        windTopY = topY;
+    }
+
+    public void EndWind(WindZone2D zone)
+    {
+        // 내가 들어온 존이 나갈 때만 끈다 (겹침/순서 꼬임 방지)
+        if (currentWindZone != zone) return;
+
+        inWind = false;
+        currentWindZone = null;
+    }
+
+
+    private void ApplyWindBuoyancy()
+    {
+        float target = inWind ? 1f : 0f;
+        windBlend = Mathf.MoveTowards(windBlend, target, Time.fixedDeltaTime * windBlendSpeed);
+        if (windBlend <= 0f) return;
+
+        float height = windTopY - windBottomY;
+        if (height <= 0.001f) return;
+
+        float t = Mathf.Clamp01((rb.position.y - windBottomY) / height); // 0=바닥, 1=위
+        float strength = Mathf.Pow(1f - t, windPower);                   // 아래 강/위 약 (0~1)
+
+        float accelUp = windMaxAccel * strength * windBlend;
+
+        // ✅ 항상 위로 가속 (중력과 경쟁 -> 위에서는 내려오고 아래에서는 다시 붕)
+        rb.AddForce(Vector2.up * accelUp * rb.mass, ForceMode2D.Force);
+
+        // ✅ 안전장치: 로켓 방지용 캡 (점프보다 크게!)
+        if (rb.linearVelocityY > windMaxUpSpeed)
+            rb.linearVelocity = new Vector2(rb.linearVelocityX, windMaxUpSpeed);
+
+        // ✅ 낙하가 너무 과하면 하한만 제한(선택)
+        if (rb.linearVelocityY < windMinDownSpeedInWind)
+            rb.linearVelocity = new Vector2(rb.linearVelocityX, windMinDownSpeedInWind);
+    }
 
 }
