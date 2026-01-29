@@ -39,7 +39,11 @@ public class GyroRotateBlock : MonoBehaviour
         // 자이로센서 값 가져오기
         var imu = JSL.JslGetIMUState(0);
         float gyroY = imu.gyroY;  // Y축 사용 (위아래 기울임)
-
+        if(PlayerStateList.isMirror)
+        {
+            gyroY = -gyroY;
+        }
+        
         // 1. 데드존 처리 (노이즈 제거)
         if (Mathf.Abs(gyroY) < deadZone)
         {

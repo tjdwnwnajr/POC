@@ -30,7 +30,7 @@ public class CameraFollow : MonoBehaviour
     {
         cam = GetComponent<CinemachineVirtualCamera>();
         offset = cam.GetComponent<CinemachineCameraOffset>();
-        cam.m_Lens.OrthographicSize = startSize;
+        //cam.m_Lens.OrthographicSize = startSize;
         defaultOffset = offset.m_Offset;
 
     }

@@ -93,5 +93,11 @@ public class InputManager : MonoBehaviour
 
         UpWasPressed = _RopeUpAction.WasPressedThisFrame();
         DownWasPressed = _RopeDownAction.WasPressedThisFrame();
+
+        if(PlayerStateList.isMirror)
+        {
+            Movement.x *= -1;
+            Rotate *= -1;
+        }
     }
 }

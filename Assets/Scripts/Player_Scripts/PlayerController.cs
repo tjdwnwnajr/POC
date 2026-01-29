@@ -165,6 +165,8 @@ public class PlayerController : MonoBehaviour
         //if (pState.dashing) return;
         if (PlayerStateList.canMove&&!PlayerStateList.isView)
         {
+            if(xAxis>0|| xAxis < 0)
+                TurnCheck();
             MoveX();
             Jump();
 
@@ -268,14 +270,18 @@ public class PlayerController : MonoBehaviour
     {
         if (PlayerStateList.lookingRight)
         {
-            Vector3 rotator = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
+            Vector3 rotator = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotator);
+            PlayerStateList.lookingRight = !PlayerStateList.lookingRight;
+            
             //_cameraFollowObject.CallTurn();
         }
         else
         {
-            Vector3 rotator = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
+            Vector3 rotator = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotator);
+            PlayerStateList.lookingRight = !PlayerStateList.lookingRight;
+           
             //_cameraFollowObject.CallTurn();
         }
     }
@@ -283,21 +289,18 @@ public class PlayerController : MonoBehaviour
     void GetDirection()
     {
 
-
         xAxis = InputManager.Movement.x;
         yAxis = InputManager.Movement.y;
-        
 
-        if (xAxis > 0)
+    }
+    private void TurnCheck()
+    {
+        if(InputManager.Movement.x>0&&!PlayerStateList.lookingRight)
         {
-
-            PlayerStateList.lookingRight = true;
             Turn();
         }
-        else if (xAxis < 0)
+        else if(InputManager.Movement.x<0&&PlayerStateList.lookingRight)
         {
-
-            PlayerStateList.lookingRight = false;
             Turn();
         }
     }

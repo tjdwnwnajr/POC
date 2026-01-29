@@ -13,6 +13,8 @@ public class PlayerStateList : MonoBehaviour
     public static bool isGrounded = true;
     public static bool canMove = true;
     public static bool isView = false;
+    [SerializeField]public static bool isMirror = false;
+    public bool mirrorOn = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public static void ViewMode(bool on)
@@ -26,6 +28,17 @@ public class PlayerStateList : MonoBehaviour
         {
             isView = false;
             return;
+        }
+    }
+    private void Update()
+    {
+        if (mirrorOn)
+        {
+            isMirror = true;
+        }
+        else
+        {
+            isMirror = false;
         }
     }
 }
