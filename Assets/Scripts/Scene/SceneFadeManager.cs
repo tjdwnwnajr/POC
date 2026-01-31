@@ -22,7 +22,7 @@ public class SceneFadeManager : MonoBehaviour
             instance = this;
           
         }
-        Debug.Log("æ¿»£√‚");
+ 
         _fadeOutStartColor.a = 0f;
     }
 
@@ -30,7 +30,7 @@ public class SceneFadeManager : MonoBehaviour
     {
         if (IsFadingOut)
         {
-            Debug.Log("Fading Out... alpha = " + _fadeOutImage.color.a);
+           
             if (_fadeOutImage.color.a < 1f)
             {
                 _fadeOutStartColor.a += Time.deltaTime * _fadeOutSpeed;
@@ -45,7 +45,7 @@ public class SceneFadeManager : MonoBehaviour
 
         if (IsFadingIn)
         {
-            Debug.Log("Fading In... alpha = " + _fadeOutImage.color.a);
+          
             float delta = Time.deltaTime;
             delta = Mathf.Min(delta, 0.016f);
 

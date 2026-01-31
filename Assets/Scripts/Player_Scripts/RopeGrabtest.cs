@@ -74,6 +74,7 @@ public class RopeGrabtest : MonoBehaviour
     void Update()
     {
         anim.SetBool("isRope",PlayerStateList.isRope);
+
         if (InputManager.RopeIsHeld&&!PlayerStateList.isRope&&hand.canGrab)
         {
             //TryGrabRope();            

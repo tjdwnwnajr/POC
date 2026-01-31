@@ -48,6 +48,10 @@ public class InputManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        if(PlayerInput != null)
+        {
+            return;
+        }
         PlayerInput = GetComponent<PlayerInput>();
 
         _moveAction = PlayerInput.actions["Move"];
@@ -99,5 +103,14 @@ public class InputManager : MonoBehaviour
             Movement.x *= -1;
             Rotate *= -1;
         }
+    }
+    public static void ActivatePlayerControls()
+    {
+        PlayerInput.currentActionMap.Enable();
+    }
+
+    public static void DeactivatePlayerControls()
+    {
+        PlayerInput.currentActionMap.Disable();
     }
 }

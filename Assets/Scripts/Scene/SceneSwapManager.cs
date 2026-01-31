@@ -42,7 +42,7 @@ public class SceneSwapManager : MonoBehaviour
     private IEnumerator FadeOutThenChangeScene(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt = DoorTriggerInteraction.DoorToSpawnAt.None)
     {
         //start fading to black
-        //PlayerStateList.isView = true;
+        InputManager.DeactivatePlayerControls();
         SceneFadeManager.instance.StartFadeOut();
 
         //keep fading out
@@ -92,7 +92,7 @@ public class SceneSwapManager : MonoBehaviour
         if (SceneFadeManager.instance != null)
         {
             SceneFadeManager.instance.StartFadeIn();
-            //StartCoroutine(ActivatePlayerControl());
+            StartCoroutine(ActivatePlayerControl());
         }
     }
     #region this code make camera move to upside
@@ -117,7 +117,7 @@ public class SceneSwapManager : MonoBehaviour
         {
             yield return null;
         }
-        PlayerStateList.isView = false;
+        InputManager.ActivatePlayerControls();
     }
     private void FindDoor(DoorTriggerInteraction.DoorToSpawnAt doorSpawnNumber)
     {
