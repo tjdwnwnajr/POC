@@ -5,7 +5,7 @@ public class CameraEventManager : MonoBehaviour
 {
     public static CameraEventManager instance;
     [Header("Camera Offset")]
-    public CameraEventFocus cameraEventFocus;
+    private CameraEventFocus cameraEventFocus;
 
     private void Awake()
     {
@@ -15,6 +15,8 @@ public class CameraEventManager : MonoBehaviour
             return;
         }
         instance = this;
+
+        cameraEventFocus = GetComponent<CameraEventFocus>();
     }
     public void CameraOffsetEvent(Transform startPos, Transform targetPos)
     {

@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 253670836546525305}
   - component: {fileID: 8373026171246908037}
   - component: {fileID: 7085768265843195921}
-  - component: {fileID: 9022733558503389636}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -260,6 +259,15 @@ MonoBehaviour:
   recoilYSteps: 5
   maxhealth: 10
   health: 0
+  inWind: 0
+  windBottomY: 0
+  windTopY: 0
+  windMaxAccel: 40
+  windPower: 2
+  windVerticalDamping: 6
+  windMaxUpSpeed: 8
+  windMinDownSpeedInWind: -20
+  windBlendSpeed: 10
 --- !u!95 &253670836546525305
 Animator:
   serializedVersion: 7
@@ -300,6 +308,7 @@ MonoBehaviour:
   recoilingX: 0
   recoilingY: 0
   invincible: 0
+  mirrorOn: 0
 --- !u!114 &7085768265843195921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,10 +324,8 @@ MonoBehaviour:
   ropeLayer:
     serializedVersion: 2
     m_Bits: 128
-  smoothing: 0.6
-  maxGyroValue: 500
-  forceMultiplier: 15
-  forceMultiplierX: 5
+  lessMultiplierX: 0
+  moreMultiplierX: 0
   forceMultiplierY: 10
   maxVelocityX: 20
   maxVelocityY: 20
@@ -328,30 +335,24 @@ MonoBehaviour:
   handPos: {x: 0, y: 0}
   ropePosX: 0
   ropePosY: 0
-  swingTarget: {fileID: 0}
---- !u!114 &9022733558503389636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2632467401589156532}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3091d4cee906aa94ba1065da7a6e8a92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RopeGrab
-  ropeLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  anchorVector: {x: 0, y: 0}
-  forceMultiplier: 20
-  forceMultiplierX: 15
-  forceMultiplierY: 15
-  maxVelocityX: 10
-  maxVelocityY: 22
-  maxForce: 40
-  deadZone: 10
+  gyroRangeMappings:
+  - minGyro: 10
+    maxGyro: 100
+    forceOutput: 5
+  - minGyro: 100
+    maxGyro: 200
+    forceOutput: 10
+  - minGyro: 200
+    maxGyro: 300
+    forceOutput: 15
+  - minGyro: 300
+    maxGyro: 400
+    forceOutput: 20
+  - minGyro: 400
+    maxGyro: 400
+    forceOutput: 25
+  chainMoveSpeed: 0.1
+  ropeVelocityThreshold: 0.5
 --- !u!1 &4350330918853289367
 GameObject:
   m_ObjectHideFlags: 0

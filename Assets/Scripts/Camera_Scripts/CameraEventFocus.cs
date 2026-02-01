@@ -4,8 +4,8 @@ using System.Collections;
 
 public class CameraEventFocus : MonoBehaviour
 {
-    [Header("Virtual Camera")]
-    public CinemachineVirtualCamera vcam;
+    public static CameraEventFocus instance;
+    private CinemachineVirtualCamera vcam;
 
     [Header("Move Settings")]
     public float moveDuration = 0.5f;   // 이동 시간
@@ -16,10 +16,22 @@ public class CameraEventFocus : MonoBehaviour
     private Vector3 defaultOffset;
     private Coroutine moveCoroutine;
 
-    void Awake()
+    private void Awake()
     {
+        // 싱글톤 패턴 설정
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+        vcam = CameraUtility.GetActiveVirtualCamera();
+        if (vcam == null)
+        {
+            Debug.Log("CameraEventFocus에서 카메라를 찾지 못하였습니다.");
+            return;
+        }
         // Framing Transposer 가져오기
-        
+
         offset = vcam.GetComponent<CinemachineCameraOffset>();
 
         if (offset == null)
@@ -31,10 +43,13 @@ public class CameraEventFocus : MonoBehaviour
 
 
         // 기본 오프셋 저장
-        
         defaultOffset = offset.m_Offset;
     }
 
+    public void RefreshCamera()
+    {
+        Awake();
+    }
     /* ===============================
      * 이벤트 위치로 카메라 시선 이동
      * =============================== */

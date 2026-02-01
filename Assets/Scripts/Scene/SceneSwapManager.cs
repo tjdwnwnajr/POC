@@ -53,6 +53,8 @@ public class SceneSwapManager : MonoBehaviour
         
 
         _doorToSpawnTo = doorToSpawnAt;
+        //카메라 초기화
+        CameraUtility.InvalidateCache();
         SceneManager.LoadScene(myScene);
         #region this code load scene first and then fade in
         //AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(myScene);
@@ -74,12 +76,23 @@ public class SceneSwapManager : MonoBehaviour
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        //플레이어 다시찾아서 위치시키기
         if (_loadFromDoor)
         {
+            _player = GameObject.FindGameObjectWithTag("Player");
+            _playerColl = _player.GetComponent<Collider2D>();
             FindDoor(_doorToSpawnTo);
             _player.transform.position = _playerSpawnPosition;
             _loadFromDoor = false;
         }
+        //카메라 초기화
+        CameraUtility.InvalidateCache();
+
+        //카메라 다시찾아서 흔들기위한 리스너 연결하기
+        CameraShakeManager.instance.FindAndSetupVirtualCamera();
+
+        //카메라 event offset 을 위한 카메라 다시 찾기
+        CameraEventFocus.instance.RefreshCamera();
 
         // 한 프레임 대기 (Cinemachine이 새 위치로 업데이트되도록)
         StartCoroutine(DelayedFadeIn());

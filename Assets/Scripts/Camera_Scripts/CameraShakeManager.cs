@@ -5,7 +5,8 @@ public class CameraShakeManager : MonoBehaviour
 {
     public static CameraShakeManager instance;
     [SerializeField] private float globalShakeForce = 1f;
-    [SerializeField] private CinemachineImpulseListener impulseListener;
+    private CinemachineImpulseListener impulseListener;
+    private CinemachineVirtualCamera currentVirtualCamera;
 
     private CinemachineImpulseDefinition impulseDefinition;
     private void Awake()
@@ -14,6 +15,8 @@ public class CameraShakeManager : MonoBehaviour
         {
             instance = this;
         }
+        //카메라찾기
+        FindAndSetupVirtualCamera();
     }
 
     public void CameraShake(CinemachineImpulseSource impulseSource)
@@ -50,4 +53,18 @@ public class CameraShakeManager : MonoBehaviour
         impulseListener.m_ReactionSettings.m_Duration = profile.listenerDuration;
 
     }
+    public void FindAndSetupVirtualCamera()
+    {
+        currentVirtualCamera = CameraUtility.GetActiveVirtualCamera();
+        
+        if(currentVirtualCamera == null)
+        {
+            Debug.LogError("CameraShakeManager에서 카메라를 찾지 못하였습니다.");
+            return;
+        }
+
+        // 그 카메라에서 Listener 추출
+        impulseListener = currentVirtualCamera.GetComponent<CinemachineImpulseListener>();
+    }
+
 }
