@@ -49,8 +49,14 @@ TagManager:
   - name: forward
     uniqueID: 2171857861
     locked: 0
+  - name: doorback
+    uniqueID: 489120575
+    locked: 0
   - name: Player
     uniqueID: 527245205
+    locked: 0
+  - name: doorfront
+    uniqueID: 3888561131
     locked: 0
   m_RenderingLayers:
   - Default
