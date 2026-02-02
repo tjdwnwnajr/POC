@@ -102,7 +102,7 @@ public class RotateBlock : MonoBehaviour
             if (CheckRotate(5f))
             {
                 checkTimer += Time.deltaTime;
-
+                DualSenseInput.Instance.Vibrate(0.02f, 0.02f, Time.deltaTime);
                 if (checkTimer >= 2f)
                 {
                     Complete();

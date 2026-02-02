@@ -176,6 +176,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RopeRelease",
+                    "type": "Button",
+                    "id": "923cd310-fa94-4b7a-8b82-b88515134fb9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -847,6 +856,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "RopeDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac01896e-3fd6-4722-af55-74d68a6ff154",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RopeRelease",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cffbf52b-f73b-4bb5-8efd-f08c415d99c7",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RopeRelease",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

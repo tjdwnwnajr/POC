@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
     public static bool RopeWasPressed;
     public static bool RopeIsHeld;
     public static bool RopeWasReleased;
+    public static bool RopeReleasWasPressed;
     //Rotate
     public static float Rotate;
 
@@ -45,6 +46,7 @@ public class InputManager : MonoBehaviour
     private InputAction _useTool;
     private InputAction _RopeUpAction;
     private InputAction _RopeDownAction;
+    private InputAction _RopeReleaseAction;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -65,6 +67,7 @@ public class InputManager : MonoBehaviour
         _useTool = PlayerInput.actions["Use"];
         _RopeUpAction = PlayerInput.actions["RopeUp"];
         _RopeDownAction = PlayerInput.actions["RopeDown"];
+        _RopeReleaseAction = PlayerInput.actions["RopeRelease"];
     }
 
     // Update is called once per frame
@@ -98,7 +101,9 @@ public class InputManager : MonoBehaviour
         UpWasPressed = _RopeUpAction.WasPressedThisFrame();
         DownWasPressed = _RopeDownAction.WasPressedThisFrame();
 
-        if(PlayerStateList.isMirror)
+        RopeReleasWasPressed = _RopeReleaseAction.WasPressedThisFrame();
+
+        if (PlayerStateList.isMirror)
         {
             Movement.x *= -1;
             Rotate *= -1;

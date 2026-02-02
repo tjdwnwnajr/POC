@@ -76,11 +76,10 @@ public class RopeGrabtest : MonoBehaviour
         anim.SetBool("isRope",PlayerStateList.isRope);
 
         if (InputManager.RopeIsHeld&&!PlayerStateList.isRope&&hand.canGrab)
-        {
-            //TryGrabRope();            
+        {          
             Grab(hand.hangedRope);
         }
-        if (InputManager.RopeWasReleased && PlayerStateList.isRope)
+        if (InputManager.RopeReleasWasPressed && PlayerStateList.isRope)
         {
             ReleaseRope();
             StartCoroutine(ResetRotation());
@@ -108,7 +107,7 @@ public class RopeGrabtest : MonoBehaviour
 
         ropePosY = hand.handPos.y;
         transform.position = new Vector2(ropePosX, ropePosY);
-
+        rb.linearVelocity = Vector2.zero;   
         rb.bodyType = RigidbodyType2D.Kinematic;
         transform.SetParent(rope.transform);
         float rotateZ = rope.gameObject.transform.rotation.z;
