@@ -3,11 +3,11 @@ using UnityEngine;
 public class GyroRotateBlock : MonoBehaviour
 {
     [Header("Rotation Settings")]
-    [SerializeField] private float rotationSensitivity = 50f;     // 회전 감도 (높을수록 민감)
-    [SerializeField] private float deadZone = 0.2f;               // 노이즈 제거
+    [SerializeField] private float rotationSensitivity = 2f;     // 회전 감도 (높을수록 민감)
+    [SerializeField] private float deadZone = 2f;               // 노이즈 제거
     [SerializeField] private float smoothDamping = 0.85f;         // 이전값 반영 (0~1, 작을수록 부드러움)
-    [SerializeField] private float maxAngularSpeed = 360f;        // 최대 회전 속도
-    [SerializeField] private float maxAngularAcceleration = 180f; // 최대 가속도 제한
+    [SerializeField] private float maxAngularSpeed = 270f;        // 최대 회전 속도
+    [SerializeField] private float maxAngularAcceleration = 160f; // 최대 가속도 제한
 
     [Header("Completion Settings")]
     [SerializeField] private float checkTolerance = 5f;           // 허용 오차도
