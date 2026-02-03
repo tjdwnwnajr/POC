@@ -31,6 +31,13 @@ public class CameraManager : MonoBehaviour
     //평상시 y반응속도 값
     private float _normYPanAmount;
 
+
+    #region Camera panning in camera control triggers
+    private Coroutine _panCameraCoroutine;
+    private Vector2 _startingTrackedObjectOffset;
+
+    #endregion
+
     private void Awake()
     {
         if (Instance == null)
@@ -47,6 +54,9 @@ public class CameraManager : MonoBehaviour
                 _normYPanAmount = _framingTransposer.m_YDamping;
             }
         }
+
+
+        _startingTrackedObjectOffset = _framingTransposer.m_TrackedObjectOffset;
     } 
     //플레이어 낙하중인지 여부에 따라 y반응속도를 조절하도록 외부에서 호출하는 함수
     public void LerpYDamping(bool isPlayerFalling)
@@ -98,4 +108,59 @@ public class CameraManager : MonoBehaviour
         //조정 종료
         IsLerpingYDamping = false;
     }
+
+    #region Pan Camera
+    public void PanCameraOnContact(float panDistance, float panTime, PanDirection panDirection, bool panToStartingPos)
+    {
+        _panCameraCoroutine = StartCoroutine(PanCamera(panDistance, panTime, panDirection, panToStartingPos));
+    }
+    private IEnumerator PanCamera(float panDistance, float panTime, PanDirection panDirection, bool panToStartingPos)
+    {
+        Vector2 endPos = Vector2.zero;
+        Vector2 startingPos = Vector2.zero;
+
+        //handle pan from trigger
+        if (!panToStartingPos)
+        {
+            //set the direction and distance
+            switch (panDirection)
+            {
+                case PanDirection.Up:
+                    endPos = Vector2.up;
+                    break;
+                case PanDirection.Down:
+                    endPos = Vector2.down;
+                    break;
+                case PanDirection.Left:
+                    endPos = Vector2.left;
+                    break;
+                case PanDirection.Right:
+                    endPos = Vector2.right;
+                    break;
+                default:
+                    endPos = _startingTrackedObjectOffset;
+                    break;
+            }
+            endPos *= panDistance;
+            startingPos = _startingTrackedObjectOffset;
+            endPos += startingPos;
+
+        }
+        //handle the pan back to starting position
+        else
+        {
+            startingPos = _framingTransposer.m_TrackedObjectOffset;
+            endPos = _startingTrackedObjectOffset;
+        }
+        float elapesedTime = 0f;
+        while (elapesedTime < panTime)
+        {
+            elapesedTime += Time.deltaTime;
+            Vector2 lerpedPos = Vector2.Lerp(startingPos, endPos, (elapesedTime / panTime));
+            _framingTransposer.m_TrackedObjectOffset = lerpedPos;
+            yield return null;
+        }
+
+    }
+    #endregion
 }
