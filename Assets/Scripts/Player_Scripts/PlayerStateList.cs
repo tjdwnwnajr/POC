@@ -15,6 +15,7 @@ public class PlayerStateList : MonoBehaviour
     public static bool isView = false;
     [SerializeField]public static bool isMirror = false;
     public bool mirrorOn = false;
+    public static bool isRotate = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public static void ViewMode(bool on)
