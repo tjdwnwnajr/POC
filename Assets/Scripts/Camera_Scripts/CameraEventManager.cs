@@ -4,8 +4,7 @@ using UnityEngine;
 public class CameraEventManager : MonoBehaviour
 {
     public static CameraEventManager instance;
-    [Header("Camera Offset")]
-    private CameraEventFocus cameraEventFocus;
+
 
     private void Awake()
     {
@@ -16,21 +15,19 @@ public class CameraEventManager : MonoBehaviour
         }
         instance = this;
 
-        cameraEventFocus = GetComponent<CameraEventFocus>();
+        
     }
     public void CameraOffsetEvent(Transform startPos, Transform targetPos)
     {
-        if (cameraEventFocus != null)
-        {
-            PlayerStateList.isView = true;
-            cameraEventFocus.FocusEvent(startPos, targetPos);
-            Invoke(nameof(ReturnCamera), 2f);
-        }
+        PlayerStateList.isView = true;
+        CameraEventFocus.instance.FocusEvent(startPos, targetPos);
+        Invoke(nameof(ReturnCamera), 2f);
+       
 
     }
     private void ReturnCamera()
     {
-        cameraEventFocus.ReturnToPlayer();
+        CameraEventFocus.instance.ReturnToPlayer();
         PlayerStateList.isView = false;
     }
 

@@ -79,7 +79,7 @@ public class RopeGrabtest : MonoBehaviour
         {          
             Grab(hand.hangedRope);
         }
-        if (InputManager.RopeReleasWasPressed && PlayerStateList.isRope)
+        if (InputManager.RopeWasReleased && PlayerStateList.isRope)
         {
             ReleaseRope();
             StartCoroutine(ResetRotation());
@@ -96,6 +96,13 @@ public class RopeGrabtest : MonoBehaviour
             }
         }
         CheckRebound();
+        if(PlayerStateList.isRope && swingTarget !=null)
+        {
+            if (swingTarget.linearVelocityY > 1f && Mathf.Abs(swingTarget.linearVelocityX) > 2f)
+            {
+                DualSenseInput.Instance.Vibrate(0.0f, 0.3f, 0.3f);
+            }
+        }
     }
 
    
@@ -190,21 +197,22 @@ public class RopeGrabtest : MonoBehaviour
         float velocityY = swingTarget.linearVelocityY;
         float velocityX = swingTarget.linearVelocityX;
         // 1보다 클 때: 진동
-        if (velocityY > 1f)
-        {
-            if (!wasAbovePositiveOne)  // 방금 1을 넘었을 때만
-            {
-                if (DualSenseInput.Instance != null)
-                {
-                    DualSenseInput.Instance.Vibrate(0.0f, 0.3f, 0.3f);
-                }
-                wasAbovePositiveOne = true;
-            }
-        }
-        else
-        {
-            wasAbovePositiveOne = false;
-        }
+        //if (velocityY > 1f)
+        //{
+        //    //if (!wasAbovePositiveOne)  // 방금 1을 넘었을 때만
+        //    //{
+        //    //    if (DualSenseInput.Instance != null)
+        //    //    {
+        //    //        DualSenseInput.Instance.Vibrate(0.0f, 0.3f, 0.3f);
+        //    //    }
+        //    //    wasAbovePositiveOne = true;
+        //    //}
+        //    DualSenseInput.Instance.Vibrate(0.0f, 0.2f, 0.2f);
+        //}
+        //else
+        //{
+        //    wasAbovePositiveOne = false;
+        //}
 
     }
    
@@ -263,7 +271,7 @@ public class RopeGrabtest : MonoBehaviour
             Debug.Log("밧줄이 움직이는 중. 속도: " + swingTarget.linearVelocityX);
             return;
         }
-            Rigidbody2D nextChain = null;
+        Rigidbody2D nextChain = null;
         Transform currentParent = swingTarget.transform.parent;
 
         if (currentParent == null) return;
@@ -290,7 +298,11 @@ public class RopeGrabtest : MonoBehaviour
         }
 
         if (nextChain == null) return;
-
+        if(nextChain.linearVelocityX > ropeVelocityThreshold)
+        {
+            Debug.Log("밧줄이 움직이는 중. 속도: " + swingTarget.linearVelocityX);
+            return;
+        }
         isMovingChain = true;
         moveStartPos = transform.position;
         moveTargetPos = nextChain.transform.position;

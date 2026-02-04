@@ -89,7 +89,8 @@ public class SceneSwapManager : MonoBehaviour
         CameraUtility.InvalidateCache();
 
         //카메라 다시찾아서 흔들기위한 리스너 연결하기
-        CameraShakeManager.instance.FindAndSetupVirtualCamera();
+        //CameraShakeManager.instance.FindAndSetupVirtualCamera();
+        CameraShakeManager.instance.RefreshCamera();
 
         //카메라 event offset 을 위한 카메라 다시 찾기
         CameraEventFocus.instance.RefreshCamera();

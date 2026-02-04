@@ -16,13 +16,26 @@ public class CameraShakeManager : MonoBehaviour
             instance = this;
         }
         //카메라찾기
-        FindAndSetupVirtualCamera();
+        currentVirtualCamera = CameraUtility.GetActiveVirtualCamera();
+        if (currentVirtualCamera == null)
+        {
+            Debug.LogError("CameraShakeManager에서 카메라를 찾지 못하였습니다.");
+            return;
+        }
+
+        // 그 카메라에서 Listener 추출
+        impulseListener = currentVirtualCamera.GetComponent<CinemachineImpulseListener>();
+        
+    }
+    public void RefreshCamera()
+    {
+        Awake();
     }
 
-    public void CameraShake(CinemachineImpulseSource impulseSource)
-    {
-        impulseSource.GenerateImpulseWithForce(globalShakeForce);
-    }
+    //public void CameraShake(CinemachineImpulseSource impulseSource)
+    //{
+    //    impulseSource.GenerateImpulseWithForce(globalShakeForce);
+    //}
     public void ScreenShakeFromProfile(ScreenShakeProfile profile, CinemachineImpulseSource impulseSource)
     {
         SetupScreenShakeSettings(profile, impulseSource);

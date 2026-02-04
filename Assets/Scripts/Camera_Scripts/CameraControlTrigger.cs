@@ -29,6 +29,14 @@ public class CameraControlTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+
+            Vector2 exitDirection = (collision.transform.position - _coll.bounds.center).normalized;
+            if(customInspectorObjects.swapCameras && customInspectorObjects.cameraOnLeft != null && customInspectorObjects.cameraOnRight != null)
+            {
+                //swap Camera
+                CameraManager.Instance.SwapCamera(customInspectorObjects.cameraOnLeft, customInspectorObjects.cameraOnRight, exitDirection);
+            }
+
             if (customInspectorObjects.panCameraOnContact)
             {
                 //pan the camera
@@ -46,8 +54,8 @@ public class CustomInspectorOvjects
     public bool swapCameras = false;
     public bool panCameraOnContact = false;
 
-    [HideInInspector] public CinemachineVirtualCameraBase cameraOnLeft;
-    [HideInInspector] public CinemachineVirtualCameraBase cameraOnRight;
+    [HideInInspector] public CinemachineVirtualCamera cameraOnLeft;
+    [HideInInspector] public CinemachineVirtualCamera cameraOnRight;
 
     [HideInInspector] public PanDirection panDirection;
     [HideInInspector] public float panDistance = 3f;
