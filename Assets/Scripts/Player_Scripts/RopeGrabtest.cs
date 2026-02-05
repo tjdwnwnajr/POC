@@ -142,6 +142,7 @@ public class RopeGrabtest : MonoBehaviour
             PlayerStateList.isRope = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.linearVelocity = Vector2.zero;
+            _playerAnim.SetBool("isRope", false);
             return;
         }
 
