@@ -18,9 +18,11 @@ public class MoveBlock : MonoBehaviour
     private bool isMoved = false;                    // 현재 목표위치 상태인지 추적
     private bool canPress = true;                             // 토글 모드에서 중복 입력 방지
     private bool isPlayerOnButton = false;                    // 플레이어가 버튼 위에 있는지 추적
+    private Animator _leverAnim;
 
     private void Start()
     {
+        _leverAnim = GetComponent<Animator>();
         if (blockToMove != null)
         {
             originalPosition = blockToMove.position;
@@ -37,6 +39,8 @@ public class MoveBlock : MonoBehaviour
         // isBtnMode일 때 입력으로 작동 (플레이어가 버튼 위에 있을 때만)
         if (isBtnMode && isPlayerOnButton && InputManager.UseToolWasPressed)
         {
+            _leverAnim.SetTrigger("isRight");
+            
             HandleToggleMode();
         }
     }
