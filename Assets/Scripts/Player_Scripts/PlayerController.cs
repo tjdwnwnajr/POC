@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
         if (PlayerStateList.isView)
         {
-            Debug.Log("����");
+           
             LockPosition();
         }
         else if (!PlayerStateList.isView)

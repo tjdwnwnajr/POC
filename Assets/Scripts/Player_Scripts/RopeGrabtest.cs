@@ -11,7 +11,7 @@ public class GyroRangeMapping
 
 public class RopeGrabtest : MonoBehaviour
 {
-    private Animator anim;
+    private Animator _playerAnim;
     [SerializeField] private LayerMask ropeLayer;
 
     [Header("Swing Settings")]
@@ -61,7 +61,7 @@ public class RopeGrabtest : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
+        _playerAnim = GetComponent<Animator>();
     }
     private void FixedUpdate()
     {
@@ -73,7 +73,7 @@ public class RopeGrabtest : MonoBehaviour
     }
     void Update()
     {
-        anim.SetBool("isRope",PlayerStateList.isRope);
+        //anim.SetBool("isRope",PlayerStateList.isRope);
 
         if (InputManager.RopeIsHeld&&!PlayerStateList.isRope&&hand.canGrab)
         {          
@@ -129,8 +129,8 @@ public class RopeGrabtest : MonoBehaviour
         swingTarget = rope;
         PlayerStateList.isRope = true;
         PlayerStateList.canMove = false;
-        
-        
+        _playerAnim.SetBool("isRope", true);
+
     }
     void ReleaseRope()
     {
@@ -165,7 +165,8 @@ public class RopeGrabtest : MonoBehaviour
         //Debug.Log(rb.linearVelocity);
         transform.SetParent(null);
         PlayerStateList.isRope = false;
-        
+        _playerAnim.SetBool("isRope", false);
+
     }
     private void CheckRebound()
     {

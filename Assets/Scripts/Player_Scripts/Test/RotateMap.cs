@@ -45,6 +45,7 @@ public class MapRotation : MonoBehaviour
     private GameObject _player;
     private Rigidbody2D _playerRb;
     private float _originalGravityScale;                      // 원래 중력값 저장
+    private Animator _playerAnim;
 
     // 다른 오브젝트들의 원래 중력값 저장
     private Dictionary<Rigidbody2D, float> _objectOriginalGravity = new Dictionary<Rigidbody2D, float>();
@@ -56,6 +57,7 @@ public class MapRotation : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _playerRb = _player.GetComponent<Rigidbody2D>();
         _originalGravityScale = _playerRb.gravityScale;        // 원래 중력값 저장
+        _playerAnim = _player.GetComponent<Animator>();
 
         // 각 오브젝트의 원래 중력값 저장
         foreach (var rb in objectsToLift)
@@ -82,7 +84,7 @@ public class MapRotation : MonoBehaviour
             isWaitingForInput = false;
             inputWaitTimer = 0f;
             HideArrows();
-          
+            PlayerStateList.isView = false;
             return;
         }
         //회전 입력 시작 - 방향 대기상태가 아닐 때, 플레이어가 회전 가능 구역에 있을 때, 회전입력했을 때,회전 중이 아닐 때
@@ -90,7 +92,9 @@ public class MapRotation : MonoBehaviour
         {
             isWaitingForInput = true;
             inputWaitTimer = 0f;
-         
+            _playerAnim.SetBool("isWalk",false); // 걷기 애니메이션 중지
+            _playerAnim.SetBool("isJump", false);
+            PlayerStateList.isView = true;
             ShowArrows();
         }
 
@@ -106,7 +110,7 @@ public class MapRotation : MonoBehaviour
                 isWaitingForInput = false;
                 inputWaitTimer = 0f;
                 HideArrows();
-            
+                PlayerStateList.isView = false;
                 return;
             }
 
@@ -118,9 +122,10 @@ public class MapRotation : MonoBehaviour
                     ShowSelectedImage(true);
                 else if (targetAngle == -90f)
                     ShowSelectedImage(false);
+                _playerAnim.SetBool("isLift", true);
                 StartCoroutine(RotateMap(targetAngle));
                 InputManager.DeactivatePlayerControls();
-              
+                PlayerStateList.isView = false;
                 HideArrows();
                 
                 
@@ -131,7 +136,7 @@ public class MapRotation : MonoBehaviour
                 isWaitingForInput = false;
                 inputWaitTimer = 0f;
                 HideArrows();
-          
+                PlayerStateList.isView = false;
                 return;
             }
         }
@@ -303,6 +308,7 @@ public class MapRotation : MonoBehaviour
         HideSelectedImage();
 
         // 플레이어와 오브젝트들 내리기
+        _playerAnim.SetBool("isLift", false);
         LowerPlayer();
         LowerObjects();
 
@@ -323,7 +329,7 @@ public class MapRotation : MonoBehaviour
 
         // 속도 초기화
         _playerRb.linearVelocity = Vector2.zero;
-
+        
         // Lerp로 점진적으로 이동 (shakeDuration 동안)
         float elapsedTime = 0f;
         while (elapsedTime < liftDuration)
@@ -337,6 +343,7 @@ public class MapRotation : MonoBehaviour
 
         // 최종 위치 설정
         _player.transform.position = targetPosition;
+        
     }
 
     private void LiftObjects()
