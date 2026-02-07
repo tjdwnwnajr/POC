@@ -1,36 +1,48 @@
-using UnityEngine;
+using Cinemachine;
 using System.Collections;
+using UnityEngine;
 
 public class MoveBlock : MonoBehaviour
 {
     [Header("Block Settings")]
-    [SerializeField] private Transform blockToMove;           // 이동시킬 블럭
-    [SerializeField] private Transform targetBlock;
-    private Vector3 targetPosition;          // 목표 위치
+    [SerializeField] private Transform[] blocksToMove;           // 이동시킬 블럭
+    [SerializeField] private Transform[] targetBlocks;
     [SerializeField] private float moveDuration = 0.5f;       // 이동 시간 (초)
 
     [Header("Mode Settings")]
     [SerializeField] private bool isBtnMode = false;          // true: 토글 모드, false: 홀드 모드
 
+    [Header("Shake Settings")]
+    [SerializeField] private bool shakeOn = false;               // 이동 시 화면 흔들림 여부
+    [SerializeField] private float shakeDuration = 0.2f;        // 흔들림 지속 시간
+    private CinemachineImpulseSource impulseSource;
+    [SerializeField] private ScreenShakeProfile profile;
 
-    private Vector3 originalPosition;
+    private Vector3[] originalPositions;
+    private int currentBlockIndex = 0;
+
     private Coroutine moveCoroutine;
-    private bool isMoved = false;                    // 현재 목표위치 상태인지 추적
+    private bool[] isMovedArray;                    // 현재 목표위치 상태인지 추적
     private bool canPress = true;                             // 토글 모드에서 중복 입력 방지
     private bool isPlayerOnButton = false;                    // 플레이어가 버튼 위에 있는지 추적
+    private bool allBlocksMoved = false;
     private Animator _leverAnim;
 
     private void Start()
     {
+        if(shakeOn)
+            impulseSource = GetComponent<CinemachineImpulseSource>();
         _leverAnim = GetComponent<Animator>();
-        if (blockToMove != null)
+        if(blocksToMove != null&& blocksToMove.Length > 0)
         {
-            originalPosition = blockToMove.position;
-            targetPosition = targetBlock.position;
-        }
-        else
-        {
-            Debug.LogWarning("이동시킬 블럭이 할당되지 않았습니다!");
+            originalPositions = new Vector3[blocksToMove.Length];
+            isMovedArray = new bool[blocksToMove.Length];
+
+            for(int i = 0; i< blocksToMove.Length; i++)
+            {
+                originalPositions[i] = blocksToMove[i].position;
+                isMovedArray[i] = false;
+            }
         }
     }
 
@@ -51,7 +63,7 @@ public class MoveBlock : MonoBehaviour
         if (isBtnMode)
             return;
 
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Rock"))
         {
             // 윗면에서만 충돌했는지 확인
             if (!IsCollidingFromTop(collision))
@@ -68,7 +80,7 @@ public class MoveBlock : MonoBehaviour
         if (isBtnMode)
             return;
 
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Rock"))
         {
        
             // 홀드 모드에서만 떨어질 때 처리
@@ -113,21 +125,47 @@ public class MoveBlock : MonoBehaviour
             StopCoroutine(moveCoroutine);
 
         // 토글: 목표위치 상태면 원래위치로, 아니면 목표위치로
-        if (isMoved)
+        if (allBlocksMoved)
         {
-            moveCoroutine = StartCoroutine(MoveBlockToOriginal());
-            isMoved = false;
+            moveCoroutine = StartCoroutine(ReturnAllBlocksSequentially());
+            allBlocksMoved = false;
         }
         else
         {
-            moveCoroutine = StartCoroutine(MoveBlockToTarget());
-            isMoved = true;
+            moveCoroutine = StartCoroutine(MoveAllBlocksSequentially());
+            allBlocksMoved = true;
         }
     }
+    private IEnumerator MoveAllBlocksSequentially()
+    {
+        InputManager.DeactivatePlayerControls();
+        for (int i = 0; i < blocksToMove.Length; i++)
+        {
+            currentBlockIndex = i;
+            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false);
+            yield return StartCoroutine(MoveBlockToTarget());
+            yield return new WaitForSeconds(1f);
+        }
+        InputManager.ActivatePlayerControls();
+        canPress = true;
+    }
 
+    private IEnumerator ReturnAllBlocksSequentially()
+    {
+        InputManager.DeactivatePlayerControls();
+        for (int i = 0; i < blocksToMove.Length; i++)
+        {
+            currentBlockIndex = i;
+            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false); //카메라 기본위치에서 움직이는 블록으로 움직이는 동안 
+            yield return StartCoroutine(MoveBlockToOriginal());
+            yield return new WaitForSeconds(1f);
+        }
+        InputManager.ActivatePlayerControls();
+        canPress = true;
+    }
     private void HandleHoldModeEnter()
     {
-    
+        
         if (moveCoroutine != null)
             StopCoroutine(moveCoroutine);
 
@@ -145,8 +183,34 @@ public class MoveBlock : MonoBehaviour
 
     private IEnumerator MoveBlockToTarget()
     {
+        if (currentBlockIndex >= targetBlocks.Length)
+        {
+            Debug.LogError("Target block index out of range.");
+            yield break;
+        }
+        
+        Transform blockToMove = blocksToMove[currentBlockIndex];
         Vector3 startPosition = blockToMove.position;
+        Vector3 targetPosition = Vector3.zero;
+        if(currentBlockIndex < targetBlocks.Length)
+        {
+            targetPosition = targetBlocks[currentBlockIndex].position;
+        }
+        else
+        {
+            Debug.LogError("Target block index out of range.");
+            yield break;
+        }
+
         float elapsed = 0f;
+
+        if (shakeOn)
+        {
+            CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
+            DualSenseInput.Instance.Vibrate(0.15f, 0.05f, shakeDuration+moveDuration);
+        
+            yield return new WaitForSeconds(shakeDuration);
+        }
 
         while (elapsed < moveDuration)
         {
@@ -157,17 +221,34 @@ public class MoveBlock : MonoBehaviour
         }
 
         blockToMove.position = targetPosition;
+        
 
-        if (isBtnMode)
-            canPress = true;
+
     }
 
     private IEnumerator MoveBlockToOriginal()
     {
-        Vector3 startPosition = blockToMove.position;
-        float elapsed = 0f;
+        if (currentBlockIndex >= targetBlocks.Length)
+        {
+            Debug.LogError("Target block index out of range.");
+            yield break;
+        }
 
-        while (elapsed < moveDuration)
+        Transform blockToMove = blocksToMove[currentBlockIndex];
+        Vector3 startPosition = blockToMove.position;
+        Vector3 originalPosition = originalPositions[currentBlockIndex];
+        
+ 
+        float elapsed = 0f;
+        if (shakeOn)
+        {
+            CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
+            DualSenseInput.Instance.Vibrate(0.15f, 0.05f, shakeDuration+moveDuration);
+            CameraEventManager.instance.CameraOffsetEvent(transform, blockToMove, shakeDuration + moveDuration);
+            yield return new WaitForSeconds(shakeDuration);
+        }
+
+            while (elapsed < moveDuration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / moveDuration);
@@ -177,10 +258,8 @@ public class MoveBlock : MonoBehaviour
 
         blockToMove.position = originalPosition;
 
-        if (isBtnMode)
-            canPress = true;
     }
-
+   
     private bool IsCollidingFromTop(Collision2D collision)
     {
         // 충돌점들을 확인

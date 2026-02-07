@@ -208,7 +208,12 @@ public class PlayerController : MonoBehaviour
         Debug.DrawRay(right, Vector2.down * groundCheckDistanceY, Color.red);
         Debug.DrawRay(left, Vector2.down * groundCheckDistanceY, Color.red);
         PlayerStateList.isGrounded = Grounded();
-        
+        if (PlayerStateList.isView)
+        {
+            anim.SetBool("isWalk", false);
+            anim.SetBool("isJump", false);
+        }
+
         if (PlayerStateList.canMove&&!PlayerStateList.isView)
         {
             GetDirection();

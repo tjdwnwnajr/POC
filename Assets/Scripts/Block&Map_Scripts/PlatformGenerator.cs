@@ -22,6 +22,7 @@ public class PlatformGenerator : MonoBehaviour
     private CinemachineImpulseSource impulseSource;
     [SerializeField] private ScreenShakeProfile profile;
     [SerializeField] private bool shakeOn;
+    [SerializeField] private float shakeDuration = 0.2f;
 
     private Coroutine platformCoroutine;
     private bool canTrigger = false;
@@ -63,7 +64,8 @@ public class PlatformGenerator : MonoBehaviour
             // 지연시간만큼 대기
             yield return new WaitForSeconds(platformData.delayBeforeSpawn);
             DualSenseInput.Instance.Vibrate(0.15f, 0.15f, 0.07f);
-            CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
+            if(shakeOn)
+                CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
             // 발판 활성화
             if (platformData.platformObject != null)
             {

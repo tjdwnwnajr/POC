@@ -1,4 +1,5 @@
 using Cinemachine;
+using System.Collections;
 using UnityEngine;
 
 public class CameraEventManager : MonoBehaviour
@@ -17,16 +18,38 @@ public class CameraEventManager : MonoBehaviour
 
         
     }
-    public void CameraOffsetEvent(Transform startPos, Transform targetPos)
+    public void CameraOffsetEvent(Transform startPos, Transform targetPos, float time = 2f, bool returnNow = false)
     {
         PlayerStateList.isView = true;
         CameraEventFocus.instance.FocusEvent(startPos, targetPos);
-        Invoke(nameof(ReturnCamera), 2f);
-       
+        //if(returnNow)
+        //{
+        //    Invoke(nameof(ReturnCamera), time);
+        //}
+        //else         {
+        //    return;
+        //}
+        
+        if (returnNow)
+        {
+            ReturnCamera();
+        }
+        else
+        {
+            StartCoroutine(WaitForReturn(time));
+        }
 
     }
+
+    IEnumerator WaitForReturn(float time)
+    {
+        yield return new WaitForSeconds(time);
+        ReturnCamera();
+    }
+
     private void ReturnCamera()
     {
+        
         CameraEventFocus.instance.ReturnToPlayer();
         PlayerStateList.isView = false;
     }
