@@ -306,7 +306,7 @@ MonoBehaviour:
   jumpPower: 18
   groundCheckPoint: {fileID: 2491512402601183812}
   groundCheckDistanceY: 0.2
-  groundCheckDistanceX: 0.5
+  groundCheckDistanceX: 0.3
   groundlayer:
     serializedVersion: 2
     m_Bits: 8
