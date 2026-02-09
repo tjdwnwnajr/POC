@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +12,7 @@ public class ButtonInteract_InputSystem : MonoBehaviour
     [SerializeField] private GameObject down;
 
     private bool playerInRange = false;
-
+    
     private void OnEnable()
     {
         if (interactAction != null)
@@ -43,6 +44,7 @@ public class ButtonInteract_InputSystem : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             playerInRange = true;
+        
     }
 
     private void OnTriggerExit2D(Collider2D other)

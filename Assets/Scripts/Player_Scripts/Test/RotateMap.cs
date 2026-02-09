@@ -2,9 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MapRotation : MonoBehaviour
+public class MapRoate : MonoBehaviour
 {
 
+    private bool rotateEnd = false;
     [Header("Rotation Settings")]
     public Transform mapParent;
     public Transform centerObject;
@@ -71,10 +72,12 @@ public class MapRotation : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(PlayerStateList.isGrounded);
         // 회전 중이 아닐 때 플레이어 컨트롤 활성화
-        if (!isRotating && PlayerStateList.isGrounded)
+        if (!isRotating && PlayerStateList.isGrounded&&rotateEnd)
         {
             InputManager.ActivatePlayerControls();
+           
         }
         // 회전 입력- 취소 입력값을 받고있을 때, 아직 회전은 아닐 때, 다시 누른다면
         if (isWaitingForInput && !isRotating && InputManager.UseToolWasPressed)
@@ -125,6 +128,7 @@ public class MapRotation : MonoBehaviour
                 _playerAnim.SetBool("isLift", true);
                 StartCoroutine(RotateMap(targetAngle));
                 InputManager.DeactivatePlayerControls();
+                rotateEnd = false;
                 PlayerStateList.isView = false;
                 HideArrows();
                 
@@ -368,6 +372,9 @@ public class MapRotation : MonoBehaviour
 
         // Rigidbody를 Dynamic으로 변경
         _playerRb.bodyType = RigidbodyType2D.Dynamic;
+
+        
+        rotateEnd = true;
     }
 
     private void LowerObjects()
