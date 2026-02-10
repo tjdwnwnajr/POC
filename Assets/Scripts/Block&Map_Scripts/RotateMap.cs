@@ -2,27 +2,34 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum RotationDirection
+{
+    OnlyLeft,   // 왼쪽(-90도)으로만 회전 가능
+    OnlyRight,  // 오른쪽(+90도)으로만 회전 가능
+    Both        // 양쪽 모두 회전 가능
+}
+
 public class RotateMap : MonoBehaviour
 {
     [Header("Rotation Settings")]
-    public Transform mapParent;           // 회전할 대상 (MapParent)
-    public Transform centerObject;        // 이 Device의 회전축
-    public Transform deviceObject;        // 이 Device 자신
+    [SerializeField] private Transform mapParent;
+    [SerializeField] private Transform deviceObject;
+    [SerializeField] private RotationDirection rotationDirection = RotationDirection.Both;
 
     [Header("Shake Settings")]
     [SerializeField] private float shakeDuration = 0.5f;
     [SerializeField] private float liftDuration = 0.5f;
     [SerializeField] private float rotationDuration = 1f;
-    [SerializeField] private float liftHeight = 5f;
+    [SerializeField] private float liftHeight = 3f;
 
     [Header("Objects to Lift")]
     [SerializeField] private List<Rigidbody2D> objectsToLift = new List<Rigidbody2D>();
 
     [Header("Gyro Settings")]
-    [SerializeField] private float gyroDeadZone = 0.2f;
+    [SerializeField] private float gyroDeadZone = 20f;
     [SerializeField] private float inputWaitDuration = 3f;
-    [SerializeField] private float gyroPositiveThreshold = 0.5f;
-    [SerializeField] private float gyroNegativeThreshold = -0.5f;
+    [SerializeField] private float gyroPositiveThreshold = 300f;
+    [SerializeField] private float gyroNegativeThreshold = -300f;
 
     private bool isWaitingForInput = false;
     private float inputWaitTimer = 0f;
@@ -45,12 +52,10 @@ public class RotateMap : MonoBehaviour
     private Animator _playerAnim;
     private Dictionary<Rigidbody2D, float> _objectOriginalGravity = new Dictionary<Rigidbody2D, float>();
 
-    private int currentRotationState = 0;
+    // ⭐ Device의 초기 Z 회전 각도 (eulerAngles.z 사용)
+    private float deviceInitialZAngle = 0f;
 
-    // ⭐ Center와 Device를 분리했을 때 저장할 정보
-    private Transform centerParent;
-    private Transform deviceParent;
-    private int centerSiblingIndex;
+    private Transform deviceParent; //mapparent
     private int deviceSiblingIndex;
 
     private void Awake()
@@ -60,7 +65,8 @@ public class RotateMap : MonoBehaviour
         _originalGravityScale = _playerRb.gravityScale;
         _playerAnim = _player.GetComponent<Animator>();
 
-        foreach (var rb in objectsToLift)
+        //물체들의 중력 저장
+        foreach (Rigidbody2D rb in objectsToLift)
         {
             if (rb != null && !_objectOriginalGravity.ContainsKey(rb))
             {
@@ -68,22 +74,23 @@ public class RotateMap : MonoBehaviour
             }
         }
 
-        // mapParent가 설정되지 않으면 부모로 설정
+
         if (mapParent == null)
         {
             mapParent = transform.parent;
         }
 
-        // deviceObject가 설정되지 않으면 이 스크립트의 gameObject로 설정
         if (deviceObject == null)
         {
             deviceObject = transform;
         }
+
+        // ⭐ Device의 초기 Z 회전 각도 저장 (eulerAngles.z 사용)
+        deviceInitialZAngle = deviceObject.eulerAngles.z;
     }
 
     void Update()
     {
-        Debug.Log(PlayerStateList.isGrounded);
         // 회전 완료 후 플레이어 컨트롤 활성화
         if (!isRotating && PlayerStateList.isGrounded && rotateEnd)
         {
@@ -94,7 +101,6 @@ public class RotateMap : MonoBehaviour
         // 입력 대기 중 취소
         if (isWaitingForInput && !isRotating && InputManager.UseToolWasPressed)
         {
-            Debug.Log("회전 입력 취소됨");
             isWaitingForInput = false;
             inputWaitTimer = 0f;
             HideArrows();
@@ -102,15 +108,27 @@ public class RotateMap : MonoBehaviour
             return;
         }
 
-        // 회전 입력 시작
+        // 회전 입력 시작 - ⭐ Device가 사용 가능한 상태인지 확인
         if (!isWaitingForInput && canRotate && InputManager.UseToolWasPressed && !isRotating)
         {
-            isWaitingForInput = true;
-            inputWaitTimer = 0f;
-            _playerAnim.SetBool("isWalk", false);
-            _playerAnim.SetBool("isJump", false);
-            PlayerStateList.isView = true;
-            ShowArrows();
+            // ⭐ (MapParent.eulerAngles.z + Device 초기 Z각도) % 360 == 0이면 사용 가능
+            if (IsDeviceUsable())
+            {
+                isWaitingForInput = true;
+                inputWaitTimer = 0f;
+                _playerAnim.SetBool("isWalk", false);
+                _playerAnim.SetBool("isJump", false);
+                PlayerStateList.isView = true;
+                ShowArrows();
+            }
+            else
+            {
+                float mapParentZAngle = mapParent.eulerAngles.z;
+                float totalZAngle = mapParentZAngle + deviceInitialZAngle;
+                float remainder = totalZAngle % 360f;
+                Debug.Log($"Device를 사용할 수 없습니다.\nMapParent Z 각도: {mapParentZAngle}도\nDevice 초기 Z 각도: {deviceInitialZAngle}도\n합: {totalZAngle}도\n합 % 360: {remainder}도");
+                return;
+            }
         }
 
         // 입력 대기 중 자이로 감지
@@ -118,10 +136,8 @@ public class RotateMap : MonoBehaviour
         {
             inputWaitTimer += Time.deltaTime;
 
-            // 입력 시간 초과
             if (inputWaitTimer >= inputWaitDuration)
             {
-                Debug.Log("입력 시간 초과 - 회전 취소");
                 isWaitingForInput = false;
                 inputWaitTimer = 0f;
                 HideArrows();
@@ -129,7 +145,6 @@ public class RotateMap : MonoBehaviour
                 return;
             }
 
-            // 자이로 입력 확인
             if (CheckGyroInput(out float targetAngle))
             {
                 isWaitingForInput = false;
@@ -147,56 +162,70 @@ public class RotateMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 자이로 입력 확인 및 회전 각도 결정
-    /// </summary>
+    
+    private bool IsDeviceUsable()
+    {
+        float mapParentZAngle = mapParent.eulerAngles.z;
+        float totalZAngle = mapParentZAngle + deviceInitialZAngle;
+
+        // % 360으로 나머지 계산
+        float remainder = totalZAngle % 360f;
+
+        // 부동소수점 오차 고려
+        float tolerance = 1f;  // 1도 허용
+
+        return Mathf.Abs(remainder) < tolerance ||
+               Mathf.Abs(remainder - 360f) < tolerance;
+    }
+
+
     private bool CheckGyroInput(out float targetAngle)
     {
         targetAngle = 0f;
         var imu = JSL.JslGetIMUState(0);
         float gyroY = imu.gyroY;
 
-        // 데드존 처리
         if (Mathf.Abs(gyroY) < gyroDeadZone)
         {
             return false;
         }
-
-        // 양의 방향 (오른쪽) 회전
+        //positive : 왼쪽
+        
         if (gyroY > gyroPositiveThreshold)
         {
-            if (currentRotationState + 1 <= 1)
+            if (rotationDirection == RotationDirection.OnlyRight)
             {
-                targetAngle = 90f;
-                return true;
-            }
-            else
-            {
-                targetAngle = 45f;
+                isWaitingForInput = false;
+                inputWaitTimer = 0f;
+                HideArrows();
+                PlayerStateList.isView = false;
+                Debug.Log("이 Device는 오른쪽으로만 회전 가능합니다!");
                 return false;
             }
+            targetAngle = 90f;
+            return true;
         }
-        // 음의 방향 (왼쪽) 회전
         else if (gyroY < gyroNegativeThreshold)
         {
-            if (currentRotationState - 1 >= -1)
+
+            if (rotationDirection == RotationDirection.OnlyLeft)
             {
-                targetAngle = -90f;
-                return true;
-            }
-            else
-            {
-                targetAngle = 45f;
+                isWaitingForInput = false;
+                inputWaitTimer = 0f;
+                HideArrows();
+                PlayerStateList.isView = false;
+                Debug.Log("이 Device는 왼쪽으로만 회전 가능합니다!");
                 return false;
             }
+
+            targetAngle = -90f;
+            return true;
         }
 
         return false;
     }
 
-    /// <summary>
-    /// ⭐ 핵심 함수: Center와 Device를 분리하고 개별 회전
-    /// </summary>
+  
     IEnumerator RotateMapCoroutine(float targetAngle)
     {
         isRotating = true;
@@ -206,88 +235,66 @@ public class RotateMap : MonoBehaviour
 
         yield return new WaitForSeconds(shakeDuration);
 
-        // ⭐ Step 1: Center와 Device를 MapParent에서 분리
-        // 나중에 다시 부모로 만들기 위해 정보 저장
-        centerParent = centerObject.parent;
+        // Step 1: Center와 Device를 MapParent에서 분리
         deviceParent = deviceObject.parent;
-        centerSiblingIndex = centerObject.GetSiblingIndex();
         deviceSiblingIndex = deviceObject.GetSiblingIndex();
 
-        // MapParent에서 자식 제거 (월드 좌표 유지)
-        centerObject.SetParent(null);
         deviceObject.SetParent(null);
 
-        //Debug.Log("Center와 Device가 MapParent에서 분리됨");
-
-        // ⭐ Step 2: 회전에 필요한 초기값 저장
+        // Step 2: 회전에 필요한 초기값 저장
         Vector3 mapParentWorldPos = mapParent.position;
         Quaternion mapParentWorldRot = mapParent.rotation;
 
-        Vector3 centerWorldPos = centerObject.position;    // 이제 월드 좌표 기준
-        Quaternion centerWorldRot = centerObject.rotation;
 
         Vector3 deviceWorldPos = deviceObject.position;
         Quaternion deviceWorldRot = deviceObject.rotation;
 
         float elapsedTime = 0f;
 
-        // ⭐ Step 3: 회전 진행
+        // Step 3: 회전 진행
         while (elapsedTime < rotationDuration)
         {
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / rotationDuration;
             float currentAngle = targetAngle * progress;
 
-            // ===== MapParent 회전 (Center를 중심으로) =====
-            Vector3 relativeMapParentPos = mapParentWorldPos - centerWorldPos;
+            // MapParent 회전
+            Vector3 relativeMapParentPos = mapParentWorldPos - deviceWorldPos;
             Vector3 rotatedMapParentPos = Quaternion.AngleAxis(currentAngle, Vector3.forward) * relativeMapParentPos;
 
-            mapParent.position = centerWorldPos + rotatedMapParentPos;
+            mapParent.position = deviceWorldPos + rotatedMapParentPos;
             mapParent.rotation = mapParentWorldRot * Quaternion.AngleAxis(currentAngle, Vector3.forward);
 
-            // ===== Center 회전 (Center Pivot을 중심으로) =====
-            Quaternion centerRotation = Quaternion.AngleAxis(currentAngle, Vector3.forward);
-            centerObject.rotation = centerWorldRot * centerRotation;
 
-            // ===== Device 회전 (Center Pivot을 중심으로) =====
+            // Device 회전 (제자리에서만 회전)
             Quaternion deviceRotation = Quaternion.AngleAxis(currentAngle, Vector3.forward);
             deviceObject.rotation = deviceWorldRot * deviceRotation;
 
             yield return null;
         }
 
-        // ⭐ Step 4: 최종 위치 및 회전 정확하게 설정
-        Vector3 finalRelativeMapParentPos = mapParentWorldPos - centerWorldPos;
+        // Step 4: 최종 위치 및 회전 정확하게 설정
+        Vector3 finalRelativeMapParentPos = mapParentWorldPos - deviceWorldPos;
         Vector3 finalRotatedMapParentPos = Quaternion.AngleAxis(targetAngle, Vector3.forward) * finalRelativeMapParentPos;
 
-        mapParent.position = centerWorldPos + finalRotatedMapParentPos;
+        mapParent.position = deviceWorldPos + finalRotatedMapParentPos;
         mapParent.rotation = mapParentWorldRot * Quaternion.AngleAxis(targetAngle, Vector3.forward);
 
-        centerObject.rotation = centerWorldRot * Quaternion.AngleAxis(targetAngle, Vector3.forward);
         deviceObject.rotation = deviceWorldRot * Quaternion.AngleAxis(targetAngle, Vector3.forward);
 
-        // 회전 상태 업데이트
-        if (targetAngle > 0)
-        {
-            currentRotationState += 1;
-        }
-        else if (targetAngle < 0)
-        {
-            currentRotationState -= 1;
-        }
+        //// ⭐ 로그 출력
+        //float mapParentZAngle = mapParent.eulerAngles.z;
+        //float totalZAngle = mapParentZAngle + deviceInitialZAngle;
+        //float remainder = totalZAngle % 360f;
+        //Debug.Log($"회전 후:\nMapParent Z 각도: {mapParentZAngle}도\nDevice 초기 Z 각도: {deviceInitialZAngle}도\n합: {totalZAngle}도\n합 % 360: {remainder}도\n사용가능: {IsDeviceUsable()}");
 
-        currentRotationState = Mathf.Clamp(currentRotationState, -1, 1);
         HideSelectedImage();
 
-        // ⭐ Step 5: Center와 Device를 다시 MapParent의 자식으로 만들기
-        // 원래 위치와 형제 순서 복원
-        centerObject.SetParent(centerParent);
-        centerObject.SetSiblingIndex(centerSiblingIndex);
+        // Step 5: Center와 Device를 다시 MapParent의 자식으로
+   
 
         deviceObject.SetParent(deviceParent);
         deviceObject.SetSiblingIndex(deviceSiblingIndex);
-
-        //Debug.Log("Center와 Device가 MapParent에 다시 포함됨");
 
         _playerAnim.SetBool("isLift", false);
         LowerPlayer();
@@ -296,15 +303,11 @@ public class RotateMap : MonoBehaviour
         isRotating = false;
     }
 
-    /// <summary>
-    /// 플레이어를 들어올리는 코루틴
-    /// </summary>
     private IEnumerator LiftPlayer()
     {
-        // centerObject의 월드 위치를 기준으로 플레이어 들어올리기
         Vector3 targetPosition = new Vector3(
-            centerObject.position.x,
-            centerObject.position.y + liftHeight,
+            deviceObject.position.x,
+            deviceObject.position.y + liftHeight,
             _player.transform.position.z
         );
         Vector3 startPosition = _player.transform.position;
@@ -326,9 +329,6 @@ public class RotateMap : MonoBehaviour
         _player.transform.position = targetPosition;
     }
 
-    /// <summary>
-    /// 오브젝트들을 들어올리기
-    /// </summary>
     private void LiftObjects()
     {
         foreach (var rb in objectsToLift)
@@ -341,9 +341,6 @@ public class RotateMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 플레이어를 내려놓기
-    /// </summary>
     private void LowerPlayer()
     {
         _playerRb.gravityScale = _originalGravityScale;
@@ -351,9 +348,6 @@ public class RotateMap : MonoBehaviour
         rotateEnd = true;
     }
 
-    /// <summary>
-    /// 오브젝트들을 내려놓기
-    /// </summary>
     private void LowerObjects()
     {
         foreach (var rb in objectsToLift)
@@ -365,27 +359,45 @@ public class RotateMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 방향 화살표 UI 표시
-    /// </summary>
     private void ShowArrows()
     {
-        if (leftArrowInstance == null && leftArrowPrefab != null)
+        if (rotationDirection == RotationDirection.OnlyLeft)
         {
-            leftArrowInstance = Instantiate(leftArrowPrefab, centerObject);
-            leftArrowInstance.transform.localPosition = new Vector3(-1f, 1f, 0f);
+            // 왼쪽 화살표만 표시
+            if (leftArrowInstance == null && leftArrowPrefab != null)
+            {
+                leftArrowInstance = Instantiate(leftArrowPrefab, deviceObject);
+                leftArrowInstance.transform.localPosition = new Vector3(-1f, 1f, 0f);
+            }
+        }
+        else if (rotationDirection == RotationDirection.OnlyRight)
+        {
+            // 오른쪽 화살표만 표시
+            if (rightArrowInstance == null && rightArrowPrefab != null)
+            {
+                rightArrowInstance = Instantiate(rightArrowPrefab, deviceObject);
+                rightArrowInstance.transform.localPosition = new Vector3(1f, 1f, 0f);
+            }
         }
 
-        if (rightArrowInstance == null && rightArrowPrefab != null)
+        else // Both
         {
-            rightArrowInstance = Instantiate(rightArrowPrefab, centerObject);
-            rightArrowInstance.transform.localPosition = new Vector3(1f, 1f, 0f);
-        }
+            // 양쪽 화살표 모두 표시
+            if (leftArrowInstance == null && leftArrowPrefab != null)
+            {
+                leftArrowInstance = Instantiate(leftArrowPrefab, deviceObject);
+                leftArrowInstance.transform.localPosition = new Vector3(-1f, 1f, 0f);
+            }
+
+            if (rightArrowInstance == null && rightArrowPrefab != null)
+            {
+                rightArrowInstance = Instantiate(rightArrowPrefab, deviceObject);
+                rightArrowInstance.transform.localPosition = new Vector3(1f, 1f, 0f);
+            }
+        } 
     }
+        
 
-    /// <summary>
-    /// 방향 화살표 UI 숨기기
-    /// </summary>
     private void HideArrows()
     {
         if (leftArrowInstance != null)
@@ -401,9 +413,6 @@ public class RotateMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 선택된 방향 이미지 표시
-    /// </summary>
     private void ShowSelectedImage(bool isLeft)
     {
         if (selectedImageInstance != null)
@@ -414,19 +423,16 @@ public class RotateMap : MonoBehaviour
 
         if (isLeft && leftSelectedPrefab != null)
         {
-            selectedImageInstance = Instantiate(leftSelectedPrefab, centerObject);
+            selectedImageInstance = Instantiate(leftSelectedPrefab, deviceObject);
             selectedImageInstance.transform.localPosition = new Vector3(-1f, 1f, 0f);
         }
         else if (!isLeft && rightSelectedPrefab != null)
         {
-            selectedImageInstance = Instantiate(rightSelectedPrefab, centerObject);
+            selectedImageInstance = Instantiate(rightSelectedPrefab, deviceObject);
             selectedImageInstance.transform.localPosition = new Vector3(1f, 1f, 0f);
         }
     }
 
-    /// <summary>
-    /// 선택된 방향 이미지 숨기기
-    /// </summary>
     private void HideSelectedImage()
     {
         if (selectedImageInstance != null)
@@ -436,9 +442,6 @@ public class RotateMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 플레이어가 회전 장치 트리거에 진입
-    /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -447,9 +450,6 @@ public class RotateMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 플레이어가 회전 장치 트리거에서 탈출
-    /// </summary>
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))

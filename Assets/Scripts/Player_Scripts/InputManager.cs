@@ -113,14 +113,14 @@ public class InputManager : MonoBehaviour
     public static void ActivatePlayerControls()
     {
         PlayerInput.currentActionMap.Enable();
-        Debug.Log("활성화");
+     
         
     }
 
     public static void DeactivatePlayerControls()
     {
         PlayerInput.currentActionMap.Disable();
-        Debug.Log("비활성화");
+     
     }
     
 }
