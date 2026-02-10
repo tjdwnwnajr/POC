@@ -194,6 +194,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BlockMove",
+                    "type": "Value",
+                    "id": "26368ba6-3e52-4f63-ae0d-0f8643522820",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -909,6 +918,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1eeb90c2-9e2b-45c8-83d5-33a06e23080c",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BlockMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

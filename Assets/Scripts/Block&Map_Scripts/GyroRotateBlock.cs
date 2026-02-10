@@ -20,7 +20,7 @@ public class GyroRotateBlock : MonoBehaviour
     private float smoothedGyroY = 0f;                             // 필터링된 자이로값
     private float holdTimer = 0f;
     public bool isComplete = false;
-
+    [SerializeField] private bool noMission = false;
     private void Update()
     {
         if (!isComplete)
@@ -84,6 +84,10 @@ public class GyroRotateBlock : MonoBehaviour
 
     private void CheckCompletion()
     {
+        if(noMission)
+        {
+            return;
+        }
         float diff = Mathf.DeltaAngle(transform.eulerAngles.z, targetAngle);
 
         // 0도 근처 또는 ±180도 근처면 OK

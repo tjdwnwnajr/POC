@@ -35,6 +35,8 @@ public class InputManager : MonoBehaviour
     //RopeUpandDown
     public static bool UpWasPressed;
     public static bool DownWasPressed;
+    //block move vector
+    public static Vector2 BlockMovement;
 
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -48,6 +50,8 @@ public class InputManager : MonoBehaviour
     private InputAction _RopeUpAction;
     private InputAction _RopeDownAction;
     private InputAction _RopeReleaseAction;
+    private InputAction _blockMove;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -69,6 +73,7 @@ public class InputManager : MonoBehaviour
         _RopeUpAction = PlayerInput.actions["RopeUp"];
         _RopeDownAction = PlayerInput.actions["RopeDown"];
         _RopeReleaseAction = PlayerInput.actions["RopeRelease"];
+        _blockMove = PlayerInput.actions["BlockMove"];
     }
 
     // Update is called once per frame
@@ -103,12 +108,19 @@ public class InputManager : MonoBehaviour
         DownWasPressed = _RopeDownAction.WasPressedThisFrame();
 
         RopeReleasWasPressed = _RopeReleaseAction.WasPressedThisFrame();
+        
+        BlockMovement = _blockMove.ReadValue<Vector2>();
+
 
         if (PlayerStateList.isMirror)
         {
             Movement.x *= -1;
             Rotate *= -1;
+            BlockMovement.x *= -1;
         }
+
+        
+        
     }
     public static void ActivatePlayerControls()
     {
