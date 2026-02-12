@@ -15,12 +15,6 @@ public class RollingStone : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        if (rb == null)
-        {
-            Debug.LogError("Rigidbody2D 컴포넌트가 필요합니다!");
-            return;
-        }
-
         isInitialized = true;
 
         // destroyTime 후 자동 파괴

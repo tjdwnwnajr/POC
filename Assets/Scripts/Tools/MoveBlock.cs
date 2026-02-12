@@ -26,13 +26,12 @@ public class MoveBlock : MonoBehaviour
     private bool canPress = true;                             // 토글 모드에서 중복 입력 방지
     private bool isPlayerOnButton = false;                    // 플레이어가 버튼 위에 있는지 추적
     private bool allBlocksMoved = false;
-    private Animator _leverAnim;
+ 
 
     private void Start()
     {
         if(shakeOn)
             impulseSource = GetComponent<CinemachineImpulseSource>();
-        _leverAnim = GetComponent<Animator>();
         if(blocksToMove != null&& blocksToMove.Length > 0)
         {
             originalPositions = new Vector3[blocksToMove.Length];
@@ -51,7 +50,6 @@ public class MoveBlock : MonoBehaviour
         // isBtnMode일 때 입력으로 작동 (플레이어가 버튼 위에 있을 때만)
         if (isBtnMode && isPlayerOnButton && InputManager.UseToolWasPressed)
         {
-            _leverAnim.SetTrigger("isRight");
             
             HandleToggleMode();
         }
@@ -98,6 +96,10 @@ public class MoveBlock : MonoBehaviour
         {
             isPlayerOnButton = true;
            
+        }
+        if (collision.gameObject.CompareTag("Rock"))
+        {
+            StartCoroutine(MovebyRock());
         }
     }
 
@@ -272,5 +274,19 @@ public class MoveBlock : MonoBehaviour
             }
         }
         return false;
+    }
+    private IEnumerator MovebyRock()
+    {
+        InputManager.DeactivatePlayerControls();
+        for (int i = 0; i < blocksToMove.Length; i++)
+        {
+            currentBlockIndex = i;
+            DualSenseInput.Instance.Vibrate(0.15f, 0.05f, shakeDuration + moveDuration);
+            CameraEventManager.instance.CameraOffsetEvent(PlayerController.Instance.transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false);
+            yield return StartCoroutine(MoveBlockToTarget());
+            yield return new WaitForSeconds(1f);
+        }
+        InputManager.ActivatePlayerControls();
+        
     }
 }

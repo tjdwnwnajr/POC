@@ -5,12 +5,12 @@ public class TriggerInteractionBase : MonoBehaviour, IInteractable
     public GameObject Player { get; set; }
     public bool CanInteract { get; set; }
 
-    private void Start()
+    protected virtual void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player"); 
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (CanInteract)
         {

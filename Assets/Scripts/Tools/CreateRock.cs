@@ -6,7 +6,7 @@ public class CreateRock : MonoBehaviour
     [SerializeField] private GameObject rockPrefab;
     [SerializeField] private Vector3 rockSpawnPoint;
     private bool canCreate = false;
-    private bool isCreated = false;
+    [HideInInspector]public bool isCreated = false;
     [SerializeField] private float coolTime = 5f;
     private bool endCreate = false;
     private void Start()
