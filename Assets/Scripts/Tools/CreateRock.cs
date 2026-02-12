@@ -18,10 +18,15 @@ public class CreateRock : MonoBehaviour
     {
         if(canCreate && InputManager.UseToolWasPressed && !isCreated)
         {
-            StartCoroutine(SpawnRock());
+            //StartCoroutine(SpawnRock());
         }
     }
+    public void TrySpawn()
+    {
+        if (isCreated) return;
 
+        StartCoroutine(SpawnRock());
+    }
     IEnumerator SpawnRock()
     {
         Instantiate(rockPrefab, rockSpawnPoint, Quaternion.identity);

@@ -20,14 +20,22 @@ public class BtnTriggerInteraction : TriggerInteractionBase
         anim = GetComponent<Animator>();
         heldTime = coolTime - 1.666f;
         isPressed = false;
-        rock = GetComponent<CreateRock>();
+        if (forRock)
+        {
+            rock = GetComponent<CreateRock>();
+        }
     }
 
 
     public override void Interact()
     {
         if (pressRoutine != null) return;
-        if (rock.isCreated) return;
+        if (forRock)
+        {
+            if (rock.isCreated) return;
+            rock.TrySpawn();
+        }
+        
         pressRoutine = StartCoroutine(PressedBtn());
         
     }

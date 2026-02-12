@@ -59,5 +59,8 @@ TagManager:
   - name: doorfront
     uniqueID: 3888561131
     locked: 0
+  - name: device
+    uniqueID: 331097261
+    locked: 0
   m_RenderingLayers:
   - Default

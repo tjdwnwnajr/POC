@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 79d87e3a2e191b34b91161c83401cf79
+guid: 51812672c7af5cb4181a00f5ac142291
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1418744019417703777
-    second: head_of_device_0
+      213: -4635559181217501013
+    second: head_of_device-1.png_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: head_of_device_0
+      name: head_of_device-1.png_0
       rect:
         serializedVersion: 2
         x: 16
@@ -115,14 +115,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1652a983b2460b310800000000000000
-      internalID: 1418744019417703777
+      spriteID: ba0fa342c7f2bafb0800000000000000
+      internalID: -4635559181217501013
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: head_of_device_1
+      name: head_of_device-1.png_1
       rect:
         serializedVersion: 2
         x: 8
@@ -137,8 +137,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 32edc75c3c03b3b4ba4a2b2a55bc3183
-      internalID: 537003846
+      spriteID: 29ceef94f24d70244843ae572caa5a58
+      internalID: -316081789
       vertices: []
       indices: 
       edges: []
@@ -147,7 +147,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4b6ccb01de5acf7408b7bbc677f50132
+    spriteID: 89fe42b89d339df478d47477a12db826
     internalID: 0
     vertices: []
     indices: 
@@ -159,8 +159,8 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      head_of_device_0: 1418744019417703777
-      head_of_device_1: 537003846
+      head_of_device-1.png_0: -4635559181217501013
+      head_of_device-1.png_1: -316081789
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

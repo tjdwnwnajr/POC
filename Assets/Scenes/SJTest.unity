@@ -131,13 +131,13 @@ GameObject:
   - component: {fileID: 186270828}
   - component: {fileID: 186270827}
   - component: {fileID: 186270826}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &186270826
 Rigidbody2D:
   serializedVersion: 5
@@ -881,13 +881,13 @@ GameObject:
   - component: {fileID: 469030475}
   - component: {fileID: 469030474}
   - component: {fileID: 469030473}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &469030473
 Rigidbody2D:
   serializedVersion: 5
