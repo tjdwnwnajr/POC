@@ -40,10 +40,10 @@ public class CreateRock : MonoBehaviour
         {
             vcam.Follow = rock.transform;
         }
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(6f);
         vcam.Follow = defaultFollowTarget;
         InputManager.ActivatePlayerControls();
-        yield return new WaitForSeconds(coolTime-4f);
+        yield return new WaitForSeconds(coolTime-6f);
         isCreated = false;
     }
     private void OnTriggerEnter2D(Collider2D collision)

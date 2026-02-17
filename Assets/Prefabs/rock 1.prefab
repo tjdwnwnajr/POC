@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RollingStone
   rollingTorque: -30
-  destroyTime: 11
+  destroyTime: 8
 --- !u!60 &7785142274274481470
 PolygonCollider2D:
   m_ObjectHideFlags: 0
