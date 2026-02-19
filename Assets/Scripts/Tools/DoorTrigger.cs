@@ -1,21 +1,62 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class DoorTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject doorB;
+    [SerializeField] private GameObject keyUsePanel;
+
+    private bool playerInRange = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            // doorF ²ô±â (ÀÌ ½ºÅ©¸³Æ®°¡ ºÙÀº ¿ÀºêÁ§Æ®)
-            gameObject.SetActive(false);
+            playerInRange = true;
 
-            // doorB ÄÑ±â
-            if (doorB != null)
+            // ğŸ”¥ keyOneì´ trueì¼ ë•Œë§Œ UI í‘œì‹œ
+            if (PlayerStateList.keyOne)
             {
-                doorB.SetActive(true);
+                keyUsePanel.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("ì—´ì‡  1ì´ í•„ìš”í•©ë‹ˆë‹¤.");
             }
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+            keyUsePanel.SetActive(false);
+        }
+    }
+
+    // âœ… Yes ë²„íŠ¼ ì—°ê²°
+    public void OnClickYes()
+    {
+        if (!playerInRange) return;
+
+        keyUsePanel.SetActive(false);
+
+        // ğŸ”‘ ì—´ì‡  ì†Œëª¨
+        PlayerStateList.keyOne = false;
+
+        // doorF ë„ê¸°
+        gameObject.SetActive(false);
+
+        // doorB ì¼œê¸°
+        if (doorB != null)
+        {
+            doorB.SetActive(true);
+        }
+    }
+
+    // âœ… No ë²„íŠ¼ ì—°ê²°
+    public void OnClickNo()
+    {
+        keyUsePanel.SetActive(false);
     }
 }
