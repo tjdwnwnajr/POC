@@ -10,12 +10,15 @@ public class CreateRock : MonoBehaviour
     [SerializeField] private float coolTime = 5f;
     [SerializeField] private CinemachineVirtualCamera vcam;
     [SerializeField] private Transform defaultFollowTarget;
-
+    [SerializeField] private CinemachineConfiner2D boundary;
+    [SerializeField] private CompositeCollider2D defaultBoundary;
+    [SerializeField] private CompositeCollider2D rockBoundary;
     private bool endCreate = false;
     private void Start()
     {
         canCreate = false;
         defaultFollowTarget = vcam.Follow;
+        boundary.m_BoundingShape2D = defaultBoundary;
     }
 
     private void Update()
@@ -29,6 +32,7 @@ public class CreateRock : MonoBehaviour
     {
         if (isCreated) return;
 
+        boundary.m_BoundingShape2D = rockBoundary;
         StartCoroutine(SpawnRock());
     }
     IEnumerator SpawnRock()
@@ -41,6 +45,7 @@ public class CreateRock : MonoBehaviour
             vcam.Follow = rock.transform;
         }
         yield return new WaitForSeconds(6f);
+        boundary.m_BoundingShape2D = defaultBoundary;
         vcam.Follow = defaultFollowTarget;
         InputManager.ActivatePlayerControls();
         yield return new WaitForSeconds(coolTime-6f);

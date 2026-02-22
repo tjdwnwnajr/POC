@@ -26,6 +26,7 @@ public class MoveBlock : MonoBehaviour
     private bool canPress = true;                             // 토글 모드에서 중복 입력 방지
     private bool isPlayerOnButton = false;                    // 플레이어가 버튼 위에 있는지 추적
     private bool allBlocksMoved = false;
+
  
 
     private void Start()
@@ -277,6 +278,7 @@ public class MoveBlock : MonoBehaviour
     }
     private IEnumerator MovebyRock()
     {
+        yield return new WaitForSeconds(1f);
         InputManager.DeactivatePlayerControls();
         for (int i = 0; i < blocksToMove.Length; i++)
         {

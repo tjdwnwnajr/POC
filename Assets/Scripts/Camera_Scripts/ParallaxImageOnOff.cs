@@ -4,10 +4,10 @@ public class ParallaxImageOnOff : MonoBehaviour
 {
     [SerializeField]private bool imageActive = false;
     [SerializeField]private GameObject backGround;
-    [SerializeField]private CinemachineVirtualCamera targetCam;
+    [SerializeField]private CinemachineVirtualCamera[] targetCams;
     private float offTimer = 0f;
     private float offSpeed = 1.5f;
-    
+    private bool anyActivated;
     private void Start()
     {
         backGround.SetActive(imageActive);
@@ -19,20 +19,33 @@ public class ParallaxImageOnOff : MonoBehaviour
     }
     private void CheckActive()
     {
-        if (targetCam != null)
+        if (targetCams == null || targetCams.Length == 0) return;
+
+        for (int i = 0; i < targetCams.Length; i++)
         {
-            if (targetCam.enabled == true) { 
-                imageActive= true;
-                offTimer = 0f;
-            }
-            else
+            if (targetCams[i].enabled == true)
             {
-                offTimer += Time.deltaTime;
-                if (offTimer > offSpeed)
-                {
-                    imageActive = false;
-                }
+                anyActivated = true;
+                break;
+
+            }
+            
+        } 
+        if (anyActivated)
+        {
+            imageActive = true;
+            offTimer = 0f;
+        }
+        else
+        {
+            offTimer += Time.deltaTime;
+            if (offTimer > offSpeed)
+            {
+                imageActive = false;
             }
         }
+        
+        
+        
     }
 }
