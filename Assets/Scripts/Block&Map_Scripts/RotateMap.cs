@@ -6,7 +6,8 @@ public enum RotationDirection
 {
     OnlyLeft,   // 왼쪽(-90도)으로만 회전 가능
     OnlyRight,  // 오른쪽(+90도)으로만 회전 가능
-    Both        // 양쪽 모두 회전 가능
+    Both,        // 양쪽 모두 회전 가능
+    Reverse
 }
 
 public class RotateMap : MonoBehaviour
@@ -202,7 +203,15 @@ public class RotateMap : MonoBehaviour
                 Debug.Log("이 Device는 오른쪽으로만 회전 가능합니다!");
                 return false;
             }
-            targetAngle = 90f;
+            if (rotationDirection == RotationDirection.Reverse)
+            {
+                targetAngle = 180f;
+            }
+            else
+            {
+                targetAngle = 90f;
+            }
+            //targetAngle = 90f;
             return true;
         }
         else if (gyroY < gyroNegativeThreshold)
@@ -217,8 +226,15 @@ public class RotateMap : MonoBehaviour
                 Debug.Log("이 Device는 왼쪽으로만 회전 가능합니다!");
                 return false;
             }
-
-            targetAngle = -90f;
+            if (rotationDirection == RotationDirection.Reverse)
+            {
+                targetAngle = 180f;
+            }
+            else
+            {
+                targetAngle = 90f;
+            }
+            //targetAngle = -90f;
             return true;
         }
 
