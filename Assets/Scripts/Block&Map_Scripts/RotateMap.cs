@@ -232,7 +232,7 @@ public class RotateMap : MonoBehaviour
             }
             else
             {
-                targetAngle = 90f;
+                targetAngle = -90f;
             }
             //targetAngle = -90f;
             return true;
