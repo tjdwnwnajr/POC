@@ -20,6 +20,7 @@ public class ParallaxImageOnOff : MonoBehaviour
     private void CheckActive()
     {
         if (targetCams == null || targetCams.Length == 0) return;
+        anyActivated = false;
 
         for (int i = 0; i < targetCams.Length; i++)
         {

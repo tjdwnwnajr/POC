@@ -51,16 +51,28 @@ public class CameraManager : MonoBehaviour
                 _currentCamera = _allVirtualCameras[i];
                 
                 _framingTransposer = _currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+                if (_framingTransposer == null)
+                {
+                    
+                    return;
+                }
                 _normYPanAmount = _framingTransposer.m_YDamping;
             }
         }
 
-
+        if (_framingTransposer == null)
+        {
+            return;
+        }
         _startingTrackedObjectOffset = _framingTransposer.m_TrackedObjectOffset;
     } 
     //플레이어 낙하중인지 여부에 따라 y반응속도를 조절하도록 외부에서 호출하는 함수
     public void LerpYDamping(bool isPlayerFalling)
     {
+        if (_framingTransposer == null)
+        {
+            return ;
+        }
         //이전 코루틴이 실행중이면 null이 아니어서 중지한다.
         if(_lerpYPanCoroutine != null)
         {
