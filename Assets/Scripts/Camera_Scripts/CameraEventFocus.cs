@@ -53,16 +53,14 @@ public class CameraEventFocus : MonoBehaviour
     /* ===============================
      * 이벤트 위치로 카메라 시선 이동
      * =============================== */
-    public void FocusEvent(Transform startPos, Transform eventTarget)
+    public void FocusEvent(Transform startPos, Transform eventTarget, float moveduration)
     {
         if (eventTarget == null) return;
 
         Vector3 dir = eventTarget.position - startPos.position;
         dir.z = 0f; // 2D 기준 (3D면 제거)
-
-        // 거리 제한
-        //if (dir.magnitude > maxOffsetDistance)
-        //    dir = dir.normalized * maxOffsetDistance;
+        moveDuration = moveduration;
+     
 
         StartMove(dir);
     }

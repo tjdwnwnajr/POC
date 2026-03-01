@@ -18,6 +18,8 @@ public class MoveBlock : MonoBehaviour
     private CinemachineImpulseSource impulseSource;
     [SerializeField] private ScreenShakeProfile profile;
 
+    [Header("Camera Moving")]
+    [SerializeField] private float cameraDurtaion = 0.15f;
     private Vector3[] originalPositions;
     private int currentBlockIndex = 0;
 
@@ -145,7 +147,7 @@ public class MoveBlock : MonoBehaviour
         for (int i = 0; i < blocksToMove.Length; i++)
         {
             currentBlockIndex = i;
-            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false);
+            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDurtaion);
             yield return StartCoroutine(MoveBlockToTarget());
             yield return new WaitForSeconds(1f);
         }
@@ -247,7 +249,7 @@ public class MoveBlock : MonoBehaviour
         {
             CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
             DualSenseInput.Instance.Vibrate(0.15f, 0.05f, shakeDuration+moveDuration);
-            CameraEventManager.instance.CameraOffsetEvent(transform, blockToMove, shakeDuration + moveDuration);
+            //CameraEventManager.instance.CameraOffsetEvent(transform, blockToMove, shakeDuration + moveDuration);
             yield return new WaitForSeconds(shakeDuration);
         }
 
@@ -284,7 +286,7 @@ public class MoveBlock : MonoBehaviour
         {
             currentBlockIndex = i;
             DualSenseInput.Instance.Vibrate(0.15f, 0.05f, shakeDuration + moveDuration);
-            CameraEventManager.instance.CameraOffsetEvent(PlayerController.Instance.transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false);
+            CameraEventManager.instance.CameraOffsetEvent(PlayerController.Instance.transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDurtaion);
             yield return StartCoroutine(MoveBlockToTarget());
             yield return new WaitForSeconds(1f);
         }

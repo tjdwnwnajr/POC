@@ -18,17 +18,11 @@ public class CameraEventManager : MonoBehaviour
 
         
     }
-    public void CameraOffsetEvent(Transform startPos, Transform targetPos, float time = 2f, bool returnNow = false)
+    public void CameraOffsetEvent(Transform startPos, Transform targetPos, float time = 2f, bool returnNow = false, float moveduration = 0.15f)
     {
         PlayerStateList.isView = true;
-        CameraEventFocus.instance.FocusEvent(startPos, targetPos);
-        //if(returnNow)
-        //{
-        //    Invoke(nameof(ReturnCamera), time);
-        //}
-        //else         {
-        //    return;
-        //}
+        CameraEventFocus.instance.FocusEvent(startPos, targetPos,moveduration);
+
         
         if (returnNow)
         {
