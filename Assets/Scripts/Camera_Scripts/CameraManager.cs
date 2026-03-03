@@ -203,6 +203,7 @@ public class CameraManager : MonoBehaviour
             //update our composer variable
             _framingTransposer = _currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         }
+        CameraUtility.InvalidateCache();
         CameraEventFocus.instance.RefreshCamera();
         CameraShakeManager.instance.RefreshCamera();
     }

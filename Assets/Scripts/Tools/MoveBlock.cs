@@ -19,7 +19,7 @@ public class MoveBlock : MonoBehaviour
     [SerializeField] private ScreenShakeProfile profile;
 
     [Header("Camera Moving")]
-    [SerializeField] private float cameraDurtaion = 0.15f;
+    [SerializeField] private float cameraDuration = 0.15f;
     private Vector3[] originalPositions;
     private int currentBlockIndex = 0;
 
@@ -147,7 +147,7 @@ public class MoveBlock : MonoBehaviour
         for (int i = 0; i < blocksToMove.Length; i++)
         {
             currentBlockIndex = i;
-            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDurtaion);
+            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration);
             yield return StartCoroutine(MoveBlockToTarget());
             yield return new WaitForSeconds(1f);
         }
@@ -161,7 +161,7 @@ public class MoveBlock : MonoBehaviour
         for (int i = 0; i < blocksToMove.Length; i++)
         {
             currentBlockIndex = i;
-            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false); //카메라 기본위치에서 움직이는 블록으로 움직이는 동안 
+            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration); //카메라 기본위치에서 움직이는 블록으로 움직이는 동안 
             yield return StartCoroutine(MoveBlockToOriginal());
             yield return new WaitForSeconds(1f);
         }
@@ -286,7 +286,7 @@ public class MoveBlock : MonoBehaviour
         {
             currentBlockIndex = i;
             DualSenseInput.Instance.Vibrate(0.15f, 0.05f, shakeDuration + moveDuration);
-            CameraEventManager.instance.CameraOffsetEvent(PlayerController.Instance.transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDurtaion);
+            CameraEventManager.instance.CameraOffsetEvent(PlayerController.Instance.transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration);
             yield return StartCoroutine(MoveBlockToTarget());
             yield return new WaitForSeconds(1f);
         }
