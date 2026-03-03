@@ -19,6 +19,7 @@ public class PlayerStateList : MonoBehaviour
     public static bool keyOne = false;
     public static bool keyTwo = false;
     public static bool keyThree = false;
+    public static bool isDead = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public static void ViewMode(bool on)

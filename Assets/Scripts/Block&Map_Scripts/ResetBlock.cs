@@ -13,12 +13,10 @@ public class ResetBlock : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(startPos);
         if (InputManager.resetPressedTwo && !hasTriggered&&!contact)
         {
             transform.position = startPos;
             hasTriggered = true;
-            Debug.Log("¼º°ø");
         }
         else
         {

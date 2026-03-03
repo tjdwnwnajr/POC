@@ -163,7 +163,7 @@ public class PlayerController : MonoBehaviour
     {
 
         //if (pState.dashing) return;
-        if (PlayerStateList.canMove&&!PlayerStateList.isView)
+        if (PlayerStateList.canMove&&!PlayerStateList.isView&& !PlayerStateList.isDead)
         {
             if(xAxis>0|| xAxis < 0)
                 TurnCheck();
@@ -214,7 +214,7 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isJump", false);
         }
 
-        if (PlayerStateList.canMove&&!PlayerStateList.isView)
+        if (PlayerStateList.canMove&&!PlayerStateList.isView&&!PlayerStateList.isDead)
         {
             GetDirection();
             UpdateJumpVariables();
@@ -553,8 +553,51 @@ public class PlayerController : MonoBehaviour
 
 
 
+    public void Die()
+    {
+        StartCoroutine(Death());
+    }
+
+    IEnumerator Death()
+    {
+        PlayerStateList.isDead = true;
+
+        // 입력 비활성화
+        InputManager.DeactivatePlayerControls();
+
+        // 이동 정지
+        rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = 0;
+
+        // Death 애니메이션 트리거
+        anim.SetTrigger("isDamaged");
+
+        // 1초 대기 (Death 애니메이션 재생)
+        yield return new WaitForSeconds(1f);
 
 
+        // 입력 재활성화
+        InputManager.ActivatePlayerControls();
+
+        // 상태 복구
+        rb.gravityScale = gravity;
+        PlayerStateList.isDead = false;
+    }
+    private void Respwan()
+    {
+
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Damage 레이어와 충돌 감지
+        if (((1 << collision.gameObject.layer) & LayerMask.GetMask("Damage")) != 0)
+        {
+            if (!PlayerStateList.isDead)
+            {
+                Die();
+            }
+        }
+    }
     ////////////////Recoil
     void Recoil()
     {
