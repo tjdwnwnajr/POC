@@ -30,6 +30,7 @@ public class KeyOneBox : MonoBehaviour
             alreadyTaken = true;
 
             Debug.Log("¿­¼è 1 È¹µæ!");
+            gameObject.SetActive(false);
         }
     }
 

@@ -17,8 +17,7 @@ public class PlayerStateList : MonoBehaviour
     public bool mirrorOn = false;
     public static bool isRotate = false;
     public static bool keyOne = false;
-    public static bool keyTwo = false;
-    public static bool keyThree = false;
+    public static bool headBtn = false;
     public static bool isDead = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
