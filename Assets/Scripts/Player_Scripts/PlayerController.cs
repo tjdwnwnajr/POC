@@ -573,9 +573,9 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("isDamaged");
 
         // 1초 대기 (Death 애니메이션 재생)
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
-
+        anim.SetTrigger("isAlive");
         // 입력 재활성화
         InputManager.ActivatePlayerControls();
 
@@ -583,7 +583,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = gravity;
         PlayerStateList.isDead = false;
     }
-    private void Respwan()
+    private void Respawn()
     {
 
     }
