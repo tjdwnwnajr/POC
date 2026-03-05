@@ -575,6 +575,11 @@ public class PlayerController : MonoBehaviour
         // 1초 대기 (Death 애니메이션 재생)
         yield return new WaitForSeconds(1.5f);
 
+       Respawn();
+    }
+    private void Respawn()
+    {
+        transform.position = SavePoint.savePoint;
         anim.SetTrigger("isAlive");
         // 입력 재활성화
         InputManager.ActivatePlayerControls();
@@ -582,10 +587,6 @@ public class PlayerController : MonoBehaviour
         // 상태 복구
         rb.gravityScale = gravity;
         PlayerStateList.isDead = false;
-    }
-    private void Respawn()
-    {
-
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {

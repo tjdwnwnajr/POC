@@ -9,9 +9,9 @@ public class RotateBlock : MonoBehaviour
 
     [Header("Rotation Settings")]
     bool isActive;
-    public float rotationAcceleration = 270f; // 입력 시 가속
-    public float maxAngularSpeed =270f;       // 최대 회전 속도
-    public float angularDamping = 0.5f;           // 감속력
+    public float rotationAcceleration = 100f; // 입력 시 가속
+    public float maxAngularSpeed =150f;       // 최대 회전 속도
+    public float angularDamping = 0.9f;           // 감속력
     float angularSpeed;
     float input;
     bool inputCheck;
