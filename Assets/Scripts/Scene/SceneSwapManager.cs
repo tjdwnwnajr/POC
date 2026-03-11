@@ -85,6 +85,10 @@ public class SceneSwapManager : MonoBehaviour
             _player.transform.position = _playerSpawnPosition;
             _loadFromDoor = false;
         }
+        if (MapRoomManager.instance != null)
+        {
+            MapRoomManager.instance.RevealRoom();
+        }
         //카메라 초기화
         CameraUtility.InvalidateCache();
 
