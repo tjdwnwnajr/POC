@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: lever
   m_EditorClassIdentifier: Assembly-CSharp::ScreenShakeProfile
   impactTime: 0.5
-  impactForce: 1
+  impactForce: 2
   defaultVelocity: {x: -1, y: 0, z: 0}
   impulseCurve:
     serializedVersion: 2
@@ -59,6 +59,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   useCustomCurve: 0
   shapes: 2
-  listenerAmplistude: 1
+  listenerAmplistude: 2
   listenerFrequency: 0.7
-  listenerDuration: 0.4
+  listenerDuration: 0.5

@@ -29,6 +29,8 @@ public class MoveBlock : MonoBehaviour
     private bool isPlayerOnButton = false;                    // 플레이어가 버튼 위에 있는지 추적
     private bool allBlocksMoved = false;
 
+    [SerializeField] private bool cameraMoveOn = true;
+
  
 
     private void Start()
@@ -147,7 +149,8 @@ public class MoveBlock : MonoBehaviour
         for (int i = 0; i < blocksToMove.Length; i++)
         {
             currentBlockIndex = i;
-            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration);
+            if(cameraMoveOn)
+                CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration);
             yield return StartCoroutine(MoveBlockToTarget());
             yield return new WaitForSeconds(1f);
         }
@@ -161,7 +164,8 @@ public class MoveBlock : MonoBehaviour
         for (int i = 0; i < blocksToMove.Length; i++)
         {
             currentBlockIndex = i;
-            CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration); //카메라 기본위치에서 움직이는 블록으로 움직이는 동안 
+            if (cameraMoveOn)
+                CameraEventManager.instance.CameraOffsetEvent(transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration); //카메라 기본위치에서 움직이는 블록으로 움직이는 동안 
             yield return StartCoroutine(MoveBlockToOriginal());
             yield return new WaitForSeconds(1f);
         }
@@ -190,7 +194,7 @@ public class MoveBlock : MonoBehaviour
     {
         if (currentBlockIndex >= targetBlocks.Length)
         {
-            Debug.LogError("Target block index out of range.");
+            
             yield break;
         }
         
@@ -203,7 +207,7 @@ public class MoveBlock : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Target block index out of range.");
+            
             yield break;
         }
 
@@ -235,7 +239,7 @@ public class MoveBlock : MonoBehaviour
     {
         if (currentBlockIndex >= targetBlocks.Length)
         {
-            Debug.LogError("Target block index out of range.");
+            
             yield break;
         }
 
@@ -286,7 +290,8 @@ public class MoveBlock : MonoBehaviour
         {
             currentBlockIndex = i;
             DualSenseInput.Instance.Vibrate(0.15f, 0.05f, shakeDuration + moveDuration);
-            CameraEventManager.instance.CameraOffsetEvent(PlayerController.Instance.transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration);
+            if (cameraMoveOn)
+                CameraEventManager.instance.CameraOffsetEvent(PlayerController.Instance.transform, blocksToMove[currentBlockIndex], shakeDuration + moveDuration, false, cameraDuration);
             yield return StartCoroutine(MoveBlockToTarget());
             yield return new WaitForSeconds(1f);
         }

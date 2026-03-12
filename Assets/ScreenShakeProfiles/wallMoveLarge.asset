@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38cdbb9ff909494baeb7cf87d12a308, type: 3}
+  m_Name: wallMoveLarge
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenShakeProfile
+  impactTime: 1
+  impactForce: 2
+  defaultVelocity: {x: 1, y: 0, z: 0}
+  impulseCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 5.079074
+      outSlope: 5.079074
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.09907526
+      value: 1.5032105
+      inSlope: 0.021684518
+      outSlope: 0.021684518
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.044649545
+    - serializedVersion: 3
+      time: 0.20210165
+      value: 0.49388197
+      inSlope: -0.06425462
+      outSlope: -0.06425462
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.08257326
+    - serializedVersion: 3
+      time: 0.30342135
+      value: 1.3100681
+      inSlope: -0.01265624
+      outSlope: -0.01265624
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.077899225
+    - serializedVersion: 3
+      time: 0.4048249
+      value: 0.7009984
+      inSlope: -0.01357492
+      outSlope: -0.01357492
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.085687466
+    - serializedVersion: 3
+      time: 0.503219
+      value: 1.1135886
+      inSlope: 0.026196877
+      outSlope: 0.026196877
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.08940163
+    - serializedVersion: 3
+      time: 0.5985841
+      value: 0.89362943
+      inSlope: -0.019536216
+      outSlope: -0.019536216
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.12381208
+    - serializedVersion: 3
+      time: 0.6520627
+      value: 0.9946669
+      inSlope: 0.072826825
+      outSlope: 0.072826825
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.13053234
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.015327835
+      outSlope: 0.015327835
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  useCustomCurve: 1
+  shapes: 0
+  listenerAmplistude: 2
+  listenerFrequency: 2
+  listenerDuration: 1

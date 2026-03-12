@@ -41,6 +41,10 @@ public class InputManager : MonoBehaviour
     private bool resetPressed;
     private float resetTimer;
     public static bool resetPressedTwo;
+    //Map
+    public static bool mapWasPressed;
+    //Map size control
+    public static Vector2 MapSizeDirection;
 
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -56,6 +60,8 @@ public class InputManager : MonoBehaviour
     private InputAction _RopeReleaseAction;
     private InputAction _blockMove;
     private InputAction _resetAction;
+    private InputAction _mapAction;
+    private InputAction _mapSizeAction;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -79,7 +85,8 @@ public class InputManager : MonoBehaviour
         _RopeReleaseAction = PlayerInput.actions["RopeRelease"];
         _blockMove = PlayerInput.actions["BlockMove"];
         _resetAction = PlayerInput.actions["Reset"];
-
+        _mapAction = PlayerInput.actions["Map"];
+        _mapSizeAction = PlayerInput.actions["MapSize"];
     }
 
     // Update is called once per frame
@@ -118,7 +125,10 @@ public class InputManager : MonoBehaviour
         BlockMovement = _blockMove.ReadValue<Vector2>();
 
         resetPressed = _resetAction.IsPressed();
-        
+
+        mapWasPressed = _mapAction.WasPressedThisFrame();
+        MapSizeDirection = _mapSizeAction.ReadValue<Vector2>();
+
         if (resetPressed)
         {
             resetTimer += Time.deltaTime;
