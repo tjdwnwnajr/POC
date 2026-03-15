@@ -31,10 +31,10 @@ public class contactOnOff : MonoBehaviour
     {
         Color a = tilemap.color;
         float t = 0;
-        while (t < 0.5f)
+        while (t < 1.5f)
         {
             t += Time.deltaTime;
-            float per = t / 0.5f;
+            float per = t / 1.5f;
             a.a = Mathf.Lerp(a.a, 0f, per);
 
             tilemap.color = a;
@@ -49,10 +49,10 @@ public class contactOnOff : MonoBehaviour
     {
         Color a = tilemap.color;
         float t = 0;
-        while (t < 1f)
+        while (t < 1.5f)
         {
             t += Time.deltaTime;
-            float per = t / 1f;
+            float per = t / 1.5f;
             a.a = Mathf.Lerp(a.a, 1f, per);
 
             tilemap.color = a;

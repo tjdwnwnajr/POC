@@ -12,33 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38cdbb9ff909494baeb7cf87d12a308, type: 3}
   m_Name: lever
   m_EditorClassIdentifier: Assembly-CSharp::ScreenShakeProfile
-  impactTime: 0.5
+  impactTime: 1.5
   impactForce: 2
-  defaultVelocity: {x: -1, y: 0, z: 0}
+  defaultVelocity: {x: -1, y: 0.5, z: 0}
   impulseCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 1.7572068
-      outSlope: 1.7572068
+      inSlope: 7.9498296
+      outSlope: 7.9498296
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.26631153
-      value: 1.4679644
-      inSlope: -1.5996258
-      outSlope: -1.5996258
-      tangentMode: 34
+      time: 0.100351244
+      value: 1.7977753
+      inSlope: 0.10240037
+      outSlope: 0.10240037
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.25082824
     - serializedVersion: 3
-      time: 0.44228187
-      value: 0.5957747
+      time: 0.2015287
+      value: 1.0054121
       inSlope: 0.11012327
       outSlope: 0.11012327
       tangentMode: 0
@@ -46,10 +46,73 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.090438955
     - serializedVersion: 3
+      time: 0.30113125
+      value: 1.8006098
+      inSlope: 0.12923379
+      outSlope: 0.12923379
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1505344
+    - serializedVersion: 3
+      time: 0.40505666
+      value: 0.9981185
+      inSlope: 0.6733298
+      outSlope: 0.6733298
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.094154745
+    - serializedVersion: 3
+      time: 0.5058033
+      value: 1.8008204
+      inSlope: 0.30330414
+      outSlope: 0.30330414
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.10829047
+    - serializedVersion: 3
+      time: 0.59832305
+      value: 0.9882117
+      inSlope: -0.38346767
+      outSlope: -0.38346767
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7045862
+      value: 1.8039247
+      inSlope: -0.012575879
+      outSlope: -0.012575879
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.18788151
+    - serializedVersion: 3
+      time: 0.79806495
+      value: 1.0006852
+      inSlope: 0.5771506
+      outSlope: 0.5771506
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.24956165
+    - serializedVersion: 3
+      time: 0.9028489
+      value: 1.8082757
+      inSlope: -0.14469466
+      outSlope: -0.14469466
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.46730754
+    - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.7247842
-      outSlope: 0.7247842
+      inSlope: -8.319779
+      outSlope: -8.319779
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -58,7 +121,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   useCustomCurve: 0
-  shapes: 2
+  shapes: 3
   listenerAmplistude: 2
   listenerFrequency: 0.7
-  listenerDuration: 0.5
+  listenerDuration: 1.5

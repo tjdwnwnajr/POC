@@ -190,6 +190,7 @@ public class MoveBlock : MonoBehaviour
         moveCoroutine = StartCoroutine(MoveBlockToOriginal());
     }
 
+    //실제 움직이기
     private IEnumerator MoveBlockToTarget()
     {
         if (currentBlockIndex >= targetBlocks.Length)
@@ -220,7 +221,10 @@ public class MoveBlock : MonoBehaviour
         
             yield return new WaitForSeconds(shakeDuration);
         }
-
+        else
+        {
+            yield return new WaitForSeconds(shakeDuration);
+        }
         while (elapsed < moveDuration)
         {
             elapsed += Time.deltaTime;
@@ -284,7 +288,8 @@ public class MoveBlock : MonoBehaviour
     }
     private IEnumerator MovebyRock()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitUntil(() => CreateRock.camIsReturned == true);
+        
         InputManager.DeactivatePlayerControls();
         for (int i = 0; i < blocksToMove.Length; i++)
         {

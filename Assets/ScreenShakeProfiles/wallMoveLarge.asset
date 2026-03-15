@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38cdbb9ff909494baeb7cf87d12a308, type: 3}
   m_Name: wallMoveLarge
   m_EditorClassIdentifier: Assembly-CSharp::ScreenShakeProfile
-  impactTime: 1
+  impactTime: 1.5
   impactForce: 2
   defaultVelocity: {x: 1, y: 0, z: 0}
   impulseCurve:
@@ -106,4 +106,4 @@ MonoBehaviour:
   shapes: 0
   listenerAmplistude: 2
   listenerFrequency: 2
-  listenerDuration: 1
+  listenerDuration: 1.5

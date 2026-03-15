@@ -13,6 +13,7 @@ public class CreateRock : MonoBehaviour
     [SerializeField] private CinemachineConfiner2D boundary;
     [SerializeField] private CompositeCollider2D defaultBoundary;
     [SerializeField] private CompositeCollider2D rockBoundary;
+    public static bool camIsReturned = true;
     private bool endCreate = false;
     private void Start()
     {
@@ -43,12 +44,15 @@ public class CreateRock : MonoBehaviour
         if (vcam != null && rock != null)
         {
             vcam.Follow = rock.transform;
+            camIsReturned = false;
         }
         yield return new WaitForSeconds(6f);
         boundary.m_BoundingShape2D = defaultBoundary;
         vcam.Follow = defaultFollowTarget;
+        yield return new WaitForSeconds(1f);
+        camIsReturned = true;
         InputManager.ActivatePlayerControls();
-        yield return new WaitForSeconds(coolTime-6f);
+        yield return new WaitForSeconds(coolTime-7f);
         isCreated = false;
     }
     private void OnTriggerEnter2D(Collider2D collision)
