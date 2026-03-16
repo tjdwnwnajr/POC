@@ -31,10 +31,14 @@ public class MoveBlock : MonoBehaviour
 
     [SerializeField] private bool cameraMoveOn = true;
 
- 
+    [SerializeField] private bool onlyOne = false;
+    private bool isUsed = false;
+
+    private BtnMinimapActive minimapActive;
 
     private void Start()
     {
+        minimapActive = GetComponent<BtnMinimapActive>();
         if(shakeOn)
             impulseSource = GetComponent<CinemachineImpulseSource>();
         if(blocksToMove != null&& blocksToMove.Length > 0)
@@ -55,8 +59,23 @@ public class MoveBlock : MonoBehaviour
         // isBtnMode일 때 입력으로 작동 (플레이어가 버튼 위에 있을 때만)
         if (isBtnMode && isPlayerOnButton && InputManager.UseToolWasPressed)
         {
-            
-            HandleToggleMode();
+            if (onlyOne)
+            {
+                if (!isUsed)
+                {
+                    HandleToggleMode();
+                    isUsed = true;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                HandleToggleMode();
+            }
+                
         }
     }
 
@@ -301,6 +320,8 @@ public class MoveBlock : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         InputManager.ActivatePlayerControls();
-        
+        if (minimapActive != null)
+            minimapActive.Interact();
+
     }
 }

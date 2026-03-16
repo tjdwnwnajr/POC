@@ -6,7 +6,7 @@ public class MapManager : MonoBehaviour
     public static MapManager instance;
     [SerializeField] private Camera _minimapCam;
     [SerializeField] private GameObject _largeMap;
-    private float maxSize = 27f;
+    private float maxSize = 28.5f;
     private float minSize = 20f;
     public bool IsLargeMapOpen { get; private set; }
     private void Awake()
@@ -36,7 +36,7 @@ public class MapManager : MonoBehaviour
         }
         if (IsLargeMapOpen)
         {
-            float newSize = _minimapCam.orthographicSize + InputManager.MapSizeDirection.y*0.1f; 
+            float newSize = _minimapCam.orthographicSize + InputManager.MapSizeDirection.y*(-0.1f); 
             if(newSize > minSize&&newSize<maxSize)
             {
                 _minimapCam.orthographicSize = newSize;

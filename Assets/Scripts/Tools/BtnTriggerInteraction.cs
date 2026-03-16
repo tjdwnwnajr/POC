@@ -10,7 +10,8 @@ public class BtnTriggerInteraction : TriggerInteractionBase
     private bool isPressed;
     private Coroutine pressRoutine;
     private CreateRock rock;
-    
+    [SerializeField] private bool onlyOne;
+    private bool isUsed;
 
 
     private Animator anim;
@@ -35,8 +36,19 @@ public class BtnTriggerInteraction : TriggerInteractionBase
             if (rock.isCreated) return;
             rock.TrySpawn();
         }
-        
-        pressRoutine = StartCoroutine(PressedBtn());
+        if (onlyOne)
+        {
+            if (!isUsed)
+            {
+                pressRoutine = StartCoroutine(PressedBtn());
+                isUsed = true;
+            }
+        }
+        else
+        {
+            pressRoutine = StartCoroutine(PressedBtn());
+        }
+            
         
     }
     IEnumerator PressedBtn()
