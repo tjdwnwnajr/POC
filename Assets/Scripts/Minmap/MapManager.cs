@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,8 +10,12 @@ public class MapManager : MonoBehaviour
     private float maxSize = 28.5f;
     private float minSize = 20f;
     public bool IsLargeMapOpen { get; private set; }
+
+    private Dictionary<string, int> _activatedPartCount = new();
+
     private void Awake()
     {
+        FindMapCam();
         _minimapCam.orthographicSize = minSize;
         if(instance == null)
         {
@@ -18,11 +23,12 @@ public class MapManager : MonoBehaviour
         }
         
         CloseLargeMap();
+        
     }
 
     private void Update()
     {
-        if (InputManager.mapWasPressed)
+        if (PlayerStateList.isGrounded&&InputManager.mapWasPressed)
         {
            
             if (IsLargeMapOpen)
@@ -44,6 +50,12 @@ public class MapManager : MonoBehaviour
             
         }
     }
+    public void FindMapCam()
+    {
+        GameObject cam = GameObject.FindWithTag("MapCam");
+        if(cam !=null)
+            _minimapCam = cam.GetComponent<Camera>();
+    }
 
     private void OpenLargeMap()
     {
@@ -58,5 +70,15 @@ public class MapManager : MonoBehaviour
         IsLargeMapOpen = false;
     }
 
+    public void SavePartCount(SceneField scene, int count)
+    {
+        string key = scene.SceneName;
+        if (!_activatedPartCount.ContainsKey(key) || count > _activatedPartCount[key])
+            _activatedPartCount[key] = count;
+    }
 
+    public int GetPartCount(SceneField scene)
+    {
+        return _activatedPartCount.TryGetValue(scene.SceneName, out int count) ? count : 1;
+    }
 }
