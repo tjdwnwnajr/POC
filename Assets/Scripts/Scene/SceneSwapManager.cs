@@ -99,6 +99,9 @@ public class SceneSwapManager : MonoBehaviour
         //카메라 event offset 을 위한 카메라 다시 찾기
         CameraEventFocus.instance.RefreshCamera();
 
+        //미니맵 로드를위한 카메라 찾기
+        MapManager.instance.FindMapCam();
+
         // 한 프레임 대기 (Cinemachine이 새 위치로 업데이트되도록)
         StartCoroutine(DelayedFadeIn());
     }

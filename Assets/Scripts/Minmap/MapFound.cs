@@ -5,6 +5,7 @@ public class MapFound : MonoBehaviour
     [SerializeField] private GameObject newMap;
     [SerializeField] private GameObject mapLoc;
     [SerializeField] private GameObject[] mapLights;
+    [SerializeField] private SceneField thisScene;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -18,7 +19,14 @@ public class MapFound : MonoBehaviour
             }
             if(mapLoc != null) 
                 mapLoc.SetActive(false);
-            newMap.SetActive(true);
+            if (!newMap.activeSelf)
+            {
+                newMap.SetActive(true);
+                int count = MapManager.instance.GetPartCount(thisScene);
+                count++;
+                MapManager.instance.SavePartCount(thisScene, count);
+            }
+            
         }
     }
 }

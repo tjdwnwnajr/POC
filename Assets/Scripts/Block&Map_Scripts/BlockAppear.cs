@@ -12,6 +12,7 @@ public class BlockAppear : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D col;
     private bool isVibrate = false;
+    [SerializeField] private GameObject activeTilemap;
 
     [SerializeField] private float appearDuration = 1f;
 
@@ -42,6 +43,10 @@ public class BlockAppear : MonoBehaviour
         {
             
             FadeIn();
+            if(activeTilemap != null)
+            {
+                activeTilemap.SetActive(true);
+            }
             DualSenseInput.Instance.Vibrate(0.35f, 0.15f, 0.12f);
             isVibrate = true;
         }
