@@ -22,9 +22,13 @@ public class MapFound : MonoBehaviour
             if (!newMap.activeSelf)
             {
                 newMap.SetActive(true);
-                int count = MapManager.instance.GetPartCount(thisScene);
-                count++;
-                MapManager.instance.SavePartCount(thisScene, count);
+                if (newMap != null)
+                {
+                    int count = MapManager.instance.GetPartCount(thisScene);
+                    count++;
+                    MapManager.instance.SavePartCount(thisScene, count);
+                }
+                
             }
             
         }
