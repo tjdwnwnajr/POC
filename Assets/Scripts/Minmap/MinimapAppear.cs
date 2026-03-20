@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 public class MinimapAppear : MonoBehaviour
 {
     [SerializeField] private GameObject linkedObj;
-    [SerializeField] private GameObject disappearObj;
+    
     private TilemapRenderer render;
 
     private void Start()

@@ -579,7 +579,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Respawn()
     {
-        transform.position = SavePoint.savePoint;
+        transform.position = SavePoint.GetRespawnPosition();
         anim.SetTrigger("isAlive");
         // 입력 재활성화
         InputManager.ActivatePlayerControls();

@@ -302,7 +302,7 @@ public class RopeGrabtest : MonoBehaviour
         if (nextChain == null) return;
         if(nextChain.linearVelocityX > ropeVelocityThreshold)
         {
-            Debug.Log("밧줄이 움직이는 중. 속도: " + swingTarget.linearVelocityX);
+            //Debug.Log("밧줄이 움직이는 중. 속도: " + swingTarget.linearVelocityX);
             return;
         }
         isMovingChain = true;
@@ -336,7 +336,7 @@ public class RopeGrabtest : MonoBehaviour
             }
 
             isMovingChain = false;
-            Debug.Log("체인 이동 완료!");
+            //Debug.Log("체인 이동 완료!");
         }
         else
         {
