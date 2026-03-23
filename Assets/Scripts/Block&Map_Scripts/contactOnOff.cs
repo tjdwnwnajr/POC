@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -7,13 +8,24 @@ public class contactOnOff : MonoBehaviour
     [SerializeField] private GameObject gameobject;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private bool On;
+    private bool isDone = false;
+    [SerializeField] private bool shakeOn;
+    private CinemachineImpulseSource impulseSource;
+    [SerializeField] private ScreenShakeProfile profile;
+
+    private void Awake()
+    {
+        if(shakeOn)
+            impulseSource = GetComponent<CinemachineImpulseSource>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player")&&!isDone)
         {
             if (gameobject != null)
                 gameobject.SetActive(true);
+            
             if (tilemap != null)
             {
                 if (On)
@@ -43,12 +55,15 @@ public class contactOnOff : MonoBehaviour
         }
 
         tilemap.color = new Color(a.r, a.g, a.b, 0f);
-
+        isDone = true;
     }
     private IEnumerator OnMap()
     {
+
         Color a = tilemap.color;
         float t = 0;
+        if(shakeOn)
+            CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
         while (t < 1.5f)
         {
             t += Time.deltaTime;
@@ -61,5 +76,6 @@ public class contactOnOff : MonoBehaviour
         }
 
         tilemap.color = new Color(a.r, a.g, a.b, 1f);
+        isDone = true;
     }
 }

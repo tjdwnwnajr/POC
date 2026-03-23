@@ -14,7 +14,7 @@ public class PlayerStateList : MonoBehaviour
     public static bool canMove = true;
     public static bool isView = false;
     [SerializeField]public static bool isMirror = false;
-    public bool mirrorOn = false;
+    //public bool mirrorOn = false;
     public static bool isRotate = false;
     public static bool keyOne = false;
     public static bool headBtn = false;
@@ -36,13 +36,13 @@ public class PlayerStateList : MonoBehaviour
     }
     private void Update()
     {
-        if (mirrorOn)
-        {
-            isMirror = true;
-        }
-        else
-        {
-            isMirror = false;
-        }
+        //if (mirrorOn)
+        //{
+        //    isMirror = true;
+        //}
+        //else
+        //{
+        //    isMirror = false;
+        //}
     }
 }

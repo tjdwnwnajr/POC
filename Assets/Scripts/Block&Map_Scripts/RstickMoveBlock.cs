@@ -10,8 +10,8 @@ public class RStickPlatform : MonoBehaviour
 
     [Header("이동 범위 제한 (선택)")]
     [SerializeField] private bool useMoveLimit = false;
-    [SerializeField] private float leftLimit = -10f;
-    [SerializeField] private float rightLimit = 10f;
+    [SerializeField] private Transform leftLimit;
+    [SerializeField] private Transform rightLimit;
 
     private float currentVelocity = 0f;
     private bool isPlayerOnTop = false;
@@ -71,8 +71,10 @@ public class RStickPlatform : MonoBehaviour
 
         if (useMoveLimit)
         {
-            nextPos.x = Mathf.Clamp(nextPos.x, leftLimit, rightLimit);
-            if (nextPos.x <= leftLimit || nextPos.x >= rightLimit)
+            float leftL = leftLimit.position.x;
+            float rightL = rightLimit.position.x;
+            nextPos.x = Mathf.Clamp(nextPos.x, leftL, rightL);
+            if (nextPos.x <= leftL || nextPos.x >= rightL)
                 currentVelocity = 0f;
         }
 
@@ -123,8 +125,8 @@ public class RStickPlatform : MonoBehaviour
     {
         if (!useMoveLimit) return;
         Gizmos.color = Color.cyan;
-        Vector3 left  = new Vector3(leftLimit,  transform.position.y, 0f);
-        Vector3 right = new Vector3(rightLimit, transform.position.y, 0f);
+        Vector3 left  = new Vector3(leftLimit.position.x,  transform.position.y, 0f);
+        Vector3 right = new Vector3(rightLimit.position.x, transform.position.y, 0f);
         Gizmos.DrawLine(left  + Vector3.down, left  + Vector3.up);
         Gizmos.DrawLine(right + Vector3.down, right + Vector3.up);
         Gizmos.DrawLine(left, right);

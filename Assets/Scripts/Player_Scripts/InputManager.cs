@@ -5,7 +5,7 @@ public class InputManager : MonoBehaviour
 {
 
     public static PlayerInput PlayerInput;
-
+    public static float mirrorFloat = 1f;
     public static Vector2 Movement;
     public static bool JumpWasPressed;
     public static bool JumpIsHeld;
@@ -149,8 +149,12 @@ public class InputManager : MonoBehaviour
             Movement.x *= -1;
             Rotate *= -1;
             BlockMovement.x *= -1;
+            mirrorFloat = -1f;
         }
-
+        else
+        {
+            mirrorFloat = 1f;
+        }
         
         
     }

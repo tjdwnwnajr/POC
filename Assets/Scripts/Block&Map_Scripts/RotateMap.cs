@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public enum RotationDirection
 {
@@ -192,7 +193,7 @@ public class RotateMap : MonoBehaviour
         }
         //positive : 왼쪽
         
-        if (gyroY > gyroPositiveThreshold)
+        if (gyroY*InputManager.mirrorFloat > gyroPositiveThreshold)
         {
             if (rotationDirection == RotationDirection.OnlyRight)
             {
@@ -214,7 +215,7 @@ public class RotateMap : MonoBehaviour
             //targetAngle = 90f;
             return true;
         }
-        else if (gyroY < gyroNegativeThreshold)
+        else if (gyroY* InputManager.mirrorFloat < gyroNegativeThreshold)
         {
 
             if (rotationDirection == RotationDirection.OnlyLeft)
