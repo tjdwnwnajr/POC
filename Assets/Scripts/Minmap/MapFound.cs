@@ -6,13 +6,14 @@ public class MapFound : MonoBehaviour
     [SerializeField] private GameObject mapLoc;
     [SerializeField] private GameObject[] mapLights;
     [SerializeField] private SceneField thisScene;
-
+    private bool isFirst = true;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+
             for (int i = 0; i < mapLights.Length; i++) {
-                if (mapLights[i] != null)
+                if (mapLights[i] != null&&isFirst)
                 {
                     mapLights[i].SetActive(true);
                 }
@@ -22,6 +23,7 @@ public class MapFound : MonoBehaviour
             if (!newMap.activeSelf)
             {
                 newMap.SetActive(true);
+                
                 if (newMap != null)
                 {
                     int count = MapManager.instance.GetPartCount(thisScene);
@@ -30,7 +32,7 @@ public class MapFound : MonoBehaviour
                 }
                 
             }
-            
+            isFirst = false;
         }
     }
 }

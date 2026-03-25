@@ -4,24 +4,42 @@ public class ResetBlock : MonoBehaviour
 {
     private bool hasTriggered = true;
     private Vector3 startPos;
+    private Quaternion startRot;
     private bool contact;
-
+    [SerializeField] private bool isForTrigger = false;
+    [SerializeField] private Transform targetBlock = null;
     private void Start()
     {
-        startPos = transform.position;
+        if (!isForTrigger)
+        {
+            startPos = transform.position;
+            return;
+        }
+        if (isForTrigger && targetBlock != null)
+        {
+            startPos = targetBlock.localPosition;
+            startRot = targetBlock.localRotation;
+            Debug.Log(startPos);
+        }
+
     }
 
     private void Update()
     {
-        if (InputManager.resetPressedTwo && !hasTriggered&&!contact)
+        if (!isForTrigger)
         {
-            transform.position = startPos;
-            hasTriggered = true;
+            if (InputManager.resetPressedTwo && !hasTriggered && !contact)
+            {
+                transform.position = startPos;
+                hasTriggered = true;
+            }
+            else
+            {
+                hasTriggered = false;
+            }
         }
-        else
-        {
-            hasTriggered = false;
-        }
+        
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -29,6 +47,8 @@ public class ResetBlock : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             contact = true;
+            
+            
         }
     }
 
@@ -37,6 +57,11 @@ public class ResetBlock : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             contact = false;
+        }
+        if (isForTrigger && targetBlock != null)
+        {
+            targetBlock.localPosition = startPos;
+            targetBlock.localRotation = startRot;
         }
     }
 }
