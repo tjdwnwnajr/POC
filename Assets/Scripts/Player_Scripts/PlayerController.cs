@@ -220,8 +220,8 @@ public class PlayerController : MonoBehaviour
             UpdateJumpVariables();
             //StartDash();
 
-            GetAttack();
-            Attack();
+            //GetAttack();
+            //Attack();
             //CatchRope();
         }
         
@@ -485,72 +485,73 @@ public class PlayerController : MonoBehaviour
 
 
     ///////////////////////////////����.....
+    #region Attack
 
-    void GetAttack()
-    {
-        pState.attacking = InputManager.AttackWasPressed;
-    }
-    void Attack()
-    {
-        timeSinceAttack += Time.deltaTime;
+    //void GetAttack()
+    //{
+    //    pState.attacking = InputManager.AttackWasPressed;
+    //}
+    //void Attack()
+    //{
+    //    timeSinceAttack += Time.deltaTime;
 
-        if (pState.attacking && timeSinceAttack >= timeBetweenAttack)
-        {
-            timeSinceAttack = 0;
-            anim.SetTrigger("isAttack");
+    //    if (pState.attacking && timeSinceAttack >= timeBetweenAttack)
+    //    {
+    //        timeSinceAttack = 0;
+    //        anim.SetTrigger("isAttack");
 
-            if (yAxis == 0 || yAxis < 0 && Grounded())
-            {
-                Hit(sideAttackTrans, sideAttackArea, ref pState.recoilingX, recoilXSpeed);
-                Instantiate(slashEffect, sideAttackTrans);
-            }
-            else if (yAxis > 0)
-            {
-                Hit(upAttackTrans, upAttackArea, ref pState.recoilingY, recoilYSpeed);
-                SlashEffectAtAngle(slashEffect, 90, upAttackTrans);
-            }
-            else if (yAxis < 0 && !Grounded())
-            {
-                Hit(downAttackTrans, downAttackArea, ref pState.recoilingY, recoilYSpeed);
-                SlashEffectAtAngle(slashEffect, -90, downAttackTrans);
-            }
-        }
+    //        if (yAxis == 0 || yAxis < 0 && Grounded())
+    //        {
+    //            Hit(sideAttackTrans, sideAttackArea, ref pState.recoilingX, recoilXSpeed);
+    //            Instantiate(slashEffect, sideAttackTrans);
+    //        }
+    //        else if (yAxis > 0)
+    //        {
+    //            Hit(upAttackTrans, upAttackArea, ref pState.recoilingY, recoilYSpeed);
+    //            SlashEffectAtAngle(slashEffect, 90, upAttackTrans);
+    //        }
+    //        else if (yAxis < 0 && !Grounded())
+    //        {
+    //            Hit(downAttackTrans, downAttackArea, ref pState.recoilingY, recoilYSpeed);
+    //            SlashEffectAtAngle(slashEffect, -90, downAttackTrans);
+    //        }
+    //    }
 
-    }
-    void SlashEffectAtAngle(GameObject _slashEffect, int _effectAngle, Transform _attackTransform)
-    {
-        _slashEffect = Instantiate(_slashEffect, _attackTransform);
-        _slashEffect.transform.eulerAngles = new Vector3(0, 0, _effectAngle); //����Ʈ ��Ⱦ ���� ����
-        _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y); //���⿡ �°� �¿� -1�� �ٲ�� ��
+    //}
+    //void SlashEffectAtAngle(GameObject _slashEffect, int _effectAngle, Transform _attackTransform)
+    //{
+    //    _slashEffect = Instantiate(_slashEffect, _attackTransform);
+    //    _slashEffect.transform.eulerAngles = new Vector3(0, 0, _effectAngle); //����Ʈ ��Ⱦ ���� ����
+    //    _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y); //���⿡ �°� �¿� -1�� �ٲ�� ��
 
 
-    }
+    //}
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(sideAttackTrans.position, sideAttackArea);
-        Gizmos.DrawWireCube(upAttackTrans.position, upAttackArea);
-        Gizmos.DrawWireCube(downAttackTrans.position, downAttackArea);
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireCube(sideAttackTrans.position, sideAttackArea);
+    //    Gizmos.DrawWireCube(upAttackTrans.position, upAttackArea);
+    //    Gizmos.DrawWireCube(downAttackTrans.position, downAttackArea);
 
-    }
-    void Hit(Transform _attacktrans, Vector2 _attackarea, ref bool _recoilDir, float _recoilStrength)
-    {
-        Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attacktrans.position, _attackarea, 0, attackableLayer);
+    //}
+    //void Hit(Transform _attacktrans, Vector2 _attackarea, ref bool _recoilDir, float _recoilStrength)
+    //{
+    //    Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attacktrans.position, _attackarea, 0, attackableLayer);
 
-        if (objectsToHit.Length > 0)
-        {
-            _recoilDir = true;
-        }
-        for (int i = 0; i < objectsToHit.Length; i++)
-        {
-            if (objectsToHit[i].GetComponent<Enemy>() != null) { }
-            {
-                objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilStrength);
-            }
-        }
-    }
-
+    //    if (objectsToHit.Length > 0)
+    //    {
+    //        _recoilDir = true;
+    //    }
+    //    for (int i = 0; i < objectsToHit.Length; i++)
+    //    {
+    //        if (objectsToHit[i].GetComponent<Enemy>() != null) { }
+    //        {
+    //            objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilStrength);
+    //        }
+    //    }
+    //}
+    #endregion
 
 
     public void Die()

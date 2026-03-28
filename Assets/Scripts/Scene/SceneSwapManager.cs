@@ -21,7 +21,8 @@ public class SceneSwapManager : MonoBehaviour
             Instance = this; 
         }
         _player = GameObject.FindGameObjectWithTag("Player");
-        _playerColl = _player.GetComponent<Collider2D>();
+        if(_player !=null)
+            _playerColl = _player.GetComponent<Collider2D>();
 
     }
     private void OnEnable()
