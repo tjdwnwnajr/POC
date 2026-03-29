@@ -1,26 +1,47 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class ClickDebugger : MonoBehaviour
+public class SoundFXManager : MonoBehaviour
 {
-    void Update()
+    public static SoundFXManager instance;
+    [SerializeField] private AudioSource soundFXObject;
+
+    private void Awake()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(instance == null)
         {
-            var results = new List<RaycastResult>();
-            var eventData = new PointerEventData(EventSystem.current)
-            {
-                position = Input.mousePosition
-            };
-
-            EventSystem.current.RaycastAll(eventData, results);
-
-            // 클릭 이벤트 받는 오브젝트 전체 출력
-            foreach (var r in results)
-            {
-                Debug.Log($"Hit: {r.gameObject.name} | Layer: {LayerMask.LayerToName(r.gameObject.layer)} | Component: {string.Join(", ", System.Array.ConvertAll(r.gameObject.GetComponents<MonoBehaviour>(), m => m.GetType().Name))}");
-            }
+            instance = this;
+            
         }
     }
+
+    public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume, bool useClipLength = true, float settingLength = 1f)
+    {
+        //spawn in gameObject
+        AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+
+        //assign the audio clip
+        audioSource.clip = audioClip;
+
+        //assign the volume
+        audioSource.volume = volume;
+
+        //play the audio clip
+        audioSource.Play();
+
+        //get the length of the audio clip
+        float clipLength;
+        if (useClipLength)
+            clipLength = audioSource.clip.length;
+        else
+        {
+            clipLength = settingLength;
+        }
+
+
+        //destroy the gameObject after the audio clip has finished playing
+        Destroy(audioSource.gameObject, clipLength);
+
+    }
+
 }

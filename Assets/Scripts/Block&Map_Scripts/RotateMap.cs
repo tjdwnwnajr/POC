@@ -33,6 +33,9 @@ public class RotateMap : MonoBehaviour
     [SerializeField] private float gyroPositiveThreshold = 300f;
     [SerializeField] private float gyroNegativeThreshold = -300f;
 
+    [Header("SoundClip")]
+    [SerializeField] private AudioClip deviceSound;
+
     private bool isWaitingForInput = false;
     private float inputWaitTimer = 0f;
     private bool isRotating = false;
@@ -245,6 +248,8 @@ public class RotateMap : MonoBehaviour
   
     IEnumerator RotateMapCoroutine(float targetAngle)
     {
+        if(deviceSound != null)
+            SoundFXManager.instance.PlaySoundFXClip(deviceSound, deviceObject, 1f);
         isRotating = true;
 
         StartCoroutine(LiftPlayer());
@@ -267,6 +272,7 @@ public class RotateMap : MonoBehaviour
         Quaternion deviceWorldRot = deviceObject.rotation;
 
         float elapsedTime = 0f;
+
 
         // Step 3: 회전 진행
         while (elapsedTime < rotationDuration)
