@@ -49,6 +49,7 @@ public class MainMenuManager : MonoBehaviour
     {
         isPaused = false;
         Time.timeScale = 1f;
+        player.enabled = true;
 
         CloseAllMenu();
     }
@@ -57,7 +58,7 @@ public class MainMenuManager : MonoBehaviour
     {
         mainMenu.SetActive(true);
         soundSettingMenu.SetActive(false);
-        player.enabled = true;
+        
 
         EventSystem.current.SetSelectedGameObject(mainMenuFirst);   
     }
