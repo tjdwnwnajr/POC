@@ -45,6 +45,8 @@ public class InputManager : MonoBehaviour
     public static bool mapWasPressed;
     //Map size control
     public static Vector2 MapSizeDirection;
+    //Setting Open and close
+    public static bool settingOpenPressed;
 
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -62,6 +64,7 @@ public class InputManager : MonoBehaviour
     private InputAction _resetAction;
     private InputAction _mapAction;
     private InputAction _mapSizeAction;
+    private InputAction _settingOpentAction;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -87,6 +90,7 @@ public class InputManager : MonoBehaviour
         _resetAction = PlayerInput.actions["Reset"];
         _mapAction = PlayerInput.actions["Map"];
         _mapSizeAction = PlayerInput.actions["MapSize"];
+        _settingOpentAction = PlayerInput.actions["Setting"];
     }
 
     // Update is called once per frame
@@ -128,6 +132,8 @@ public class InputManager : MonoBehaviour
 
         mapWasPressed = _mapAction.WasPressedThisFrame();
         MapSizeDirection = _mapSizeAction.ReadValue<Vector2>();
+
+        settingOpenPressed = _settingOpentAction.WasPressedThisFrame();
 
         if (resetPressed)
         {

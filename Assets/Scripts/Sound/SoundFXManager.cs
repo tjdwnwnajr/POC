@@ -3,9 +3,18 @@ using System.Collections.Generic;
 
 public class SoundFXManager : MonoBehaviour
 {
+    public enum SFX
+    {
+        lever=0,
+        button=1, 
+        wall=2,
+        door=3,
+        device=4,
+
+    }
     public static SoundFXManager instance;
     [SerializeField] private AudioSource soundFXObject;
-
+    [SerializeField] private AudioClip[] clips;
     private void Awake()
     {
         if(instance == null)
@@ -15,13 +24,15 @@ public class SoundFXManager : MonoBehaviour
         }
     }
 
-    public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume, bool useClipLength = true, float settingLength = 1f)
+    public void PlaySoundFXClip(SFX audioClip, Transform spawnTransform, float volume, bool useClipLength = true, float settingLength = 1f)
     {
         //spawn in gameObject
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
 
+        if (clips[(int)audioClip] == null)
+            return;
         //assign the audio clip
-        audioSource.clip = audioClip;
+        audioSource.clip = clips[(int)audioClip];
 
         //assign the volume
         audioSource.volume = volume;
