@@ -5,14 +5,16 @@ public class SceneFadeManager : MonoBehaviour
     public static SceneFadeManager instance;
 
     [SerializeField] public Image _fadeOutImage;
+    
     [Range(0.1f, 10f), SerializeField] private float _fadeOutSpeed = 5f;
     [Range(0.1f, 10f), SerializeField] private float _fadeInSpeed = 5f;
 
     [SerializeField] private Color _fadeOutStartColor;
-
+ 
     public bool IsFadingOut { get; private set; }
 
     public bool IsFadingIn { get; private set; }
+
 
 
     private void Awake()
@@ -24,6 +26,7 @@ public class SceneFadeManager : MonoBehaviour
         }
  
         _fadeOutStartColor.a = 0f;
+   
     }
 
     private void Update()
@@ -59,6 +62,7 @@ public class SceneFadeManager : MonoBehaviour
                 IsFadingIn = false;
             }
         }
+     
     }
     public void StartFadeOut()
     {   
@@ -74,4 +78,5 @@ public class SceneFadeManager : MonoBehaviour
             IsFadingIn = true;
         }
     }
+
 }

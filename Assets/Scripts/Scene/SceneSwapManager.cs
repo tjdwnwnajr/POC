@@ -7,6 +7,7 @@ public class SceneSwapManager : MonoBehaviour
 {
     public static SceneSwapManager Instance;
     private static bool _loadFromDoor;
+    private bool _isBox;
     private GameObject _player;
     private Collider2D _playerColl;
     private Collider2D _doorColl;
@@ -34,10 +35,19 @@ public class SceneSwapManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public static void SwapSceneFromDoorUse(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt)
+    public static void SwapSceneFromDoorUse(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt, bool isBox = false)
     {
-        _loadFromDoor = true;
-        Instance.StartCoroutine(Instance.FadeOutThenChangeScene(myScene, doorToSpawnAt));
+        if (!isBox)
+        {
+            _loadFromDoor = true;
+            Instance.StartCoroutine(Instance.FadeOutThenChangeScene(myScene, doorToSpawnAt));
+        }
+        else
+        {
+            _loadFromDoor = true;
+            Instance.StartCoroutine(Instance.BrightOutThenChangeScene(myScene, doorToSpawnAt));
+            
+        }
     }
 
     private IEnumerator FadeOutThenChangeScene(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt = DoorTriggerInteraction.DoorToSpawnAt.None)
@@ -75,6 +85,26 @@ public class SceneSwapManager : MonoBehaviour
         #endregion
 
     }
+    private IEnumerator BrightOutThenChangeScene(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt = DoorTriggerInteraction.DoorToSpawnAt.None)
+    {
+        _isBox = true;
+        //start fading to black
+        InputManager.DeactivatePlayerControls();
+        SceneBrightManager.instance.StartBrightOut();
+
+        //keep fading out
+        while (SceneBrightManager.instance.IsBrightOut)
+        {
+            yield return null;
+        }
+
+
+        _doorToSpawnTo = doorToSpawnAt;
+        //카메라 초기화
+        CameraUtility.InvalidateCache();
+        SceneManager.LoadScene(myScene);
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //플레이어 다시찾아서 위치시키기
@@ -104,8 +134,14 @@ public class SceneSwapManager : MonoBehaviour
         MapManager.instance.FindMapCam();
 
         // 한 프레임 대기 (Cinemachine이 새 위치로 업데이트되도록)
-        StartCoroutine(DelayedFadeIn());
-    }
+        if (!_isBox)
+            StartCoroutine(DelayedFadeIn());
+        else
+        {
+            StartCoroutine(DelayedBrightIn());
+            _isBox = false;
+        }
+     }
 
     private IEnumerator DelayedFadeIn()
     {
@@ -132,6 +168,16 @@ public class SceneSwapManager : MonoBehaviour
     //    SceneFadeManager.instance.StartFadeIn();
     //}
     #endregion
+    private IEnumerator DelayedBrightIn()
+    {
+        yield return new WaitForSeconds(0.5f); // Cinemachine 업데이트 대기
+
+        if (SceneBrightManager.instance != null)
+        {
+            SceneBrightManager.instance.StartBrightIn();
+            StartCoroutine(ActivatePlayerControl());
+        }
+    }
 
     private IEnumerator ActivatePlayerControl()
     {
@@ -153,6 +199,7 @@ public class SceneSwapManager : MonoBehaviour
 
                 //calculate spwan position 
                 CalculateSpawnPosition();
+
                 return;
             }
         }
