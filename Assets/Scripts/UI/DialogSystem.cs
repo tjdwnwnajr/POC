@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.InputSystem; // Unity 6 New Input System
+using UnityEngine.InputSystem;
 
 public class DialogSystem : MonoBehaviour
 {
@@ -12,20 +12,19 @@ public class DialogSystem : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float typingSpeed = 0.05f;
-
-    // New Input System Action (패드 서쪽 버튼 & 마우스 좌클릭 바인딩용)
     [SerializeField] private InputActionReference nextDialogAction;
 
+    [Header("Player Control")]
+    public MonoBehaviour playerMovementScript;
+
+    public bool isDialogActive { get; private set; } = false;
     private int currentDialogIndex = -1;
     private int currentSpeakerIndex = 0;
     private bool isTypingEffect = false;
-    private bool isDialogActive = false;
+    private bool canInput = false;
+    private bool isExitCooldown = false; // 종료 직후 재시작 방지용
 
-    private void Awake()
-    {
-        Setup();
-    }
-
+    private void Awake() => Setup();
     private void OnEnable() => nextDialogAction.action.Enable();
     private void OnDisable() => nextDialogAction.action.Disable();
 
@@ -34,40 +33,41 @@ public class DialogSystem : MonoBehaviour
         for (int i = 0; i < speakers.Length; ++i)
         {
             SetActiveObjects(speakers[i], false);
-            //speakers[i].spriteRenderer.gameObject.SetActive(false);
+            if (speakers[i].spriteRenderer != null)
+            {
+                speakers[i].spriteRenderer.gameObject.SetActive(true);
+                Color c = speakers[i].spriteRenderer.color;
+                speakers[i].spriteRenderer.color = c;
+            }
         }
     }
 
-    private bool canNext = false; // 대화 시작 직후 입력을 방지하기 위한 변수
-
-    // 이 함수가 public이어야 DialogNPC에서 호출 가능합니다!
     public void StartDialog()
     {
-        if (isDialogActive) return;
+        // 대화 중이거나 방금 종료된 상태면 실행 안 함
+        if (isDialogActive || isExitCooldown) return;
 
         isDialogActive = true;
         currentDialogIndex = -1;
-        canNext = false; // 시작 시 입력 잠금
+        canInput = false;
 
-        for (int i = 0; i < speakers.Length; ++i)
-            speakers[i].spriteRenderer.gameObject.SetActive(true);
+        if (playerMovementScript != null) playerMovementScript.enabled = false;
 
         SetNextDialog();
-
-        // 0.1초 뒤에 입력을 받을 수 있게 함 (프레임 겹침 방지)
         StartCoroutine(EnableInputDelay());
     }
 
     private IEnumerator EnableInputDelay()
     {
         yield return new WaitForSeconds(0.1f);
-        canNext = true;
+        canInput = true;
     }
 
     private void Update()
     {
-        if (!isDialogActive || !canNext) return; // canNext가 true일 때만 입력 처리
+        if (!isDialogActive || !canInput) return;
 
+        // 대화 넘기기는 마우스 좌클릭(0) 또는 패드 버튼
         if (Input.GetMouseButtonDown(0) || nextDialogAction.action.WasPressedThisFrame())
         {
             HandleNextInput();
@@ -83,7 +83,7 @@ public class DialogSystem : MonoBehaviour
             speakers[currentSpeakerIndex].textDialogue.text = dialogs[currentDialogIndex].dialogue;
             speakers[currentSpeakerIndex].objectArrow.SetActive(true);
         }
-        else if (dialogs.Length > currentDialogIndex + 1)
+        else if (currentDialogIndex + 1 < dialogs.Length)
         {
             SetNextDialog();
         }
@@ -95,33 +95,46 @@ public class DialogSystem : MonoBehaviour
 
     private void SetNextDialog()
     {
-        // 이전 화자 UI 끄기
         if (currentSpeakerIndex < speakers.Length)
             SetActiveObjects(speakers[currentSpeakerIndex], false);
 
         currentDialogIndex++;
         currentSpeakerIndex = dialogs[currentDialogIndex].speakerIndex;
 
-        // 새 화자 UI 켜기
         SetActiveObjects(speakers[currentSpeakerIndex], true);
         speakers[currentSpeakerIndex].textName.text = dialogs[currentDialogIndex].name;
-
-        // ★ 중요: 텍스트를 확실히 비우고 코루틴 시작
         speakers[currentSpeakerIndex].textDialogue.text = "";
 
-        StopAllCoroutines(); // 기존 돌아가던 타이핑 코루틴 중복 방지
-        StartCoroutine(OnTypingText());
-        StartCoroutine(EnableInputDelay()); // 대사마다 아주 짧은 딜레이를 주면 연타 스킵 방지 가능
+        StopCoroutine("OnTypingText");
+        StartCoroutine("OnTypingText");
     }
 
     private void EndDialog()
     {
         isDialogActive = false;
+        canInput = false;
+
         for (int i = 0; i < speakers.Length; ++i)
         {
             SetActiveObjects(speakers[i], false);
-            //speakers[i].spriteRenderer.gameObject.SetActive(false);
+            if (speakers[i].spriteRenderer != null)
+            {
+                Color c = speakers[i].spriteRenderer.color;
+                speakers[i].spriteRenderer.color = c;
+            }
         }
+
+        if (playerMovementScript != null) playerMovementScript.enabled = true;
+
+        // 종료 후 0.5초 동안은 재시작 방지 (실수로 다시 눌리는 것 방지)
+        StartCoroutine(ExitCooldownRoutine());
+    }
+
+    private IEnumerator ExitCooldownRoutine()
+    {
+        isExitCooldown = true;
+        yield return new WaitForSeconds(0.5f);
+        isExitCooldown = false;
     }
 
     private void SetActiveObjects(Speaker speaker, bool visible)
@@ -131,8 +144,11 @@ public class DialogSystem : MonoBehaviour
         speaker.textDialogue.gameObject.SetActive(visible);
         speaker.objectArrow.SetActive(false);
 
-        Color color = speaker.spriteRenderer.color;
-        speaker.spriteRenderer.color = color;
+        if (speaker.spriteRenderer != null)
+        {
+            Color color = speaker.spriteRenderer.color;
+            speaker.spriteRenderer.color = color;
+        }
     }
 
     private IEnumerator OnTypingText()
@@ -143,14 +159,11 @@ public class DialogSystem : MonoBehaviour
 
         while (index <= fullText.Length)
         {
-            // isTypingEffect가 false가 되면(HandleNextInput에서 강제 종료 시) 루프 탈출
             if (!isTypingEffect) break;
-
             speakers[currentSpeakerIndex].textDialogue.text = fullText.Substring(0, index);
             index++;
             yield return new WaitForSeconds(typingSpeed);
         }
-
         isTypingEffect = false;
         speakers[currentSpeakerIndex].objectArrow.SetActive(true);
     }
