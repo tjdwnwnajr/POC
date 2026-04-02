@@ -1059,6 +1059,10 @@ PrefabInstance:
       propertyPath: _minimapCam
       value: 
       objectReference: {fileID: 79264418}
+    - target: {fileID: 3100238420023001082, guid: bb8013f11a88e824aa7a0df49bb84418, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7430404142123497132, guid: bb8013f11a88e824aa7a0df49bb84418, type: 3}
       propertyPath: m_Name
       value: PERSISTOBJECTS
