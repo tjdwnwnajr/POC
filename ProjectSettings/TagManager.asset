@@ -64,5 +64,8 @@ TagManager:
   - name: device
     uniqueID: 331097261
     locked: 0
+  - name: map
+    uniqueID: 936946193
+    locked: 0
   m_RenderingLayers:
   - Default

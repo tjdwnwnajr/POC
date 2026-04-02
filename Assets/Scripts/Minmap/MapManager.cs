@@ -28,26 +28,25 @@ public class MapManager : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerStateList.isGrounded&&InputManager.mapWasPressed)
+        if (InputManager.mapWasPressed&&IsLargeMapOpen)
         {
            
-            if (IsLargeMapOpen)
-            {
-                CloseLargeMap();
-            }
-            else
-            {
-                OpenLargeMap();
-            }
+            CloseLargeMap();
+            
+            
+        }
+        else if(PlayerStateList.isGrounded && InputManager.mapWasPressed && !IsLargeMapOpen)
+        {
+            OpenLargeMap();
         }
         if (IsLargeMapOpen)
         {
-            float newSize = _minimapCam.orthographicSize + InputManager.MapSizeDirection.y*(-0.1f); 
-            if(newSize > minSize&&newSize<maxSize)
+            float newSize = _minimapCam.orthographicSize + InputManager.MapSizeDirection.y * (-0.1f);
+            if (newSize > minSize && newSize < maxSize)
             {
                 _minimapCam.orthographicSize = newSize;
             }
-            
+
         }
     }
     public void FindMapCam()
@@ -59,12 +58,14 @@ public class MapManager : MonoBehaviour
 
     private void OpenLargeMap()
     {
+        Time.timeScale = 0f;
         PlayerStateList.isView = true;
         _largeMap.SetActive(true);
         IsLargeMapOpen = true;
     }
     private void CloseLargeMap()
     {
+        Time.timeScale = 1f;
         PlayerStateList.isView = false;
         _largeMap.SetActive(false);
         IsLargeMapOpen = false;
