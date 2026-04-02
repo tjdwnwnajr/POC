@@ -34,7 +34,7 @@ public class DoorTriggerInteraction : TriggerInteractionBase
 
         }
         //load new Scene
-        else
+        else if(!isBox)
         {
             SceneSwapManager.SwapSceneFromDoorUse(_sceneToLoad, _doorToSpawnTo);
         }
@@ -43,6 +43,7 @@ public class DoorTriggerInteraction : TriggerInteractionBase
     IEnumerator FindKeyAndWakeUp()
     {
         isTrigger = true;
+        
         //열쇠를 찾는 애니메이션 재생
         yield return new WaitForSeconds(2f);
 
