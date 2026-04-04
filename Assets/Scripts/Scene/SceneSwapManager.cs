@@ -1,5 +1,6 @@
 using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,9 @@ public class SceneSwapManager : MonoBehaviour
 {
     public static SceneSwapManager Instance;
     private static bool _loadFromDoor;
+    public static bool[] isDreamCleared = new bool[3] { false, false, false };
+
+
     private bool _isBox;
     private GameObject _player;
     private Collider2D _playerColl;
@@ -14,6 +18,9 @@ public class SceneSwapManager : MonoBehaviour
     private Vector3 _playerSpawnPosition;
 
     private DoorTriggerInteraction.DoorToSpawnAt _doorToSpawnTo;
+
+
+
 
     private void Awake()
     {
@@ -37,6 +44,7 @@ public class SceneSwapManager : MonoBehaviour
 
     public static void SwapSceneFromDoorUse(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt, bool isBox = false)
     {
+        
         if (!isBox)
         {
             _loadFromDoor = true;
@@ -49,6 +57,7 @@ public class SceneSwapManager : MonoBehaviour
             
         }
     }
+
 
     private IEnumerator FadeOutThenChangeScene(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt = DoorTriggerInteraction.DoorToSpawnAt.None)
     {
@@ -120,6 +129,8 @@ public class SceneSwapManager : MonoBehaviour
         {
             MapRoomManager.instance.RevealRoom();
         }
+        
+
         //카메라 초기화
         CameraUtility.InvalidateCache();
 

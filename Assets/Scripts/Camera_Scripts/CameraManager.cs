@@ -7,7 +7,7 @@ using Cinemachine;
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
-    [SerializeField] private CinemachineVirtualCamera[] _allVirtualCameras;
+    [SerializeField] public CinemachineVirtualCamera[] _allVirtualCameras;
 
     [Header("lerping Y Damping")]
     //낙하 y반응속도
@@ -32,6 +32,7 @@ public class CameraManager : MonoBehaviour
     private float _normYPanAmount;
 
 
+
     #region Camera panning in camera control triggers
     private Coroutine _panCameraCoroutine;
     private Vector2 _startingTrackedObjectOffset;
@@ -44,6 +45,7 @@ public class CameraManager : MonoBehaviour
         {
             Instance = this;
         }
+
         for (int i = 0; i < _allVirtualCameras.Length; i++)
         {
             if (_allVirtualCameras[i].enabled)

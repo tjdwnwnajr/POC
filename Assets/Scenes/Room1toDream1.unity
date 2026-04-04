@@ -13743,11 +13743,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37748bb530e58ef47a0890241a2feca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorTriggerInteraction
-  _doorToSpawnTo: 1
+  _doorToSpawnTo: 2
   _sceneToLoad:
     _sceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
     _sceneName: SampleScene
+  isBox: 0
+  isForRespawn: 0
   CurrentDoorPosition: 1
+  clearScene:
+    _sceneAsset: {fileID: 0}
+    _sceneName: 
 --- !u!61 &1374174955
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14010,7 +14015,12 @@ MonoBehaviour:
   _sceneToLoad:
     _sceneAsset: {fileID: 102900000, guid: eb4a0ba5136f21649875b647e5adef38, type: 3}
     _sceneName: firstDream
+  isBox: 0
+  isForRespawn: 0
   CurrentDoorPosition: 2
+  clearScene:
+    _sceneAsset: {fileID: 0}
+    _sceneName: 
 --- !u!61 &1593508687
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16281,7 +16291,7 @@ Transform:
   m_GameObject: {fileID: 8317182324156068923}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.483322, y: 2.3799999, z: -10}
+  m_LocalPosition: {x: 5.4968076, y: 2.3799999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17597,7 +17607,6 @@ MonoBehaviour:
   recoilingX: 0
   recoilingY: 0
   invincible: 0
-  mirrorOn: 0
 --- !u!223 &6075501927762756952
 Canvas:
   m_ObjectHideFlags: 0

@@ -19,6 +19,11 @@ public class PlayerStateList : MonoBehaviour
     public static bool keyOne = false;
     public static bool headBtn = false;
     public static bool isDead = false;
+    public static bool firstKeyFounded = true;
+    public static bool secondKeyFounded = true;
+    public static bool thirdKeyFounded = true;
+    public static bool keyReady = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public static void ViewMode(bool on)
@@ -36,13 +41,13 @@ public class PlayerStateList : MonoBehaviour
     }
     private void Update()
     {
-        //if (mirrorOn)
-        //{
-        //    isMirror = true;
-        //}
-        //else
-        //{
-        //    isMirror = false;
-        //}
+        if(firstKeyFounded && secondKeyFounded && thirdKeyFounded)
+        {
+            keyReady = true;
+        }
+        else
+        {
+            keyReady = false;
+        }
     }
 }
