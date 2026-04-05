@@ -31,7 +31,7 @@ public class CameraManager : MonoBehaviour
     //평상시 y반응속도 값
     private float _normYPanAmount;
 
-
+    [SerializeField] private Collider2D[] _cameraZoneColliders;
 
     #region Camera panning in camera control triggers
     private Coroutine _panCameraCoroutine;
@@ -45,29 +45,80 @@ public class CameraManager : MonoBehaviour
         {
             Instance = this;
         }
+        if (_cameraZoneColliders != null && _cameraZoneColliders.Length > 0)
+            InitCameraByPlayerPosition(); // 새로 추가된 함수
+        else
+            SetupCurrentCamera();
+    }
 
+    public void InitCameraByPlayerPosition()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null||_cameraZoneColliders ==null)
+        {
+            SetupCurrentCamera();
+            return;
+        }
+
+        Vector2 playerPos = player.transform.position;
+
+        // 모든 카메라 비활성화
+        foreach (var cam in _allVirtualCameras)
+        {
+            if (cam != null)
+            {
+                cam.enabled = false;
+            }
+        }
+
+        bool found = false;
+        
+        for (int i = 0; i < _cameraZoneColliders.Length; i++)
+        {
+            if (_cameraZoneColliders[i] == null) continue;
+            if (i >= _allVirtualCameras.Length) break;
+
+            bool overlap = _cameraZoneColliders[i].OverlapPoint(playerPos);
+
+            if (overlap)
+            {
+                _allVirtualCameras[i].enabled = true;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found && _allVirtualCameras.Length > 0)
+        {
+            _allVirtualCameras[0].enabled = true;
+        }
+
+        SetupCurrentCamera();
+    }
+
+    private void SetupCurrentCamera()
+    {
         for (int i = 0; i < _allVirtualCameras.Length; i++)
         {
             if (_allVirtualCameras[i].enabled)
             {
                 _currentCamera = _allVirtualCameras[i];
-                
+
                 _framingTransposer = _currentCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-                if (_framingTransposer == null)
-                {
-                    
-                    return;
-                }
+
+                if (_framingTransposer == null) return;
+
                 _normYPanAmount = _framingTransposer.m_YDamping;
+
+                break; 
             }
         }
 
-        if (_framingTransposer == null)
-        {
-            return;
-        }
+        if (_framingTransposer == null) return;
+
         _startingTrackedObjectOffset = _framingTransposer.m_TrackedObjectOffset;
-    } 
+    }
+
     //플레이어 낙하중인지 여부에 따라 y반응속도를 조절하도록 외부에서 호출하는 함수
     public void LerpYDamping(bool isPlayerFalling)
     {
