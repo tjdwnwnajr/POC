@@ -12,7 +12,7 @@ public class DialogSystem : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float typingSpeed = 0.05f;
-    [SerializeField] private InputActionReference nextDialogAction;
+    //  nextDialogAction 지웠어요
 
     [Header("Player Control")]
     public MonoBehaviour playerMovementScript;
@@ -22,11 +22,10 @@ public class DialogSystem : MonoBehaviour
     private int currentSpeakerIndex = 0;
     private bool isTypingEffect = false;
     private bool canInput = false;
-    private bool isExitCooldown = false; // 종료 직후 재시작 방지용
+    private bool isExitCooldown = false;
 
     private void Awake() => Setup();
-    private void OnEnable() => nextDialogAction.action.Enable();
-    private void OnDisable() => nextDialogAction.action.Disable();
+    // OnEnable, OnDisable 지웠어요
 
     private void Setup()
     {
@@ -44,14 +43,15 @@ public class DialogSystem : MonoBehaviour
 
     public void StartDialog()
     {
-        // 대화 중이거나 방금 종료된 상태면 실행 안 함
         if (isDialogActive || isExitCooldown) return;
 
         isDialogActive = true;
         currentDialogIndex = -1;
         canInput = false;
 
-        if (playerMovementScript != null) playerMovementScript.enabled = false;
+        PlayerStateList.canMove = false;
+        PlayerStateList.isView = true;
+        InputManager.DeactivatePlayerControls();
 
         SetNextDialog();
         StartCoroutine(EnableInputDelay());
@@ -67,8 +67,13 @@ public class DialogSystem : MonoBehaviour
     {
         if (!isDialogActive || !canInput) return;
 
-        // 대화 넘기기는 마우스 좌클릭(0) 또는 패드 버튼
-        if (Input.GetMouseButtonDown(0) || nextDialogAction.action.WasPressedThisFrame())
+        bool nextPressed = Input.GetMouseButtonDown(0);
+
+        // InputManager 대신 직접 게임패드에서 읽기
+        if (Gamepad.current != null)
+            nextPressed |= Gamepad.current.buttonWest.wasPressedThisFrame;
+
+        if (nextPressed)
         {
             HandleNextInput();
         }
@@ -124,9 +129,10 @@ public class DialogSystem : MonoBehaviour
             }
         }
 
-        if (playerMovementScript != null) playerMovementScript.enabled = true;
+        PlayerStateList.canMove = true;
+        PlayerStateList.isView = false;
+        InputManager.ActivatePlayerControls();
 
-        // 종료 후 0.5초 동안은 재시작 방지 (실수로 다시 눌리는 것 방지)
         StartCoroutine(ExitCooldownRoutine());
     }
 
