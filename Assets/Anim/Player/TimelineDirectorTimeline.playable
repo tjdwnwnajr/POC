@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 1.8333333333333333
+    m_Start: 0.8333333333333263
     m_ClipIn: 0
     m_Asset: {fileID: 2164261146737015801}
     m_Duration: 2.833333333333333
@@ -230,11 +230,11 @@ MonoBehaviour:
     m_Recordable: 1
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 3.833333333333334
-    m_PreExtrapolationTime: 1.8333333333333333
+    m_PostExtrapolationTime: 3.8333333333333317
+    m_PreExtrapolationTime: 0.8333333333333263
     m_DisplayName: MoveLtoR
   - m_Version: 1
-    m_Start: 8.5
+    m_Start: 7.499999999999991
     m_ClipIn: 0
     m_Asset: {fileID: -5428702803736097729}
     m_Duration: 2.833333333333341
@@ -263,11 +263,11 @@ MonoBehaviour:
     m_Recordable: 1
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 3.833333333333334
+    m_PostExtrapolationTime: 3.8333333333333357
     m_PreExtrapolationTime: 0
     m_DisplayName: MoveRtoL
   - m_Version: 1
-    m_Start: 15.166666666666675
+    m_Start: 14.166666666666668
     m_ClipIn: 0
     m_Asset: {fileID: -1227666582850145670}
     m_Duration: 2.833333333333333
@@ -296,11 +296,11 @@ MonoBehaviour:
     m_Recordable: 1
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 3.8333333333333286
+    m_PostExtrapolationTime: 3.833333333333332
     m_PreExtrapolationTime: 0
     m_DisplayName: MoveLtoR
   - m_Version: 1
-    m_Start: 21.833333333333336
+    m_Start: 20.833333333333332
     m_ClipIn: 0
     m_Asset: {fileID: 729250968582987436}
     m_Duration: 2.833333333333341
@@ -329,11 +329,11 @@ MonoBehaviour:
     m_Recordable: 1
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 3.3333333333333215
+    m_PostExtrapolationTime: 3.333333333333325
     m_PreExtrapolationTime: 0
     m_DisplayName: MoveRtoL
   - m_Version: 1
-    m_Start: 28
+    m_Start: 26.999999999999996
     m_ClipIn: 0
     m_Asset: {fileID: 6687986992939121628}
     m_Duration: 2.5
@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 11.5
+    m_Start: 10.499999999999996
     m_ClipIn: 0
     m_Asset: {fileID: 5316200326997787343}
     m_Duration: 3.5
@@ -833,7 +833,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 25
+    m_Start: 23.999999999999996
     m_ClipIn: 0
     m_Asset: {fileID: 6523573476492692544}
     m_Duration: 3
@@ -929,7 +929,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -7407735041870529087}
-    m_Duration: 32
+    m_Duration: 31
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1550880893480960196}
     m_EaseInDuration: 0
@@ -1159,7 +1159,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: 4217866861693477548}
-    m_Duration: 1.9999999999999998
+    m_Duration: 1
     m_TimeScale: 1
     m_ParentTrack: {fileID: 1015915083614081184}
     m_EaseInDuration: 0
@@ -1207,7 +1207,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_idle
   - m_Version: 1
-    m_Start: 1.9999999999999998
+    m_Start: 1
     m_ClipIn: 0
     m_Asset: {fileID: -758900980155929071}
     m_Duration: 2.666666666666666
@@ -1240,7 +1240,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_run
   - m_Version: 1
-    m_Start: 4.666666666666666
+    m_Start: 3.6666666666666674
     m_ClipIn: 0
     m_Asset: {fileID: 4588992242671026877}
     m_Duration: 1.9999999999999982
@@ -1273,7 +1273,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_idle
   - m_Version: 1
-    m_Start: 6.666666666666664
+    m_Start: 5.666666666666666
     m_ClipIn: 0
     m_Asset: {fileID: -7149417350703184025}
     m_Duration: 1.9999999999999998
@@ -1306,7 +1306,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_idle
   - m_Version: 1
-    m_Start: 8.666666666666675
+    m_Start: 7.666666666666671
     m_ClipIn: 0
     m_Asset: {fileID: -2656701974757683150}
     m_Duration: 2.666666666666666
@@ -1339,43 +1339,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_run
   - m_Version: 1
-    m_Start: 11.333333333333343
+    m_Start: 10.333333333333341
     m_ClipIn: 0
     m_Asset: {fileID: -323824098946437270}
     m_Duration: 1.9999999999999982
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 1015915083614081184}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 1
-    m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: pixellab_idle
-  - m_Version: 1
-    m_Start: 13.333333333333341
-    m_ClipIn: 0
-    m_Asset: {fileID: -1472667640514685843}
-    m_Duration: 1.9999999999999998
     m_TimeScale: 1
     m_ParentTrack: {fileID: 1015915083614081184}
     m_EaseInDuration: 0
@@ -1405,7 +1372,40 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_idle
   - m_Version: 1
-    m_Start: 15.333333333333332
+    m_Start: 12.333333333333337
+    m_ClipIn: 0
+    m_Asset: {fileID: -1472667640514685843}
+    m_Duration: 1.9999999999999998
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 1015915083614081184}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 1
+    m_PreExtrapolationMode: 1
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: pixellab_idle
+  - m_Version: 1
+    m_Start: 14.33333333333333
     m_ClipIn: 0
     m_Asset: {fileID: -2380535027409029308}
     m_Duration: 2.666666666666666
@@ -1438,7 +1438,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_run
   - m_Version: 1
-    m_Start: 18.000000000000007
+    m_Start: 17.000000000000004
     m_ClipIn: 0
     m_Asset: {fileID: 5570027354951840745}
     m_Duration: 1.9999999999999982
@@ -1471,7 +1471,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_idle
   - m_Version: 1
-    m_Start: 20.000000000000007
+    m_Start: 19.000000000000004
     m_ClipIn: 0
     m_Asset: {fileID: 7235771342608392838}
     m_Duration: 1.9999999999999998
@@ -1504,7 +1504,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_idle
   - m_Version: 1
-    m_Start: 22.00000000000002
+    m_Start: 21.000000000000018
     m_ClipIn: 0
     m_Asset: {fileID: 8218767623159466711}
     m_Duration: 2.666666666666666
@@ -1537,7 +1537,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_run
   - m_Version: 1
-    m_Start: 24.66666666666668
+    m_Start: 23.666666666666675
     m_ClipIn: 0
     m_Asset: {fileID: -9158239126908864360}
     m_Duration: 3.3333333333333215
@@ -1570,7 +1570,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_idle
   - m_Version: 1
-    m_Start: 28
+    m_Start: 26.999999999999996
     m_ClipIn: 0
     m_Asset: {fileID: -7245033625574493078}
     m_Duration: 2.5
@@ -1639,7 +1639,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: pixellab_run
   - m_Version: 1
-    m_Start: 30.5
+    m_Start: 29.499999999999996
     m_ClipIn: 0
     m_Asset: {fileID: 5293241813130715911}
     m_Duration: 1.5
@@ -1795,7 +1795,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 18.5
+    m_Start: 17.499999999999996
     m_ClipIn: 0
     m_Asset: {fileID: 9055803930325779392}
     m_Duration: 3
@@ -2235,7 +2235,7 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 5
+    m_Start: 3.9999999999999996
     m_ClipIn: 0
     m_Asset: {fileID: 3598962459024986031}
     m_Duration: 3.5
@@ -2831,7 +2831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalEmitter
-  m_Time: 32
+  m_Time: 31
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: d901d28efedefb74da2c516548c50f6e, type: 2}
