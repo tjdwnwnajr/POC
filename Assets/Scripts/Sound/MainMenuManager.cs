@@ -16,8 +16,7 @@ public class MainMenuManager : MonoBehaviour
     {
         mainMenu.SetActive(false);
         soundSettingMenu.SetActive(false);
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        player = playerObj.GetComponent<PlayerController>();
+       
     }
 
     private void Update()
@@ -38,6 +37,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Pause()
     {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        player = playerObj.GetComponent<PlayerController>();
         isPaused = true;
         Time.timeScale = 0f;
         player.enabled = false;

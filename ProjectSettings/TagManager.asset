@@ -46,6 +46,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: map
+    uniqueID: 936946193
+    locked: 0
   - name: back
     uniqueID: 2659335015
     locked: 0
@@ -63,9 +66,6 @@ TagManager:
     locked: 0
   - name: device
     uniqueID: 331097261
-    locked: 0
-  - name: map
-    uniqueID: 936946193
     locked: 0
   m_RenderingLayers:
   - Default

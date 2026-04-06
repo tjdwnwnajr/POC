@@ -19,6 +19,9 @@ public class RotateBlock : MonoBehaviour
     public float checkRotation;
     public bool isComplete = false;
     float angle;
+    [SerializeField] private bool useLimitAngle = true;
+    [SerializeField] private float minAngle = -55f;
+    [SerializeField] private float maxAngle = 55f;
 
     [Header("Camera Offset")]
     [SerializeField] private Transform targetPos;
@@ -85,6 +88,29 @@ public class RotateBlock : MonoBehaviour
             -maxAngularSpeed,
             maxAngularSpeed
         );
+        if (useLimitAngle)
+        {
+            float currentAngle = Mathf.DeltaAngle(0f, transform.eulerAngles.z);
+            float nextAngle = currentAngle + angularSpeed * Time.deltaTime;
+
+            // 그냥 nextAngle 자체를 클램프해서 직접 적용
+            float clampedNext = Mathf.Clamp(nextAngle, minAngle, maxAngle);
+
+            // 클램프가 발생했으면 속도 0으로 막기
+            if (!Mathf.Approximately(clampedNext, nextAngle))
+            {
+                angularSpeed = 0f;
+            }
+
+            // -180~180 → 0~360 변환 후 적용
+            float clampedZ = Mathf.Repeat(clampedNext, 360f);
+            transform.eulerAngles = new Vector3(
+                transform.eulerAngles.x,
+                transform.eulerAngles.y,
+                clampedZ
+            );
+            return;
+        }
 
         // 회전 적용
         transform.Rotate(0f, 0f, angularSpeed * Time.deltaTime);

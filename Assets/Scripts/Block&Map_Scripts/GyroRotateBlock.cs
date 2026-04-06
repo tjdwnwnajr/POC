@@ -8,6 +8,10 @@ public class GyroRotateBlock : MonoBehaviour
     [SerializeField] private float smoothDamping = 0.85f;         // 이전값 반영 (0~1, 작을수록 부드러움)
     [SerializeField] private float maxAngularSpeed = 270f;        // 최대 회전 속도
     [SerializeField] private float maxAngularAcceleration = 160f; // 최대 가속도 제한
+    [Header("Rotation Limit")]
+    [SerializeField] private bool useLimitAngle = true;
+    [SerializeField] private float minAngle = -55f;
+    [SerializeField] private float maxAngle = 55f;
 
     [Header("Completion Settings")]
     [SerializeField] private float checkTolerance = 5f;           // 허용 오차도
@@ -78,6 +82,26 @@ public class GyroRotateBlock : MonoBehaviour
 
     private void ApplyRotation()
     {
+        if (useLimitAngle)
+        {
+            float currentAngle = Mathf.DeltaAngle(0f, transform.eulerAngles.z);
+            float nextAngle = currentAngle + angularSpeed * Time.deltaTime;
+
+            float clampedNext = Mathf.Clamp(nextAngle, minAngle, maxAngle);
+
+            if (!Mathf.Approximately(clampedNext, nextAngle))
+            {
+                angularSpeed = 0f;
+            }
+
+            float clampedZ = Mathf.Repeat(clampedNext, 360f);
+            transform.eulerAngles = new Vector3(
+                transform.eulerAngles.x,
+                transform.eulerAngles.y,
+                clampedZ
+            );
+            return;
+        }
         // Z축 회전 적용
         transform.Rotate(0f, 0f, angularSpeed * Time.deltaTime);
     }

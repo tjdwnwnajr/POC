@@ -21,79 +21,71 @@ public class PlayerController : MonoBehaviour
     private float _fallSpeedYDampingChangeThreshold;
 
 
-    //���� �Ŵ޸���
-    [HideInInspector]public bool isRope = false;
-    
-    
     //movement var
     private Vector2 moveInput;
     [Header("Move Controller")]
     [SerializeField] private float walkSpeed = 1;
     private float xAxis;
 
-
-
-    //���� ���� ����
+    //점프 변수
     [Header("Jump Controller")]
-    [SerializeField] private float jumpPower = 45; //���� ����
+    [SerializeField] private float jumpPower = 45; 
     [SerializeField] private Transform groundCheckPoint;
-    [SerializeField] private float groundCheckDistanceY = 0.2f; //�ٴ� üũ x,y���� 
+    [SerializeField] private float groundCheckDistanceY = 0.2f; 
     [SerializeField] private float groundCheckDistanceX = 0.5f;
     [SerializeField] private LayerMask groundlayer;
 
-    //���� �ּ� ����
-    [SerializeField] private float jumpMinTime; //�ּ� ���� �ð�
-    private float jumpCountTime = 0; //���� �ð� ���� ����
+    
+    [SerializeField] private float jumpMinTime; //점프최소시간
+    private float jumpCountTime = 0; 
     private bool jumpCancelImmediate;
     
 
-    //�̴� ����
+    //
     private bool jumpwasPressed = false;
-    private int airJumpCounter = 0; //���� ���� ī��Ʈ ����
-    [SerializeField] private int maxAirJumps; //�ִ� ���� ���� Ƚ��
+    private int airJumpCounter = 0; 
+    [SerializeField] private int maxAirJumps; 
     
-    //���� ���� : ������ �̸� ������ ������ �۵��ϵ��� �ϴ� ����
+  
     private float jumpBufferCounter = 0;
     [SerializeField] private float jumpBufferTime;
 
-    //coyote time : ������ �������� ������ �۵��ϵ��� �ϴº��� 
     private float coyoteTimeCounter = 0;
     [SerializeField] private float coyoteTime;
 
 
-    //�߷� ����
+
     [SerializeField] private float fallSpeedLimit = -10f;
-    [SerializeField] float gravityUp = 1.2f;        // ��� �� �⺻ �߷�
-    [SerializeField] float gravityHang = 0.3f;      // ���� ü�� �߷� (�ٽ�)
-    [SerializeField] float gravityFall = 2.0f;      // ���� �� �߷�
-    [SerializeField] float hangVelocityThreshold = 0.15f; // ���� ����
+    [SerializeField] float gravityUp = 1.2f;        
+    [SerializeField] float gravityHang = 0.3f;      
+    [SerializeField] float gravityFall = 2.0f;      
+    [SerializeField] float hangVelocityThreshold = 0.15f; 
     [SerializeField] float gravitySmoothSpeed = 10f;
-
-
-    //dash
-    private bool dashKeyDown;
-    [Header("Dash Controller")]
-    [SerializeField] private float dashSpeed;
-    [SerializeField] private float dashTime;
-    [SerializeField] private float dashCooldown;
     private float gravity;
-    private bool canDash = true;
-    private bool dashed;
-    [SerializeField] GameObject dashEffect;
-    [Space(5)]
-
-
-    //////////////////���� ���� 
-    
-    [SerializeField] private float timeBetweenAttack; //���� �ӵ� ����
-    private float timeSinceAttack;
     private float yAxis;
-    [SerializeField] private Transform sideAttackTrans, upAttackTrans, downAttackTrans;
-    [SerializeField] private Vector2 sideAttackArea, upAttackArea, downAttackArea; //���� ����
-    [SerializeField] private LayerMask attackableLayer;
-    [SerializeField] private float damage;
-    [SerializeField] private GameObject slashEffect;
-    [Space(5)]
+    ////dash
+    //private bool dashKeyDown;
+    //[Header("Dash Controller")]
+    //[SerializeField] private float dashSpeed;
+    //[SerializeField] private float dashTime;
+    //[SerializeField] private float dashCooldown;
+
+    //private bool canDash = true;
+    //private bool dashed;
+    //[SerializeField] GameObject dashEffect;
+    //[Space(5)]
+
+
+
+    //[SerializeField] private float timeBetweenAttack; //���� �ӵ� ����
+    //private float timeSinceAttack;
+
+    //[SerializeField] private Transform sideAttackTrans, upAttackTrans, downAttackTrans;
+    //[SerializeField] private Vector2 sideAttackArea, upAttackArea, downAttackArea; //���� ����
+    //[SerializeField] private LayerMask attackableLayer;
+    //[SerializeField] private float damage;
+    //[SerializeField] private GameObject slashEffect;
+    //[Space(5)]
 
     /////�ݵ����� �κ�
     [Header("Recoil")]
@@ -129,6 +121,11 @@ public class PlayerController : MonoBehaviour
 
     private WindZone2D currentWindZone;
 
+    [Header("Slope Settings")]
+    [SerializeField] private float slopeSpeedMultiplier = 0.5f; // 오르막 속도 배율 (0~1)
+    [SerializeField] private float slopeAngleThreshold = 10f;   // 이 각도 이상이면 경사로 인식
+    private float slopeAngle = 0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -140,7 +137,7 @@ public class PlayerController : MonoBehaviour
         {
             Instance = this;
         }
-        health = maxhealth;
+        //health = maxhealth;
 
 
 
@@ -174,14 +171,15 @@ public class PlayerController : MonoBehaviour
             LimitFallSpeed();      
 
             ApplyWindBuoyancy();
+            DetectSlope();
             //Recoil();
         }
 
         // 항상 실행
-        if (!PlayerStateList.isView)
-        {
-            Recoil();
-        }
+        //if (!PlayerStateList.isView)
+        //{
+        //    Recoil();
+        //}
 
         if (PlayerStateList.isView)
         {
@@ -241,22 +239,52 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-  
-    //������Լ�
-    /////////////////////////////////////////////////////////
 
-    
-    public void OnDash(InputAction.CallbackContext ctx)
+    private void DetectSlope()
     {
-        if (ctx.started)
-        {
-            dashKeyDown = true;
-        }
-        if (ctx.canceled)
-        {
-            dashKeyDown = false;
-        }
+        // 중앙, 좌, 우 세 방향으로 레이캐스트
+        RaycastHit2D hitCenter = Physics2D.Raycast(
+            groundCheckPoint.position,
+            Vector2.down,
+            groundCheckDistanceY + 0.1f,
+            groundlayer
+        );
+        RaycastHit2D hitRight = Physics2D.Raycast(
+            groundCheckPoint.position + new Vector3(groundCheckDistanceX, 0, 0),
+            Vector2.down,
+            groundCheckDistanceY + 0.1f,
+            groundlayer
+        );
+        RaycastHit2D hitLeft = Physics2D.Raycast(
+            groundCheckPoint.position + new Vector3(-groundCheckDistanceX, 0, 0),
+            Vector2.down,
+            groundCheckDistanceY + 0.1f,
+            groundlayer
+        );
+
+        // 세 레이 중 가장 큰 경사각을 사용
+        RaycastHit2D bestHit = hitCenter ? hitCenter : (hitRight ? hitRight : hitLeft);
+
+        float angleCenter = hitCenter ? Vector2.Angle(hitCenter.normal, Vector2.up) : 0f;
+        float angleRight = hitRight ? Vector2.Angle(hitRight.normal, Vector2.up) : 0f;
+        float angleLeft = hitLeft ? Vector2.Angle(hitLeft.normal, Vector2.up) : 0f;
+
+        slopeAngle = Mathf.Max(angleCenter, angleRight, angleLeft);
+
+        
     }
+
+    //public void OnDash(InputAction.CallbackContext ctx)
+    //{
+    //    if (ctx.started)
+    //    {
+    //        dashKeyDown = true;
+    //    }
+    //    if (ctx.canceled)
+    //    {
+    //        dashKeyDown = false;
+    //    }
+    //}
 
     private void LockPosition()
     {
@@ -313,49 +341,55 @@ public class PlayerController : MonoBehaviour
     //�̵� �Լ�
     void MoveX()
     {
-        if (pState.recoilingX) return; // 넉백 중 이동 차단
+        //if (pState.recoilingX) return; // 넉백 중 이동 차단
+        float speed = walkSpeed;
 
-        rb.linearVelocity = new Vector2(xAxis * walkSpeed, rb.linearVelocityY);
+        if (Mathf.Abs(xAxis) > 0 && slopeAngle >= slopeAngleThreshold)
+        {
+            speed *= slopeSpeedMultiplier;
+        }
+
+        rb.linearVelocity = new Vector2(xAxis * speed, rb.linearVelocityY);
 
         anim.SetBool("isWalk", rb.linearVelocityX != 0);
     }
 
 
-    void StartDash()
-    {
+    //void StartDash()
+    //{
 
 
-        if (dashKeyDown && canDash && !dashed)
-        //if (DualSenseInput.Instance.DashPressed && canDash && !dashed)
-        {
-            StartCoroutine(Dash());
-            dashed = true;
+    //    if (dashKeyDown && canDash && !dashed)
+    //    //if (DualSenseInput.Instance.DashPressed && canDash && !dashed)
+    //    {
+    //        StartCoroutine(Dash());
+    //        dashed = true;
 
-        }
+    //    }
 
-        if (Grounded())//���� ������ �ٷ� �뽬�����ϵ��� dashed false
-        {
-            dashed = false;
+    //    if (Grounded())//���� ������ �ٷ� �뽬�����ϵ��� dashed false
+    //    {
+    //        dashed = false;
 
-        }
-    }
+    //    }
+    //}
 
-    IEnumerator Dash()
-    {
-        canDash = false;
-        pState.dashing = true;
-        anim.SetTrigger("isDash");
-        rb.gravityScale = 0;
-        rb.linearVelocity = new Vector2(transform.localScale.x * dashSpeed, 0);
-        if (Grounded()) Instantiate(dashEffect, transform);
-        yield return new WaitForSeconds(dashTime);
-        rb.gravityScale = gravity;
-        pState.dashing = false;
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
+    //IEnumerator Dash()
+    //{
+    //    canDash = false;
+    //    pState.dashing = true;
+    //    anim.SetTrigger("isDash");
+    //    rb.gravityScale = 0;
+    //    rb.linearVelocity = new Vector2(transform.localScale.x * dashSpeed, 0);
+    //    if (Grounded()) Instantiate(dashEffect, transform);
+    //    yield return new WaitForSeconds(dashTime);
+    //    rb.gravityScale = gravity;
+    //    pState.dashing = false;
+    //    yield return new WaitForSeconds(dashCooldown);
+    //    canDash = true;
 
 
-    }
+    //}
 
     //////////////���� ����///////////////////////
 
@@ -484,7 +518,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    ///////////////////////////////����.....
+ 
     #region Attack
 
     //void GetAttack()

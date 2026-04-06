@@ -4,7 +4,7 @@ using Cinemachine;
 public class CameraShakeManager : MonoBehaviour
 {
     public static CameraShakeManager instance;
-    [SerializeField] private float globalShakeForce = 1f;
+    //[SerializeField] private float globalShakeForce = 1f;
     private CinemachineImpulseListener impulseListener;
     private CinemachineVirtualCamera currentVirtualCamera;
 

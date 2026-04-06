@@ -37,7 +37,7 @@ public class RopeGrabtest : MonoBehaviour
         new GyroRangeMapping { minGyro = 300f, maxGyro = 400f, forceOutput = 20f },
         new GyroRangeMapping { minGyro = 400f, maxGyro = 400f, forceOutput = 25f }
     };
-    private bool wasAbovePositiveOne = false;
+    //private bool wasAbovePositiveOne = false;
     
 
     [Header("Chain Movement")]

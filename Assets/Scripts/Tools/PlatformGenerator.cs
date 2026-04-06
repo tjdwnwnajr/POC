@@ -22,7 +22,7 @@ public class PlatformGenerator : MonoBehaviour
     private CinemachineImpulseSource impulseSource;
     [SerializeField] private ScreenShakeProfile profile;
     [SerializeField] private bool shakeOn;
-    [SerializeField] private float shakeDuration = 0.2f;
+    
 
     private Coroutine platformCoroutine;
     private bool canTrigger = false;

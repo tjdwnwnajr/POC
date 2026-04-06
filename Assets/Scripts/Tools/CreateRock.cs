@@ -14,7 +14,7 @@ public class CreateRock : MonoBehaviour
     [SerializeField] private CompositeCollider2D defaultBoundary;
     [SerializeField] private CompositeCollider2D rockBoundary;
     public static bool camIsReturned = true;
-    private bool endCreate = false;
+    
     private void Start()
     {
         canCreate = false;
