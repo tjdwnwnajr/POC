@@ -398,7 +398,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7853682446098137962, guid: 2df7abd6a7f060a4bb80092b7c376563, type: 3}
+  m_Sprite: {fileID: -1157343744439448132, guid: 8a04a72a8cccbef4faea44885c49be50, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -582,8 +582,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.67058825, g: 0.65882355, b: 0.3647059, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.9433962, g: 0.93843275, b: 0.81434673, a: 1}
+    m_PressedColor: {r: 0.9245283, g: 0.9114454, b: 0.9114454, a: 1}
     m_SelectedColor: {r: 0.67058825, g: 0.65882355, b: 0.3647059, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -629,7 +629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.754717, g: 0.74403703, b: 0.74403703, a: 1}
+  m_Color: {r: 0.21542363, g: 0.5947466, b: 0.9716981, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -799,8 +799,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281234849
-  m_fontColor: {r: 0.6313726, g: 0.45882353, b: 0.18039216, a: 1}
+    rgba: 4286950261
+  m_fontColor: {r: 0.45882353, g: 0.67058825, b: 0.52156866, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -977,7 +977,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7529412, g: 0.74509805, b: 0.74509805, a: 1}
+  m_Color: {r: 0.21568628, g: 0.59607846, b: 0.972549, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1060,6 +1060,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 79264418}
     - target: {fileID: 3100238420023001082, guid: bb8013f11a88e824aa7a0df49bb84418, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742000108415996271, guid: bb8013f11a88e824aa7a0df49bb84418, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -1304,8 +1308,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281234849
-  m_fontColor: {r: 0.6320754, g: 0.45732492, b: 0.18187074, a: 1}
+    rgba: 4286950261
+  m_fontColor: {r: 0.45812565, g: 0.6698113, b: 0.5219046, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

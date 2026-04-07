@@ -21,7 +21,12 @@ public class SceneBrightManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-
+            DontDestroyOnLoad(gameObject);
+        }
+        
+        else
+        {
+            Destroy(gameObject);
         }
 
         _brightOutStartColor.a = 0f;
@@ -75,6 +80,10 @@ public class SceneBrightManager : MonoBehaviour
             IsBrightIn = true;
         }
     }
-
+    public void ChangeSpeedSettings(float brightoutS, float brightinS)
+    {
+        _brightOutSpeed = brightoutS;
+        _brightInSpeed = brightinS;
+    }
    
 }
