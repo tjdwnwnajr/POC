@@ -249,7 +249,7 @@ public class RotateMap : MonoBehaviour
     IEnumerator RotateMapCoroutine(float targetAngle)
     {
         
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.device, deviceObject, 1f);
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.device, deviceObject, 0.3f, false, 2f);
         isRotating = true;
 
         StartCoroutine(LiftPlayer());

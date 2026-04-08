@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 {   // �̵����� ����
 
 
-
+    [SerializeField] private float walkTerm; // 발걸음 소리 간격
     private Rigidbody2D rb;
     private Animator anim;
     public static PlayerController Instance;
@@ -154,6 +154,7 @@ public class PlayerController : MonoBehaviour
         pState.invincible = false;
         gravity = rb.gravityScale;
         _fallSpeedYDampingChangeThreshold = CameraManager.Instance._fallSpeedYDampingChangeThresholde;
+        PlaySoundOn();
     }
 
     private void FixedUpdate()
@@ -162,7 +163,8 @@ public class PlayerController : MonoBehaviour
         //if (pState.dashing) return;
         if (PlayerStateList.canMove&&!PlayerStateList.isView&& !PlayerStateList.isDead)
         {
-            if(xAxis>0|| xAxis < 0)
+            
+            if (xAxis>0|| xAxis < 0)
                 TurnCheck();
             MoveX();
             Jump();
@@ -239,7 +241,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void PlaySoundOn()
+    {
+       StartCoroutine(PlayWalkSound());
+    }
 
+    IEnumerator PlayWalkSound()
+    {
+        while (true)
+        {
+            if (PlayerStateList.canMove&&!PlayerStateList.isView&&PlayerStateList.isGrounded && Mathf.Abs(xAxis) > 0.1f)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.walk, transform, 0.4f);
+            }
+            yield return new WaitForSeconds(walkTerm); // 발걸음 소리 간격
+
+        }
+    }
     private void DetectSlope()
     {
         // 중앙, 좌, 우 세 방향으로 레이캐스트

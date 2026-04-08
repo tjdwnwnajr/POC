@@ -16,6 +16,6 @@ public class LeverTriggerInteraction : TriggerInteractionBase
     {
         anim.SetBool("isRight", !isRight);
         isRight = !isRight;
-        Debug.Log(isRight);
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.lever, transform, 0.05f);
     }
 }

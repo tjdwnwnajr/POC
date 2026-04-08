@@ -318,7 +318,7 @@ MonoBehaviour:
   - "\uC774 \uC9C0\uC625\uAC19\uC740 \uACF3\uC744 \uB098\uAC00\uACE0\uC2F6\uB2E4..."
   - "\uC800 \uC55E\uC758 \uBB38\uC744 \uC5F4\uAE30 \uC704\uD574\uC120"
   - "\uC790\uC2E0\uC758 \uAFC8 \uC18D\uC73C\uB85C \uB4E4\uC5B4\uAC00\uC57C \uD55C\uB2E4."
-  - "      \n"
+  - "      \n                                        "
   - "\uADF8\uACF3\uC5D0 \uD0C8\uCD9C\uC758 \uC5F4\uC1E0\uAC00 \uC788\uB2E4."
 --- !u!4 &361312929
 Transform:
@@ -781,8 +781,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   nextScene:
-    _sceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
-    _sceneName: SampleScene
+    _sceneAsset: {fileID: 102900000, guid: ac88e63bcb0038f43bf9132a198883c8, type: 3}
+    _sceneName: StartScene
   BrightOutSpeed: 1
   waitTime: 1
   BrightInSpeed: 1
@@ -951,8 +951,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -6616619659696649875, guid: 20fa84333229b604ea5148efa27389a0, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 9d6657644fcbab740a61cfa364732b91, type: 3}
-  m_PlayOnAwake: 0
+  m_Resource: {fileID: 8300000, guid: 080105570976d7a4d820feb63a0a13e5, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

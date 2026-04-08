@@ -55,6 +55,7 @@ public class BtnTriggerInteraction : TriggerInteractionBase
     {
         isPressed = !isPressed;
         anim.SetBool("isPressed", isPressed);
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.button, transform, 0.1f);
         if (autoReleasing)
         {
             yield return new WaitForSeconds(heldTime);

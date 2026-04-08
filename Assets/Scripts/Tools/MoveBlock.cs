@@ -244,6 +244,7 @@ public class MoveBlock : MonoBehaviour
         {
             yield return new WaitForSeconds(shakeDuration);
         }
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.wall, blockToMove, 1f, false, shakeDuration + moveDuration);
         while (elapsed < moveDuration)
         {
             elapsed += Time.deltaTime;
@@ -279,8 +280,8 @@ public class MoveBlock : MonoBehaviour
             //CameraEventManager.instance.CameraOffsetEvent(transform, blockToMove, shakeDuration + moveDuration);
             yield return new WaitForSeconds(shakeDuration);
         }
-
-            while (elapsed < moveDuration)
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.wall, blockToMove, 1f, false, shakeDuration + moveDuration);
+        while (elapsed < moveDuration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / moveDuration);
@@ -310,6 +311,7 @@ public class MoveBlock : MonoBehaviour
         yield return new WaitUntil(() => CreateRock.camIsReturned == true);
         
         InputManager.DeactivatePlayerControls();
+        
         for (int i = 0; i < blocksToMove.Length; i++)
         {
             currentBlockIndex = i;
@@ -323,5 +325,6 @@ public class MoveBlock : MonoBehaviour
         if (minimapActive != null)
             minimapActive.Interact();
 
+        Destroy(gameObject, 1f);
     }
 }

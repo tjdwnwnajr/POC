@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnClickStart()
     {
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene("CutScene");
     }
 
     public void OnClickQuit()

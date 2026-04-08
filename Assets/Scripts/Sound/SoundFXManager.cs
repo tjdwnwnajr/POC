@@ -1,5 +1,7 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SoundFXManager : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class SoundFXManager : MonoBehaviour
         wall=2,
         door=3,
         device=4,
-
+        walk = 5
     }
     public static SoundFXManager instance;
     [SerializeField] private AudioSource soundFXObject;
@@ -54,5 +56,22 @@ public class SoundFXManager : MonoBehaviour
         Destroy(audioSource.gameObject, clipLength);
 
     }
+    public void PlaySoundOn(SFX audioSource, float volume)
+    {
+        StartCoroutine(PlayWalkSound(audioSource,volume));
+    }
+
+    IEnumerator PlayWalkSound(SFX audioSource, float volume)
+    {
+        AudioSource walkAudioSource = gameObject.AddComponent<AudioSource>();
+        walkAudioSource.clip = clips[(int)SFX.walk];
+        walkAudioSource.volume = volume;
+        walkAudioSource.Play();
+        Debug.Log("Walk sound started.");
+        yield return new WaitForSeconds(walkAudioSource.clip.length * 2); // 발걸음 소리 간격
+
+        Destroy(walkAudioSource);
+    }
+    
 
 }
