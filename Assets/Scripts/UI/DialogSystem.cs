@@ -17,7 +17,10 @@ public class DialogSystem : MonoBehaviour
     [Header("Player Control")]
     public MonoBehaviour playerMovementScript;
 
+    [SerializeField] private GameObject nextUI;
+
     public bool isDialogActive { get; private set; } = false;
+    private bool hasShownNextUI = false;
     private int currentDialogIndex = -1;
     private int currentSpeakerIndex = 0;
     private bool isTypingEffect = false;
@@ -134,7 +137,22 @@ public class DialogSystem : MonoBehaviour
         InputManager.ActivatePlayerControls();
 
         StartCoroutine(ExitCooldownRoutine());
+
+        if (!hasShownNextUI)
+        {
+            hasShownNextUI = true;
+            ShowNextUI();
+        }
     }
+
+    private void ShowNextUI()
+    {
+        if (nextUI != null)
+        {
+            nextUI.SetActive(true);
+        }
+    }
+
 
     private IEnumerator ExitCooldownRoutine()
     {

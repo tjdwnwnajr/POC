@@ -4,69 +4,180 @@ using UnityEngine.InputSystem;
 
 public class VideoTrigger : MonoBehaviour
 {
-    public GameObject videoCanvas;    // VideoCanvas 오브젝트 연결
-    public VideoPlayer videoPlayer;   // Video Player 오브젝트 연결
-    public Transform player;          // 플레이어 Transform 연결 (거리 체크용)
-    public MonoBehaviour playerMovementScript; // 플레이어 이동 스크립트를 여기에 드래그 (예: PlayerController)
+    [SerializeField] private GameObject videoCanvas;
+    [SerializeField] private GameObject videoPlayerObject; // VideoPlayer들이 붙어있는 오브젝트 하나만 연결
+    [SerializeField] private int currentVideoIndex = 0;
+    [SerializeField] private PlayerController player;
+    [SerializeField] private GameObject interactionUI;
 
-    public float interactRange = 2.5f;
-    private bool isPlaying = false;    // 현재 영상 재생 중인지 확인
+    private VideoPlayer[] videoPlayers;
+    private PlayerInput playerInput;
+    private InputAction useAction;
+    private bool isPlaying = false;
+    private bool isPlayerInside = false;
+    private bool hasAutoPlayedOnce = false;
+    private bool pendingAutoPlay = false;
+
+    private VideoPlayer CurrentVideo => videoPlayers[currentVideoIndex];
+
+    private void Awake()
+    {
+        playerInput = FindFirstObjectByType<PlayerInput>();
+        useAction = playerInput.actions["Use"];
+
+        // 연결한 오브젝트에서 자동으로 모든 VideoPlayer 가져옴
+        videoPlayers = videoPlayerObject.GetComponents<VideoPlayer>();
+    }
 
     private void Start()
     {
-        if (videoCanvas != null) videoCanvas.SetActive(false);
+        if (videoCanvas != null)
+            videoCanvas.SetActive(false);
 
-        // 영상이 끝까지 재생되었을 때 자동으로 닫히는 기능 연결
-        if (videoPlayer != null)
-            videoPlayer.loopPointReached += (vp) => CloseVideo();
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
+
+        // 모든 VideoPlayer 처음 상태로 초기화
+        foreach (VideoPlayer vp in videoPlayers)
+        {
+            if (vp != null)
+            {
+                vp.Stop();
+                vp.time = 0;
+                vp.loopPointReached += OnVideoEnd;
+            }
+        }
     }
 
-    void Update()
+    private void Update()
     {
-        if (player == null || videoCanvas == null) return;
+        if (player == null || videoPlayers == null || videoCanvas == null)
+            return;
 
-        // 1. 영상이 재생 중일 때 닫기 입력 체크
         if (isPlaying)
         {
-            if ((Gamepad.current != null && Gamepad.current.buttonWest.wasPressedThisFrame) ||
-                Input.GetMouseButtonDown(1))
-            {
+            // 액션맵이 꺼져있어도 작동하도록 직접 게임패드에서 읽기
+            bool skipPressed = false;
+
+            if (Gamepad.current != null)
+                skipPressed |= Gamepad.current.buttonWest.wasPressedThisFrame;
+
+            skipPressed |= Input.GetMouseButtonDown(0);
+
+            if (skipPressed)
                 CloseVideo();
-            }
-            return; // 영상 재생 중엔 아래 거리 체크 로직 실행 안 함
+
+            return;
         }
 
-        // 2. 영상 재생 전 거리 체크 및 시작 입력
-        float distance = Vector2.Distance(transform.position, player.position);
-        if (distance <= interactRange)
+        if (!hasAutoPlayedOnce && pendingAutoPlay && player.Grounded())
         {
-            if ((Gamepad.current != null && Gamepad.current.buttonWest.wasPressedThisFrame) ||
-                Input.GetMouseButtonDown(1))
+            pendingAutoPlay = false;
+            hasAutoPlayedOnce = true;
+            PlayVideo();
+            return;
+        }
+
+        if (hasAutoPlayedOnce && isPlayerInside)
+        {
+            if (interactionUI != null)
+                interactionUI.SetActive(true);
+
+            bool interactPressed = false;
+
+            if (Gamepad.current != null)
+                interactPressed |= Gamepad.current.buttonWest.wasPressedThisFrame;
+
+            interactPressed |= Input.GetMouseButtonDown(0);
+
+            if (interactPressed)
             {
+                if (interactionUI != null)
+                    interactionUI.SetActive(false);
                 PlayVideo();
             }
         }
+        else
+        {
+            if (interactionUI != null)
+                interactionUI.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        isPlayerInside = true;
+
+        if (!hasAutoPlayedOnce)
+            pendingAutoPlay = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        isPlayerInside = false;
+
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
     }
 
     public void PlayVideo()
     {
-        isPlaying = true;
-        videoCanvas.SetActive(true);
-        videoPlayer.Play();
+        if (currentVideoIndex < 0 || currentVideoIndex >= videoPlayers.Length)
+        {
+            Debug.LogWarning("VideoIndex가 범위를 벗어났어요!");
+            return;
+        }
 
-        // 플레이어 이동 스크립트 비활성화
-        if (playerMovementScript != null)
-            playerMovementScript.enabled = false;
+        Debug.Log($"재생되는 VideoPlayer : {CurrentVideo.name}, 클립 : {CurrentVideo.clip}");
+
+        isPlaying = true;
+
+        if (videoCanvas != null)
+            videoCanvas.SetActive(true);
+
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
+
+        PlayerStateList.canMove = false;
+        PlayerStateList.isView = true;
+
+        // 처음부터 재생
+        CurrentVideo.Stop();
+        CurrentVideo.time = 0;
+        CurrentVideo.Play();
     }
 
     public void CloseVideo()
     {
         isPlaying = false;
-        videoPlayer.Stop();
-        videoCanvas.SetActive(false);
+        CurrentVideo.Stop();
 
-        // 플레이어 이동 스크립트 다시 활성화
-        if (playerMovementScript != null)
-            playerMovementScript.enabled = true;
+        if (videoCanvas != null)
+            videoCanvas.SetActive(false);
+
+        PlayerStateList.canMove = true;
+        PlayerStateList.isView = false;
+    }
+
+    public void SetVideoIndex(int index)
+    {
+        if (index < 0 || index >= videoPlayers.Length)
+        {
+            Debug.LogWarning("VideoIndex가 범위를 벗어났어요!");
+            return;
+        }
+        currentVideoIndex = index;
+    }
+
+    private void OnVideoEnd(VideoPlayer vp)
+    {
+        if (vp == CurrentVideo)
+        {
+            CloseVideo();
+        }
     }
 }

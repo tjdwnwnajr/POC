@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8527959864348319151}
   - component: {fileID: 5348825707808241269}
   - component: {fileID: 7653217957340803491}
-  m_Layer: 12
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 1330326467028931163}
   - component: {fileID: 1633713703641789779}
   - component: {fileID: 770498683438422783}
-  m_Layer: 12
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 476012423399643294}
   - component: {fileID: 4797923581243515442}
   - component: {fileID: 4661205863546630890}
-  m_Layer: 12
+  m_Layer: 5
   m_Name: BtnCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4661205863546630890
 MonoBehaviour:
   m_ObjectHideFlags: 0
