@@ -6,7 +6,7 @@ public class BGMplayandstop : MonoBehaviour
 {
     private AudioSource audioSource;
     private bool playOn = false;
-
+    private bool isPlaying = false;
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -21,6 +21,10 @@ public class BGMplayandstop : MonoBehaviour
     }
     private void PlayON()
     {
-        audioSource.Play();
+        if (!isPlaying)
+        {
+            audioSource.Play();
+            isPlaying = true;
+        }
     }
 }

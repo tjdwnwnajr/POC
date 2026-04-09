@@ -626,15 +626,22 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("isDamaged");
 
         // 1초 대기 (Death 애니메이션 재생)
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
+        SceneFadeManager.instance.StartFadeOut();
+        yield return new WaitForSeconds(0.5f); // 페이드아웃 시간
+        Respawn();
+        yield return new WaitForSeconds(0.5f); // 페이드아웃 시간
+        SceneFadeManager.instance.StartFadeIn();
 
-       Respawn();
+
+        
     }
     private void Respawn()
     {
         transform.position = SavePoint.GetRespawnPosition();
         anim.SetTrigger("isAlive");
         // 입력 재활성화
+        CameraManager.Instance.InitCameraByPlayerPosition();
         InputManager.ActivatePlayerControls();
 
         // 상태 복구
