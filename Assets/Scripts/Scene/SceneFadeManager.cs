@@ -22,9 +22,13 @@ public class SceneFadeManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-          
+            DontDestroyOnLoad(gameObject);
         }
- 
+
+        else
+        {
+            Destroy(gameObject);
+        }
         _fadeOutStartColor.a = 0f;
    
     }
@@ -78,5 +82,14 @@ public class SceneFadeManager : MonoBehaviour
             IsFadingIn = true;
         }
     }
-
+    public void ChangeSpeedSettings(float fadeoutS, float fadeinS)
+    {
+        _fadeOutSpeed = fadeoutS;
+        _fadeInSpeed = fadeinS;
+    }
+    public void ReturnSpeedSettings()
+    {
+        _fadeOutSpeed = 5f;
+        _fadeInSpeed = 5f;
+    }
 }
