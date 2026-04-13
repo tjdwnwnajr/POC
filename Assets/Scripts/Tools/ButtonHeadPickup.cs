@@ -4,17 +4,20 @@ using UnityEngine.InputSystem;
 public class ButtonHeadPickup : MonoBehaviour
 {
     [SerializeField] private InputActionReference interactAction;
+    [SerializeField] private GameObject getHeadUI; // 추가
 
     private bool playerInRange;
 
     private void OnEnable()
     {
-        interactAction.action.performed += OnInteract;
+        if (interactAction != null)
+            interactAction.action.performed += OnInteract;
     }
 
     private void OnDisable()
     {
-        interactAction.action.performed -= OnInteract;
+        if (interactAction != null)
+            interactAction.action.performed -= OnInteract;
     }
 
     private void OnInteract(InputAction.CallbackContext ctx)
@@ -23,7 +26,9 @@ public class ButtonHeadPickup : MonoBehaviour
 
         PlayerStateList.headBtn = true;
 
-        gameObject.SetActive(false); // 줍고 사라짐
+        ShowUI(); // 추가
+
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -36,5 +41,11 @@ public class ButtonHeadPickup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             playerInRange = false;
+    }
+
+    private void ShowUI()
+    {
+        if (getHeadUI != null)
+            getHeadUI.SetActive(true);
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 public class StartDialog : MonoBehaviour
 {
     [SerializeField] private DialogSystem dialogSystem;
-    [SerializeField] private PlayerController player;
     [SerializeField] private GameObject interactionUI;
     [SerializeField] private Transform dialogStartPoint;
 
+    private PlayerController player;
     private PlayerInput playerInput;
     private InputAction useAction;
     private Rigidbody2D playerRb;
@@ -23,6 +23,13 @@ public class StartDialog : MonoBehaviour
         playerRb = player.GetComponent<Rigidbody2D>();
 
         interactionUI.SetActive(false);
+
+        // 태그로 플레이어 찾아오기
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+            player = playerObj.GetComponent<PlayerController>();
+        else
+            Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없어요!");
     }
 
     private void Update()

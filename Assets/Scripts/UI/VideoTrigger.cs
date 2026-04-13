@@ -7,9 +7,9 @@ public class VideoTrigger : MonoBehaviour
     [SerializeField] private GameObject videoCanvas;
     [SerializeField] private GameObject videoPlayerObject; // VideoPlayer들이 붙어있는 오브젝트 하나만 연결
     [SerializeField] private int currentVideoIndex = 0;
-    [SerializeField] private PlayerController player;
     [SerializeField] private GameObject interactionUI;
 
+    private PlayerController player;
     private VideoPlayer[] videoPlayers;
     private PlayerInput playerInput;
     private InputAction useAction;
@@ -27,6 +27,13 @@ public class VideoTrigger : MonoBehaviour
 
         // 연결한 오브젝트에서 자동으로 모든 VideoPlayer 가져옴
         videoPlayers = videoPlayerObject.GetComponents<VideoPlayer>();
+
+        // 태그로 플레이어 찾아오기
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+            player = playerObj.GetComponent<PlayerController>();
+        else
+            Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없어요!");
     }
 
     private void Start()

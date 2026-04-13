@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 
 public class KeyOneBox : MonoBehaviour
 {
-    [SerializeField] private InputActionReference interactAction; // Inspector¿¡¼­ ÁöÁ¤
+    [SerializeField] private InputActionReference interactAction;
+    [SerializeField] private GameObject getKeyUI; // Ãß°¡
 
     private bool playerInRange = false;
     private bool alreadyTaken = false;
@@ -29,7 +30,8 @@ public class KeyOneBox : MonoBehaviour
             PlayerStateList.keyOne = true;
             alreadyTaken = true;
 
-            Debug.Log("¿­¼è 1 È¹µæ!");
+            ShowUI(); // º¯°æµÈ ºÎºÐ
+
             gameObject.SetActive(false);
         }
     }
@@ -44,5 +46,11 @@ public class KeyOneBox : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             playerInRange = false;
+    }
+
+    private void ShowUI()
+    {
+        if (getKeyUI != null)
+            getKeyUI.SetActive(true);
     }
 }
