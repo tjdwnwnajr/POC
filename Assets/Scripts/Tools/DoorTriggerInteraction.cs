@@ -10,7 +10,13 @@ public class DoorTriggerInteraction : TriggerInteractionBase
         One,
         Two,
         Three,
-        Four
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight,
+        Nine,
+        Ten
     }
     public enum DoorType
     {
@@ -52,12 +58,7 @@ public class DoorTriggerInteraction : TriggerInteractionBase
         }
     }
     public override void Interact()
-    {
-        for(int i = 0;  i<3; i++)
-        {
-            Debug.Log(SceneSwapManager.isDreamCleared[i]);
-        }
-        
+    { 
         if (isForRespawn)
         {
             return;
@@ -87,6 +88,8 @@ public class DoorTriggerInteraction : TriggerInteractionBase
         if(_doorType != DoorType.None)
             SceneSwapManager.isDreamCleared[(int)_doorType] = true;
         //열쇠를 찾는 애니메이션 재생
+        Animator anim = GetComponent<Animator>();
+        anim.SetTrigger("isOpen");
         yield return new WaitForSeconds(2f);
         
 

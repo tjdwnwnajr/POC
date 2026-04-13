@@ -22,74 +22,104 @@ public class DoorDialogueSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText;
 
     [Header("Fade Settings")]
-    [SerializeField] private float fadeInDuration = 2.5f;    // 스르륵 나오는 시간 (길수록 천천히)
-    [SerializeField] private float holdDuration = 3.0f;      // 완전히 보인 후 유지 시간
-    [SerializeField] private float fadeOutDuration = 1.5f;   // 사라지는 시간
-    [SerializeField] private float delayBetween = 0.5f;      // 다음 대사까지 텀
-
-    // 대사 목록
-    private string[] dialogues = new string[]
+    [SerializeField] private float fadeInDuration = 2.5f;
+    [SerializeField] private float holdDuration = 3.0f;
+    [SerializeField] private float fadeOutDuration = 1.5f;
+    [SerializeField] private float delayBetween = 0.5f;
+    private TextMeshProUGUI currentText;
+    // 기본 대사 (인스펙터에서 교체 가능)
+    [SerializeField]private string[] dialogues = new string[]
     {
         "꿈의 열쇠를 찾아와라.",
         "그렇지 않은 자에게는",
         "오직...죽음 뿐."
     };
 
-    private int currentIndex = 0;
     private Coroutine dialogueCoroutine;
+
+    // 대사 완료 시 호출할 콜백
+    private System.Action onComplete;
 
     private void Awake()
     {
+
         if (instance == null)
             instance = this;
-
+        
+        currentText = dialogueText;
         HideImmediate();
     }
 
     // =============================================
-    // 외부에서 호출 (CutsceneWalker.StopWalking)
+    // 기존 방식: 내부 대사로 시작 (콜백 없음)
     // =============================================
     public void StartDialogue()
     {
-        currentIndex = 0;
-        dialogueText.gameObject.SetActive(true);
+        StartDialogueWithLines(dialogues, null);
+    }
+
+    // =============================================
+    // 신규: 외부 대사 배열 + 완료 콜백으로 시작
+    // OpenLastDoor 등 외부에서 호출
+    // =============================================
+    public void StartDialogueWithLines(string[] lines, System.Action callback)
+    {
+        onComplete = callback;
+        currentText.gameObject.SetActive(true);
 
         if (dialogueCoroutine != null)
             StopCoroutine(dialogueCoroutine);
 
-        dialogueCoroutine = StartCoroutine(PlayAllLines());
+        dialogueCoroutine = StartCoroutine(PlayAllLines(lines));
+    }
+
+    // TMP 교체 메서드
+    public void ChangeText(TextMeshProUGUI newText)
+    {
+        HideImmediate();
+        currentText = newText;
+    }
+
+    // 복구 메서드 (PlayAllLines 끝날 때 자동 호출)
+    private void RestoreDefaultText()
+    {
+        HideImmediate();
+        currentText = dialogueText;
     }
 
     // =============================================
     // 내부 로직
     // =============================================
-    private IEnumerator PlayAllLines()
+    private IEnumerator PlayAllLines(string[] lines)
     {
-        foreach (string line in dialogues)
+        foreach (string line in lines)
         {
             yield return StartCoroutine(ShowLine(line));
             yield return new WaitForSeconds(delayBetween);
         }
 
-        // 모든 대사 끝
         yield return new WaitForSeconds(0.5f);
-        HideImmediate();
-        InputManager.ActivatePlayerControls();
+
+        RestoreDefaultText();
+
+        // 콜백이 있으면 콜백 호출, 없으면 기존처럼 컨트롤 활성화
+        if (onComplete != null)
+            onComplete.Invoke();
+        else
+            InputManager.ActivatePlayerControls();
     }
 
     private IEnumerator ShowLine(string line)
     {
-        // 텍스트 세팅, 완전 투명하게 시작
-        dialogueText.text = line;
+        currentText.text = line;
         SetAlpha(0f);
 
-        // 페이드 인 (스르륵 나오기)
+        // 페이드 인
         float elapsed = 0f;
         while (elapsed < fadeInDuration)
         {
             elapsed += Time.deltaTime;
             float alpha = Mathf.Clamp01(elapsed / fadeInDuration);
-            // EaseIn 커브 적용 (더 자연스럽게)
             SetAlpha(alpha * alpha);
             yield return null;
         }
@@ -98,7 +128,7 @@ public class DoorDialogueSystem : MonoBehaviour
         // 유지
         yield return new WaitForSeconds(holdDuration);
 
-        // 페이드 아웃 (스르륵 사라지기)
+        // 페이드 아웃
         elapsed = 0f;
         while (elapsed < fadeOutDuration)
         {
@@ -112,15 +142,15 @@ public class DoorDialogueSystem : MonoBehaviour
 
     private void SetAlpha(float alpha)
     {
-        Color c = dialogueText.color;
+        Color c = currentText.color;
         c.a = alpha;
-        dialogueText.color = c;
+        currentText.color = c;
     }
 
     private void HideImmediate()
     {
-        dialogueText.text = "";
+        currentText.text = "";
         SetAlpha(0f);
-        dialogueText.gameObject.SetActive(false);
+        currentText.gameObject.SetActive(false);
     }
 }
