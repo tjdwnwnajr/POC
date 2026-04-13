@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 public class DoorTrigger : MonoBehaviour
 {
+    public static bool isOpened = true;
     [SerializeField] private GameObject doorB;
     [SerializeField] private GameObject keyUsePanel;
     [SerializeField] private GameObject noKeyPanel;
