@@ -4,9 +4,17 @@ using UnityEngine.InputSystem;
 public class ButtonHeadPickup : MonoBehaviour
 {
     [SerializeField] private InputActionReference interactAction;
-    [SerializeField] private GameObject getHeadUI; // 추가
+    [SerializeField] private GameObject getHeadUI;
 
     private bool playerInRange;
+
+    private void Start()
+    {
+        if (WorldStateManager.Instance != null && WorldStateManager.Instance.headBtnTaken)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -26,8 +34,10 @@ public class ButtonHeadPickup : MonoBehaviour
 
         PlayerStateList.headBtn = true;
 
-        ShowUI(); // 추가
+        if (WorldStateManager.Instance != null)
+            WorldStateManager.Instance.headBtnTaken = true;
 
+        ShowUI();
         gameObject.SetActive(false);
     }
 

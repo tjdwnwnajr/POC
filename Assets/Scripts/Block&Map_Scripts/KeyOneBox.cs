@@ -9,6 +9,15 @@ public class KeyOneBox : MonoBehaviour
     private bool playerInRange = false;
     private bool alreadyTaken = false;
 
+    private void Start()
+    {
+        if (WorldStateManager.Instance != null && WorldStateManager.Instance.keyOneTaken)
+        {
+            alreadyTaken = true;
+            gameObject.SetActive(false);
+        }
+    }
+
     private void OnEnable()
     {
         if (interactAction != null)
@@ -24,14 +33,17 @@ public class KeyOneBox : MonoBehaviour
     private void Update()
     {
         if (!playerInRange || alreadyTaken) return;
+        if (interactAction == null) return;
 
         if (interactAction.action.triggered)
         {
             PlayerStateList.keyOne = true;
             alreadyTaken = true;
 
-            ShowUI(); // 변경된 부분
+            if (WorldStateManager.Instance != null)
+                WorldStateManager.Instance.keyOneTaken = true;
 
+            ShowUI();
             gameObject.SetActive(false);
         }
     }
