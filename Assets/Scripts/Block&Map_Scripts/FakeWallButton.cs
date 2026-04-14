@@ -3,22 +3,39 @@ using UnityEngine.InputSystem;
 
 public class FakeWallButton : MonoBehaviour
 {
-    [SerializeField] private InputActionReference interactAction; // Inspector ÁöÁ¤
+    [SerializeField] private InputActionReference interactAction;
     [SerializeField] private WallFadeOut targetWall;
 
     private bool playerInRange = false;
     private bool pressed = false;
 
+    private void Start()
+    {
+        if (WorldStateManager.Instance != null && WorldStateManager.Instance.fakeWallOpened)
+        {
+            pressed = true;
+
+            if (targetWall != null)
+                targetWall.FadeOut();
+        }
+    }
+
     private void OnEnable()
     {
-        interactAction.action.Enable();
-        interactAction.action.performed += OnInteract;
+        if (interactAction != null)
+        {
+            interactAction.action.Enable();
+            interactAction.action.performed += OnInteract;
+        }
     }
 
     private void OnDisable()
     {
-        interactAction.action.performed -= OnInteract;
-        interactAction.action.Disable();
+        if (interactAction != null)
+        {
+            interactAction.action.performed -= OnInteract;
+            interactAction.action.Disable();
+        }
     }
 
     private void OnInteract(InputAction.CallbackContext context)
@@ -28,7 +45,11 @@ public class FakeWallButton : MonoBehaviour
 
         pressed = true;
 
-        targetWall.FadeOut();
+        if (WorldStateManager.Instance != null)
+            WorldStateManager.Instance.fakeWallOpened = true;
+
+        if (targetWall != null)
+            targetWall.FadeOut();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

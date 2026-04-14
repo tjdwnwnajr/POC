@@ -5,48 +5,63 @@ using UnityEngine.EventSystems;
 public class DoorTrigger : MonoBehaviour
 {
     public static bool isOpened = true;
+
     [SerializeField] private GameObject doorB;
     [SerializeField] private GameObject keyUsePanel;
     [SerializeField] private GameObject noKeyPanel;
     [SerializeField] private GameObject yesButton;
     [SerializeField] private GameObject noButton;
+
     private bool playerInRange = false;
     private bool isPanelOpen = false;
     private bool isKeyPanel = false;
 
+    private void Start()
+    {
+        if (WorldStateManager.Instance != null && WorldStateManager.Instance.doorOpened)
+        {
+            ApplyOpenedState();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
+        if (!other.CompareTag("Player")) return;
+        if (WorldStateManager.Instance != null && WorldStateManager.Instance.doorOpened) return;
 
-            if (PlayerStateList.keyOne)
-            {
+        playerInRange = true;
+
+        if (PlayerStateList.keyOne)
+        {
+            if (keyUsePanel != null)
                 keyUsePanel.SetActive(true);
+
+            if (EventSystem.current != null && yesButton != null)
                 EventSystem.current.SetSelectedGameObject(yesButton);
-                isPanelOpen = true;
-                isKeyPanel = true;
-                PlayerStateList.canMove = false;
-                PlayerStateList.isView = true;
-            }
-            else
-            {
+
+            isPanelOpen = true;
+            isKeyPanel = true;
+            PlayerStateList.canMove = false;
+            PlayerStateList.isView = true;
+        }
+        else
+        {
+            if (noKeyPanel != null)
                 noKeyPanel.SetActive(true);
-                isPanelOpen = true;
-                isKeyPanel = false;
-                PlayerStateList.canMove = false;
-                PlayerStateList.isView = true;
-            }
+
+            isPanelOpen = true;
+            isKeyPanel = false;
+            PlayerStateList.canMove = false;
+            PlayerStateList.isView = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
-            ClosePanels();
-        }
+        if (!other.CompareTag("Player")) return;
+
+        playerInRange = false;
+        ClosePanels();
     }
 
     private void Update()
@@ -54,7 +69,6 @@ public class DoorTrigger : MonoBehaviour
         if (!isPanelOpen) return;
         if (Gamepad.current == null) return;
 
-        // noKeyPanel일때는 West버튼으로 닫기만 함
         if (!isKeyPanel)
         {
             if (Gamepad.current.buttonWest.wasPressedThisFrame)
@@ -62,11 +76,9 @@ public class DoorTrigger : MonoBehaviour
             return;
         }
 
-        // West버튼으로 현재 선택된 버튼 확정
         if (Gamepad.current.buttonWest.wasPressedThisFrame)
         {
-            // EventSystem에서 현재 선택된 오브젝트가 무엇인지 확인
-            GameObject selected = EventSystem.current.currentSelectedGameObject;
+            GameObject selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
 
             if (selected == yesButton)
                 OnClickYes();
@@ -79,9 +91,16 @@ public class DoorTrigger : MonoBehaviour
     {
         isPanelOpen = false;
         isKeyPanel = false;
-        keyUsePanel.SetActive(false);
-        noKeyPanel.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
+
+        if (keyUsePanel != null)
+            keyUsePanel.SetActive(false);
+
+        if (noKeyPanel != null)
+            noKeyPanel.SetActive(false);
+
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
+
         PlayerStateList.canMove = true;
         PlayerStateList.isView = false;
     }
@@ -93,14 +112,23 @@ public class DoorTrigger : MonoBehaviour
         ClosePanels();
 
         PlayerStateList.keyOne = false;
-        gameObject.SetActive(false);
 
-        if (doorB != null)
-            doorB.SetActive(true);
+        if (WorldStateManager.Instance != null)
+            WorldStateManager.Instance.doorOpened = true;
+
+        ApplyOpenedState();
     }
 
     public void OnClickNo()
     {
         ClosePanels();
+    }
+
+    private void ApplyOpenedState()
+    {
+        gameObject.SetActive(false);
+
+        if (doorB != null)
+            doorB.SetActive(true);
     }
 }
