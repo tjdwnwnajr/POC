@@ -25,13 +25,19 @@ public class ButtonInteract : MonoBehaviour
     private void OnEnable()
     {
         if (interactAction != null)
+        {
+            interactAction.action.Enable();
             interactAction.action.performed += OnInteract;
+        }
     }
 
     private void OnDisable()
     {
         if (interactAction != null)
+        {
             interactAction.action.performed -= OnInteract;
+            interactAction.action.Disable();
+        }
     }
 
     private void OnInteract(InputAction.CallbackContext ctx)
@@ -77,6 +83,9 @@ public class ButtonInteract : MonoBehaviour
     private void ShowUI()
     {
         if (needHeadUI != null)
+        {
             needHeadUI.SetActive(true);
+            Debug.Log("UI 켜짐");
+        }
     }
 }

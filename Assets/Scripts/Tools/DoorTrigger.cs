@@ -11,10 +11,20 @@ public class DoorTrigger : MonoBehaviour
     [SerializeField] private GameObject noKeyPanel;
     [SerializeField] private GameObject yesButton;
     [SerializeField] private GameObject noButton;
+    [SerializeField] private float interactDistance = 3.0f;
 
-    private bool playerInRange = false;
+    private Transform player;
     private bool isPanelOpen = false;
     private bool isKeyPanel = false;
+    private bool hasTriggeredThisRange = false;
+
+    private void Awake()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObj != null)
+            player = playerObj.transform;
+    }
 
     private void Start()
     {
@@ -24,48 +34,30 @@ public class DoorTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void Update()
     {
-        if (!other.CompareTag("Player")) return;
+        if (player == null) return;
         if (WorldStateManager.Instance != null && WorldStateManager.Instance.doorOpened) return;
 
-        playerInRange = true;
+        float distance = Vector2.Distance(transform.position, player.position);
+        bool inRange = distance <= interactDistance;
 
-        if (PlayerStateList.keyOne)
+        if (inRange)
         {
-            if (keyUsePanel != null)
-                keyUsePanel.SetActive(true);
-
-            if (EventSystem.current != null && yesButton != null)
-                EventSystem.current.SetSelectedGameObject(yesButton);
-
-            isPanelOpen = true;
-            isKeyPanel = true;
-            PlayerStateList.canMove = false;
-            PlayerStateList.isView = true;
+            if (!hasTriggeredThisRange)
+            {
+                OpenPanel();
+                hasTriggeredThisRange = true;
+            }
         }
         else
         {
-            if (noKeyPanel != null)
-                noKeyPanel.SetActive(true);
+            hasTriggeredThisRange = false;
 
-            isPanelOpen = true;
-            isKeyPanel = false;
-            PlayerStateList.canMove = false;
-            PlayerStateList.isView = true;
+            if (isPanelOpen)
+                ClosePanels();
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (!other.CompareTag("Player")) return;
-
-        playerInRange = false;
-        ClosePanels();
-    }
-
-    private void Update()
-    {
         if (!isPanelOpen) return;
         if (Gamepad.current == null) return;
 
@@ -73,6 +65,7 @@ public class DoorTrigger : MonoBehaviour
         {
             if (Gamepad.current.buttonWest.wasPressedThisFrame)
                 ClosePanels();
+
             return;
         }
 
@@ -85,6 +78,31 @@ public class DoorTrigger : MonoBehaviour
             else if (selected == noButton)
                 OnClickNo();
         }
+    }
+
+    private void OpenPanel()
+    {
+        if (PlayerStateList.keyOne)
+        {
+            if (keyUsePanel != null)
+                keyUsePanel.SetActive(true);
+
+            if (EventSystem.current != null && yesButton != null)
+                EventSystem.current.SetSelectedGameObject(yesButton);
+
+            isKeyPanel = true;
+        }
+        else
+        {
+            if (noKeyPanel != null)
+                noKeyPanel.SetActive(true);
+
+            isKeyPanel = false;
+        }
+
+        isPanelOpen = true;
+        PlayerStateList.canMove = false;
+        PlayerStateList.isView = true;
     }
 
     private void ClosePanels()
@@ -107,8 +125,6 @@ public class DoorTrigger : MonoBehaviour
 
     public void OnClickYes()
     {
-        if (!playerInRange) return;
-
         ClosePanels();
 
         PlayerStateList.keyOne = false;
