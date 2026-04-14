@@ -8,45 +8,56 @@ public enum OnDirection
 
 public class MirrorOnOff : MonoBehaviour
 {
-    private Collider2D _coll;
-    private Vector2 exitDir;
-    [SerializeField] private OnDirection OnDir = OnDirection.Left;
-    
-
-    private void Awake()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        _coll = GetComponent<Collider2D>();
+        if (collision.CompareTag("Player"))
+            PlayerStateList.isMirror = true;
     }
-  
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
-        {
-            exitDir =  (collision.transform.position - _coll.bounds.center).normalized;
-            MirrorEffect();
-        }
+            PlayerStateList.isMirror = false;
     }
-    
-    private void MirrorEffect()
-    {
-        if (OnDir == OnDirection.Left)
-        {
-            if (exitDir.x < 0f)
-                PlayerStateList.isMirror = true;
-            else
-            {
-                PlayerStateList.isMirror = false;
-            }
-        }
-        else
-        {
-            if (exitDir.x > 0f)
-                PlayerStateList.isMirror = true;
-            else
-            {
-                PlayerStateList.isMirror = false;
-            }
-        }
-        
-    }
+    //private Collider2D _coll;
+    //private Vector2 exitDir;
+    //[SerializeField] private OnDirection OnDir = OnDirection.Left;
+
+
+    //private void Awake()
+    //{
+    //    _coll = GetComponent<Collider2D>();
+    //}
+
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Player"))
+    //    {
+    //        exitDir =  (collision.transform.position - _coll.bounds.center).normalized;
+    //        MirrorEffect();
+    //    }
+    //}
+
+    //private void MirrorEffect()
+    //{
+    //    if (OnDir == OnDirection.Left)
+    //    {
+    //        if (exitDir.x < 0f)
+    //            PlayerStateList.isMirror = true;
+    //        else
+    //        {
+    //            PlayerStateList.isMirror = false;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (exitDir.x > 0f)
+    //            PlayerStateList.isMirror = true;
+    //        else
+    //        {
+    //            PlayerStateList.isMirror = false;
+    //        }
+    //    }
+
+    //}
 }

@@ -20,6 +20,7 @@ public class StartDialog : MonoBehaviour
     {
         playerInput = FindFirstObjectByType<PlayerInput>();
         useAction = playerInput.actions["Use"];
+        player = FindFirstObjectByType<PlayerController>();
         playerRb = player.GetComponent<Rigidbody2D>();
 
         interactionUI.SetActive(false);

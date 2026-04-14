@@ -71,12 +71,19 @@ public class RStickPlatform : MonoBehaviour
 
         if (useMoveLimit)
         {
-            float leftL = leftLimit.position.x;
-            float rightL = rightLimit.position.x;
+            //float leftL = leftLimit.position.x;
+            //float rightL = rightLimit.position.x;
+            //nextPos.x = Mathf.Clamp(nextPos.x, leftL, rightL);
+            //if (nextPos.x <= leftL || nextPos.x >= rightL)
+            //    currentVelocity = 0f;
+            float leftL = Mathf.Min(leftLimit.position.x, rightLimit.position.x);
+            float rightL = Mathf.Max(leftLimit.position.x, rightLimit.position.x);
+
             nextPos.x = Mathf.Clamp(nextPos.x, leftL, rightL);
             if (nextPos.x <= leftL || nextPos.x >= rightL)
                 currentVelocity = 0f;
         }
+
 
         transform.position = nextPos;
 

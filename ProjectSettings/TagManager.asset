@@ -9,6 +9,7 @@ TagManager:
   - Rock
   - Damage
   - MapCam
+  - Canvas
   layers:
   - Default
   - TransparentFX

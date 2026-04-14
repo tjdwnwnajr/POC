@@ -11,6 +11,18 @@ public class UITriggerObject : MonoBehaviour
 
     private void Awake()
     {
+        if(uiObject ==null && interactionUI == null)
+        {
+            foreach (Transform child in transform)
+            {
+                if (child.CompareTag("Canvas"))
+                {
+                    uiObject = child.gameObject;
+                    interactionUI = child.gameObject;
+                    break;
+                }
+            }
+        }
         HideUI();
         HideInteractionUI(); // null이어도 안전
     }
