@@ -32,7 +32,7 @@ public class MoveBlock : MonoBehaviour
     [SerializeField] private bool cameraMoveOn = true;
 
     [SerializeField] private bool onlyOne = false;
-    private bool isUsed = false;
+    [HideInInspector]public bool isUsed = false;
 
     private BtnMinimapActive minimapActive;
 
@@ -308,6 +308,8 @@ public class MoveBlock : MonoBehaviour
     }
     private IEnumerator MovebyRock()
     {
+        
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.button, transform, 0.5f);
         yield return new WaitUntil(() => CreateRock.camIsReturned == true);
         
         InputManager.DeactivatePlayerControls();

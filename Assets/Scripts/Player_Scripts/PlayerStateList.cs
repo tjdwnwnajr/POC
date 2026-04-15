@@ -19,8 +19,8 @@ public class PlayerStateList : MonoBehaviour
     public static bool keyOne = false;
     public static bool headBtn = false;
     public static bool isDead = false;
-    public static bool firstKeyFounded = true;
-    public static bool secondKeyFounded = true;
+    public static bool firstKeyFounded = false;
+    public static bool secondKeyFounded = false;
     public static bool thirdKeyFounded = false;
     public static bool keyReady = false;
 

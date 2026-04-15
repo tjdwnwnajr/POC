@@ -145,7 +145,7 @@ public class GyroRotateBlock : MonoBehaviour
         currentEuler.z = targetAngle;
         transform.eulerAngles = currentEuler;
 
-        Debug.Log("회전 완료!");
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.clear, transform, 0.5f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

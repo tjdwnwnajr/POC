@@ -12,7 +12,15 @@ public class SoundFXManager : MonoBehaviour
         wall=2,
         door=3,
         device=4,
-        walk = 5
+        walk = 5,
+        jump = 6,
+        die = 7,
+        chest = 8,
+        clear = 9,
+        portal = 10,
+        mirrorOn = 11,
+        mirrorOff = 12,
+        blockappear = 13,
     }
     public static SoundFXManager instance;
     [SerializeField] private AudioSource soundFXObject;

@@ -147,11 +147,17 @@ public class RotateBlock : MonoBehaviour
         checkTimer = 0f;
 
         angularSpeed = 0f;
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.clear, transform, 0.5f);
 
         // 카메라 흔들림 같은 연출
-        if(shakeOn)
+        if (shakeOn)
+        {
             CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
-        if (offsetOn)
+            SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.blockappear, transform, 0.5f);
+            
+        }
+
+            if (offsetOn)
             CameraEventManager.instance.CameraOffsetEvent(transform, targetPos);
         
 

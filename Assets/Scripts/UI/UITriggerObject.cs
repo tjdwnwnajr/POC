@@ -5,10 +5,10 @@ public class UITriggerObject : MonoBehaviour
 {
     [SerializeField] private GameObject uiObject;
     [SerializeField] private GameObject interactionUI;
-
+    
     private bool hasShownOnce = false;
     private bool playerInRange = false;
-
+    private MoveBlock moveBlock;
     private void Awake()
     {
         if(uiObject ==null && interactionUI == null)
@@ -25,6 +25,8 @@ public class UITriggerObject : MonoBehaviour
         }
         HideUI();
         HideInteractionUI(); // null이어도 안전
+        moveBlock = GetComponent<MoveBlock>();
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -55,6 +57,15 @@ public class UITriggerObject : MonoBehaviour
 
     private void Update()
     {
+        if(moveBlock != null)
+        {
+            if(moveBlock.isUsed == true)
+            {
+                HideUI();
+                HideInteractionUI();
+                return;
+            }
+        }
         if (!hasShownOnce) return;
         if (!playerInRange) return;
 

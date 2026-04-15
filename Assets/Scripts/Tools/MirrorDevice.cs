@@ -17,9 +17,10 @@ public class MirrorDevice : TriggerInteractionBase
         GameObject player = PlayerController.Instance.gameObject;
         SpriteRenderer sr = player.GetComponent<SpriteRenderer>();
 
-        // 2초에 걸쳐 투명하게
+        // 1.5초에 걸쳐 투명하게
         float elapsed = 0f;
-        float duration = 2f;
+        float duration = 1.5f;
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.mirrorOn, transform, 0.5f);
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
@@ -30,11 +31,15 @@ public class MirrorDevice : TriggerInteractionBase
         }
 
         // 순간이동 및 미러 활성화
+
         player.transform.position = mirrorSpawnPoint.position;
         PlayerStateList.isMirror = mirrorOn;
 
+        yield return new WaitForSeconds(0.5f); // 잠시 대기
+
         // 다시 불투명하게
         elapsed = 0f;
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.mirrorOff, transform, 0.5f);
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;

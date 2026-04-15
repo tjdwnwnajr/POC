@@ -89,9 +89,23 @@ public class DoorTriggerInteraction : TriggerInteractionBase
             SceneSwapManager.isDreamCleared[(int)_doorType] = true;
         //열쇠를 찾는 애니메이션 재생
         Animator anim = GetComponent<Animator>();
+        //상자 여는 소리
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.chest, transform, 1f);
+
         anim.SetTrigger("isOpen");
         yield return new WaitForSeconds(2f);
-        
+        if(_doorType == DoorType.DreamOne)
+        {
+            PlayerStateList.firstKeyFounded = true;
+        }
+        else if(_doorType == DoorType.DreamTwo)
+        {
+            PlayerStateList.secondKeyFounded = true;
+        }
+        else if(_doorType == DoorType.DreamThree)
+        {
+            PlayerStateList.thirdKeyFounded = true;
+        }
 
         //잠에서깬다
         SceneSwapManager.SwapSceneFromDoorUse(_sceneToLoad, _doorToSpawnTo, isBox);

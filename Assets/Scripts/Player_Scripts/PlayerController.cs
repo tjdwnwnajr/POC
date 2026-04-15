@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     //점프 변수
     [Header("Jump Controller")]
+    private bool jumpSoundPlayed = false;
     [SerializeField] private float jumpPower = 45; 
     [SerializeField] private Transform groundCheckPoint;
     [SerializeField] private float groundCheckDistanceY = 0.2f; 
@@ -224,7 +225,12 @@ public class PlayerController : MonoBehaviour
             //Attack();
             //CatchRope();
         }
-        
+        if (InputManager.JumpWasPressed && (coyoteTimeCounter > 0 || airJumpCounter < maxAirJumps))
+        {
+            SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.jump, transform, 0.5f);
+        }
+
+
 
         //���ϼӵ��� �Ӱ谪���� �۾ƾ���, ī�޶� y�����ӵ��� �̹� �������� ���°� �ƴϾ����, �̹� ���ϻ��·� ������ ���°� �ƴϾ����
         if (rb.linearVelocityY < _fallSpeedYDampingChangeThreshold && !CameraManager.Instance.IsLerpingYDamping && !CameraManager.Instance.LerpedFromPlayerFalling)
@@ -432,7 +438,8 @@ public class PlayerController : MonoBehaviour
             pState.jumping = false;
             coyoteTimeCounter = coyoteTime;
             airJumpCounter = 0;
-        }
+            jumpSoundPlayed = false;
+}
         //���� ��
         else
         {
@@ -469,6 +476,7 @@ public class PlayerController : MonoBehaviour
             pState.jumping = true;
             jumpCountTime = 0;
             jumpwasPressed = false;
+            
         }
         //�̴� ����
         else if (pState.jumping && jumpwasPressed && airJumpCounter < maxAirJumps)
@@ -477,6 +485,7 @@ public class PlayerController : MonoBehaviour
             airJumpCounter++;
             jumpCountTime = 0;
             jumpwasPressed = false;
+            //SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.jump, transform, 0.2f);
         }
 
         //���� ĵ��
@@ -614,6 +623,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator Death()
     {
         PlayerStateList.isDead = true;
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.die, transform, 0.5f);
 
         // 입력 비활성화
         InputManager.DeactivatePlayerControls();
