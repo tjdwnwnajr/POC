@@ -47,7 +47,7 @@ public class RopeGrabtest : MonoBehaviour
     private Vector3 moveStartPos;
     private Vector3 moveTargetPos;
     private float moveProgress = 0f;
-    [SerializeField] private float ropeVelocityThreshold = 0.5f;
+    [SerializeField] private float ropeVelocityThreshold = 0.3f;
 
     private Rigidbody2D rb;
     private Rigidbody2D swingTarget;
@@ -270,7 +270,7 @@ public class RopeGrabtest : MonoBehaviour
 
         if (Mathf.Abs(swingTarget.linearVelocityX) > ropeVelocityThreshold)
         {
-            Debug.Log("밧줄이 움직이는 중. 속도: " + swingTarget.linearVelocityX);
+            //Debug.Log("밧줄이 움직이는 중. 속도: " + swingTarget.linearVelocityX);
             return;
         }
         Rigidbody2D nextChain = null;
@@ -292,7 +292,7 @@ public class RopeGrabtest : MonoBehaviour
         else
         {
             int nextIndex = currentIndex + 1;
-            if (nextIndex < currentParent.childCount-1)
+            if (nextIndex < currentParent.childCount-2)
             {
                 Transform siblingTransform = currentParent.GetChild(nextIndex);
                 nextChain = siblingTransform.GetComponent<Rigidbody2D>();

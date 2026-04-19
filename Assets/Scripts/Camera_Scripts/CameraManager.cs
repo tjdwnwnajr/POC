@@ -31,6 +31,7 @@ public class CameraManager : MonoBehaviour
     //평상시 y반응속도 값
     private float _normYPanAmount;
 
+    [SerializeField] private bool zoneOnOff = false;
     [SerializeField] private Collider2D[] _cameraZoneColliders;
 
     #region Camera panning in camera control triggers
@@ -53,6 +54,7 @@ public class CameraManager : MonoBehaviour
 
     public void InitCameraByPlayerPosition()
     {
+        if(zoneOnOff == false) return;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null||_cameraZoneColliders ==null)
         {
