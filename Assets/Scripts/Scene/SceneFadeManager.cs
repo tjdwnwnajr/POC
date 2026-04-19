@@ -64,6 +64,7 @@ public class SceneFadeManager : MonoBehaviour
             else
             {
                 IsFadingIn = false;
+                ReturnSpeedSettings();
             }
         }
      
@@ -81,9 +82,10 @@ public class SceneFadeManager : MonoBehaviour
             _fadeOutImage.color = _fadeOutStartColor;
             IsFadingIn = true;
         }
+        
     }
     public void ChangeSpeedSettings(float fadeoutS, float fadeinS)
-    {
+    {      
         _fadeOutSpeed = fadeoutS;
         _fadeInSpeed = fadeinS;
     }

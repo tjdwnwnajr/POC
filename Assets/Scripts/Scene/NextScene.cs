@@ -9,6 +9,8 @@ public class NextScene : MonoBehaviour
     [SerializeField] private float waitTime = 1f;
     [SerializeField] private float BrightInSpeed = 1f;
     [SerializeField] private bool selectBrightOut = false;
+
+
     public void SwapSceneFromCutScene()
     {
        if (selectBrightOut)
@@ -46,8 +48,7 @@ public class NextScene : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         SceneManager.LoadScene(nextScene);
         SceneFadeManager.instance.StartFadeIn();
-        yield return new WaitForSeconds(5f);
-        SceneFadeManager.instance.ReturnSpeedSettings();
-
+        
+        
     }
 }

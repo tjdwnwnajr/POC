@@ -48,6 +48,11 @@ public class OpenLastDoor : TriggerInteractionBase
     "먼저 문을 여시오."
     };
 
+    [Header("Open Door - Animation")]
+    [SerializeField] private Animator doorAnim;
+
+    [Header("UISettings")]
+    [SerializeField] private UITriggerObject uiObj;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
@@ -182,11 +187,17 @@ public class OpenLastDoor : TriggerInteractionBase
         }
 
         doorRenderer.color = new Color(a.r, a.g, a.b, 0f);
-        
+        uiObj.isDone = true;
+
     }
     private IEnumerator BirghtOutAndTheEnd() {
         InputManager.DeactivatePlayerControls();
-        yield return new WaitForSeconds(7f);
+        uiObj.isDone = true;
+        if(doorAnim != null)
+        {
+            doorAnim.SetTrigger("isOpen");
+        }
+        yield return new WaitForSeconds(4f);
         
         SceneBrightManager.instance.StartBrightOut();
 

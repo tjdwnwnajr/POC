@@ -10,7 +10,7 @@ public class BlockAppear : MonoBehaviour
     [SerializeField] private GyroRotateBlock missionblock;
     private bool isActive = false;
     private SpriteRenderer spriteRenderer;
-    private BoxCollider2D col;
+    private Collider2D col;
     private bool isVibrate = false;
     [SerializeField] private GameObject activeTilemap;
 
@@ -20,7 +20,7 @@ public class BlockAppear : MonoBehaviour
     {
         block = this.gameObject;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        col = GetComponent<BoxCollider2D>();
+        col = GetComponent<Collider2D>();
         spriteRenderer.enabled = false;
         col.enabled = false;
         

@@ -9,6 +9,7 @@ public class UITriggerObject : MonoBehaviour
     private bool hasShownOnce = false;
     private bool playerInRange = false;
     private MoveBlock moveBlock;
+    public bool isDone = false;
     private void Awake()
     {
         if(uiObject ==null && interactionUI == null)
@@ -65,6 +66,12 @@ public class UITriggerObject : MonoBehaviour
                 HideInteractionUI();
                 return;
             }
+        }
+        if (isDone)
+        {
+            HideUI();
+            HideInteractionUI();
+            return; 
         }
         if (!hasShownOnce) return;
         if (!playerInRange) return;

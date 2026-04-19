@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
     //점프 변수
     [Header("Jump Controller")]
-    private bool jumpSoundPlayed = false;
+    
     [SerializeField] private float jumpPower = 45; 
     [SerializeField] private Transform groundCheckPoint;
     [SerializeField] private float groundCheckDistanceY = 0.2f; 
@@ -438,7 +438,7 @@ public class PlayerController : MonoBehaviour
             pState.jumping = false;
             coyoteTimeCounter = coyoteTime;
             airJumpCounter = 0;
-            jumpSoundPlayed = false;
+            
 }
         //���� ��
         else
