@@ -41,6 +41,7 @@ public class contactOnOff : MonoBehaviour
     }
     private IEnumerator OffMap()
     {
+        isDone = true;
         Color a = tilemap.color;
         float t = 0;
         while (t < 1.5f)
@@ -55,20 +56,20 @@ public class contactOnOff : MonoBehaviour
         }
 
         tilemap.color = new Color(a.r, a.g, a.b, 0f);
-        isDone = true;
+        
     }
     private IEnumerator OnMap()
     {
-
+        isDone = true;
         Color a = tilemap.color;
         float t = 0;
         if(shakeOn)
             CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
-        while (t < 1.5f)
+        while (t < 2.5f)
         {
             t += Time.deltaTime;
-            float per = t / 1.5f;
-            a.a = Mathf.Lerp(a.a, 1f, per);
+            float per = t / 2.5f;
+            a.a = Mathf.Lerp(0f, 1f, per);
 
             tilemap.color = a;
 
@@ -76,6 +77,6 @@ public class contactOnOff : MonoBehaviour
         }
 
         tilemap.color = new Color(a.r, a.g, a.b, 1f);
-        isDone = true;
+        
     }
 }
