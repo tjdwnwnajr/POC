@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MoveBlock : MonoBehaviour
 {
+    [Header("Complete UI")]
+    [SerializeField] private GameObject completeUI; // UI 오브젝트
+    [SerializeField] private float uiDuration = 2f; // UI 표시 시간
+
     [Header("Block Settings")]
     [SerializeField] private Transform[] blocksToMove;           // 이동시킬 블럭
     [SerializeField] private Transform[] targetBlocks;
@@ -175,6 +179,14 @@ public class MoveBlock : MonoBehaviour
         }
         InputManager.ActivatePlayerControls();
         canPress = true;
+
+        // 블럭 이동 완료 후 UI 표시
+        if (completeUI != null)
+        {
+            completeUI.SetActive(true);
+            yield return new WaitForSeconds(uiDuration);
+            completeUI.SetActive(false);
+        }
     }
 
     private IEnumerator ReturnAllBlocksSequentially()
