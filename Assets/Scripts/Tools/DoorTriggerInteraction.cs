@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class DoorTriggerInteraction : TriggerInteractionBase
 {
@@ -40,6 +41,12 @@ public class DoorTriggerInteraction : TriggerInteractionBase
     [Header("Door Type")]
     [SerializeField] private DoorType _doorType = DoorType.None;
     private Transform lightObj;
+
+    [Header("CompleteUI")]
+    [SerializeField] private GameObject completeUI;
+    [SerializeField] private float uiDuration = 2f;
+    [SerializeField] private GameObject keyObj;
+
     protected override void Start()
     {
         base.Start();
@@ -93,7 +100,38 @@ public class DoorTriggerInteraction : TriggerInteractionBase
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.chest, transform, 1f);
 
         anim.SetTrigger("isOpen");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.1f);
+        if(keyObj !=null)
+        {
+            SpriteRenderer spriteRenderer = keyObj.GetComponent<SpriteRenderer>();
+            Vector3 position = keyObj.transform.position;
+            float startY = position.y;  
+            float targetY = position.y + 1.5f;
+            Color a = spriteRenderer.color;
+            float t = 0;
+            while (t < 1.5f)
+            {
+                t += Time.deltaTime;
+                float per = t / 1.5f;
+                a.a = Mathf.Lerp(0f, 1f, per);
+                position.y = Mathf.Lerp(startY, targetY, t);
+                spriteRenderer.color = a;
+                keyObj.transform.position = position;
+
+                yield return null;
+            }
+
+            spriteRenderer.color = new Color(a.r, a.g, a.b, 1f);
+        }
+        yield return new WaitForSeconds(0.9f);
+        if (completeUI != null)
+        {
+            completeUI.SetActive(true);
+            yield return new WaitForSeconds(uiDuration);
+            completeUI.SetActive(false);
+        }
+
+        
         if(_doorType == DoorType.DreamOne)
         {
             PlayerStateList.firstKeyFounded = true;
