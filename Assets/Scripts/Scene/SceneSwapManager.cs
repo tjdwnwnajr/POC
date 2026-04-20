@@ -65,12 +65,13 @@ public class SceneSwapManager : MonoBehaviour
         InputManager.DeactivatePlayerControls();
         SceneFadeManager.instance.StartFadeOut();
 
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.fadeout, transform, 1f);
         //keep fading out
         while (SceneFadeManager.instance.IsFadingOut)
         {
             yield return null;
         }
-        
+        yield return new WaitForSeconds(1f);
 
         _doorToSpawnTo = doorToSpawnAt;
         //카메라 초기화
@@ -100,17 +101,19 @@ public class SceneSwapManager : MonoBehaviour
         //start fading to black
         InputManager.DeactivatePlayerControls();
         SceneBrightManager.instance.StartBrightOut();
-
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.brightout, transform, 1f);
         //keep fading out
         while (SceneBrightManager.instance.IsBrightOut)
         {
             yield return null;
         }
-
+        yield return new WaitForSeconds(1f);
 
         _doorToSpawnTo = doorToSpawnAt;
         //카메라 초기화
         CameraUtility.InvalidateCache();
+        
+        
         SceneManager.LoadScene(myScene);
     }
 
