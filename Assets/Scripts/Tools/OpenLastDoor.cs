@@ -197,6 +197,7 @@ public class OpenLastDoor : TriggerInteractionBase
         {
             doorAnim.SetTrigger("isOpen");
         }
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.door, transform, 0.8f);
         yield return new WaitForSeconds(4f);
         
         SceneBrightManager.instance.StartBrightOut();

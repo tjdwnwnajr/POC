@@ -153,7 +153,7 @@ public class RotateBlock : MonoBehaviour
         if (shakeOn)
         {
             CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
-            SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.clear, transform, 0.5f);
+            //SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.clear, transform, 0.5f);
             
         }
 

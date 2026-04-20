@@ -24,13 +24,15 @@ public class ElevatorActivate : TriggerInteractionBase
 
         DualSenseInput.Instance?.Vibrate(0.9f, 1.0f, 0.4f);
         CameraEventManager.instance.CameraShakeEvent(shakeProfile, impulseSource);
-
-        // 2초 대기
         yield return new WaitForSeconds(2f);
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.up, transform, 0.8f);
+        // 2초 대기
+        
 
         SceneFadeManager.instance.StartFadeOut();
+        
         yield return new WaitUntil(() => !SceneFadeManager.instance.IsFadingOut);
-
+        yield return new WaitForSeconds(2f);
         SceneSwapManager.SwapSceneFromDoorUse(nextScene,
             DoorTriggerInteraction.DoorToSpawnAt.None);
     }

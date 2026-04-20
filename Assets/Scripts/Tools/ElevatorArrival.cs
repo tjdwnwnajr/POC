@@ -40,7 +40,7 @@ public class ElevatorArrival : MonoBehaviour
         // ¦¡¦¡ 2. ÆäÀÌµå ÀÎ (¾ÏÀü ¡æ ¹à¾ÆÁü)
         SceneFadeManager.instance.StartFadeIn();
         yield return new WaitForSeconds(0.3f);
-
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.arrive, transform, 0.8f);
         // ¦¡¦¡ 3. ¿¤¸®º£ÀÌÅÍ »ó½Â
         float elapsed = 0f;
         while (elapsed < riseDuration)
