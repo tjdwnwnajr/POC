@@ -46,7 +46,7 @@ public class CameraManager : MonoBehaviour
         {
             Instance = this;
         }
-        if (_cameraZoneColliders != null && _cameraZoneColliders.Length > 0)
+        if (zoneOnOff && _cameraZoneColliders != null && _cameraZoneColliders.Length > 0)
             InitCameraByPlayerPosition(); // 새로 추가된 함수
         else
             SetupCurrentCamera();
@@ -54,7 +54,7 @@ public class CameraManager : MonoBehaviour
 
     public void InitCameraByPlayerPosition()
     {
-        if(zoneOnOff == false) return;
+        
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null||_cameraZoneColliders ==null)
         {
