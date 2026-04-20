@@ -17,15 +17,16 @@ public class SoundFXManager : MonoBehaviour
         die = 7,
         chest = 8,
         clear = 9,
+        brightout = 10,
         mirrorOn = 11,
         mirrorOff = 12,
-        
+        fadeout = 13,
         up = 14,
         arrive = 15,
-        fadeout = 16,
-        fadein = 17,
-        brightout = 18,
-        brightin = 19,
+        
+        
+        
+        
     }
     public static SoundFXManager instance;
     [SerializeField] private AudioSource soundFXObject;
