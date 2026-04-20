@@ -50,4 +50,20 @@ public class PlayerStateList : MonoBehaviour
             keyReady = false;
         }
     }
+    public static void ResetPlayerState()
+    {
+        isRope = false;
+        isGrounded = true;
+        canMove = true;
+        isView = false;
+        isMirror = false;
+        isRotate = false;
+        keyOne = false;
+        headBtn = false;
+        isDead = false;
+        firstKeyFounded = false;
+        secondKeyFounded = false;
+        thirdKeyFounded = false;
+        keyReady = false;
+    }
 }

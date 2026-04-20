@@ -177,4 +177,27 @@ public class InputManager : MonoBehaviour
      
     }
     
+    public static void ResetInputValues()
+    {
+        Movement = Vector2.zero;
+        JumpWasPressed = false;
+        JumpIsHeld = false;
+        JumpWasReleased = false;
+        RunIsHeld = false;
+        RopeWasPressed = false;
+        RopeIsHeld = false;
+        RopeWasReleased = false;
+        Rotate = 0f;
+        CheckIsHeld = false;
+        AttackWasPressed = false;
+        LookWasPressed = false;
+        LookIsHeld = false;
+        LookWasReleased = false;
+        LookDirection = Vector2.zero;
+        UseToolWasPressed = false;
+        UpWasPressed = false;
+        DownWasPressed = false;
+        RopeReleasWasPressed = false;
+        BlockMovement = Vector2.zero;
+    }
 }

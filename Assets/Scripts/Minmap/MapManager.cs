@@ -82,4 +82,5 @@ public class MapManager : MonoBehaviour
     {
         return _activatedPartCount.TryGetValue(scene.SceneName, out int count) ? count : 1;
     }
+
 }

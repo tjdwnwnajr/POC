@@ -227,4 +227,13 @@ public class SceneSwapManager : MonoBehaviour
         _playerSpawnPosition = _doorColl.transform.position - new Vector3(0f, colliderHeight, 0f);
 
     }
+
+    public static void ResetSceneSwapManager()
+    {
+        _loadFromDoor = false;
+        for (int i = 0; i < isDreamCleared.Length; i++)
+        {
+            isDreamCleared[i] = false;
+        }
+    }
 }

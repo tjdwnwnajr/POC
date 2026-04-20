@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class MainMenuManager : MonoBehaviour
 {
+    public static MainMenuManager instance;
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject soundSettingMenu;
     [SerializeField] private PlayerController player;
@@ -14,6 +15,12 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
+        if (instance == null)
+        {
+            instance = this;
+
+        }
+
         mainMenu.SetActive(false);
         soundSettingMenu.SetActive(false);
        
@@ -46,7 +53,7 @@ public class MainMenuManager : MonoBehaviour
         OpenMainMenu();
     }
 
-    private void Unpause()
+    public void Unpause()
     {
         isPaused = false;
         Time.timeScale = 1f;
