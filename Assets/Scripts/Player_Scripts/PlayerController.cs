@@ -439,7 +439,7 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
             airJumpCounter = 0;
             
-}
+        }
         //���� ��
         else
         {

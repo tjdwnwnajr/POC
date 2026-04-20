@@ -34,6 +34,6 @@ public class ElevatorActivate : TriggerInteractionBase
         yield return new WaitUntil(() => !SceneFadeManager.instance.IsFadingOut);
         yield return new WaitForSeconds(2f);
         SceneSwapManager.SwapSceneFromDoorUse(nextScene,
-            DoorTriggerInteraction.DoorToSpawnAt.None);
+            DoorTriggerInteraction.DoorToSpawnAt.None,false,false);
     }
 }

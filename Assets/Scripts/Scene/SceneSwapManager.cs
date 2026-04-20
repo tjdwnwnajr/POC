@@ -42,13 +42,13 @@ public class SceneSwapManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
     
-    public static void SwapSceneFromDoorUse(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt, bool isBox = false)
+    public static void SwapSceneFromDoorUse(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt, bool isBox = false, bool sceneswapsounduse = true)
     {
         
         if (!isBox)
         {
             _loadFromDoor = true;
-            Instance.StartCoroutine(Instance.FadeOutThenChangeScene(myScene, doorToSpawnAt));
+            Instance.StartCoroutine(Instance.FadeOutThenChangeScene(myScene, doorToSpawnAt, sceneswapsounduse));
         }
         else
         {
@@ -59,13 +59,13 @@ public class SceneSwapManager : MonoBehaviour
     }
 
 
-    private IEnumerator FadeOutThenChangeScene(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt = DoorTriggerInteraction.DoorToSpawnAt.None)
+    private IEnumerator FadeOutThenChangeScene(SceneField myScene, DoorTriggerInteraction.DoorToSpawnAt doorToSpawnAt = DoorTriggerInteraction.DoorToSpawnAt.None, bool sceneswapsounduse = true)
     {
         //start fading to black
         InputManager.DeactivatePlayerControls();
         SceneFadeManager.instance.StartFadeOut();
-
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.fadeout, transform, 1f);
+        if(sceneswapsounduse)
+            SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.fadeout, transform, 1f);
         //keep fading out
         while (SceneFadeManager.instance.IsFadingOut)
         {

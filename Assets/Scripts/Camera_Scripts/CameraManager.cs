@@ -54,7 +54,7 @@ public class CameraManager : MonoBehaviour
 
     public void InitCameraByPlayerPosition()
     {
-        
+        if(zoneOnOff == false) return;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null||_cameraZoneColliders ==null)
         {
