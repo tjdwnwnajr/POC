@@ -1,20 +1,20 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 
 public class MirrorDevice : TriggerInteractionBase
 {
     [SerializeField] private Transform mirrorSpawnPoint;
     [SerializeField] private bool mirrorOn = true;
-    private AnimatorController basicController;
-    private AnimatorController mirrorController;
+    private RuntimeAnimatorController basicController;
+    private RuntimeAnimatorController mirrorController;
     private Animator playerAnim;
     protected override void Start()
     {
         base.Start();
         playerAnim = Player.GetComponent<Animator>();
-        basicController = playerAnim.runtimeAnimatorController as AnimatorController;
-        mirrorController = Resources.Load<AnimatorController>("Animators/PlayerMirrorController");
+        basicController = playerAnim.runtimeAnimatorController as RuntimeAnimatorController;
+        mirrorController = Resources.Load<RuntimeAnimatorController>("Animators/PlayerMirrorController");
     }
     public override void Interact()
     {
