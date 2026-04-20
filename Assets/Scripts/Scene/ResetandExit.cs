@@ -6,6 +6,11 @@ public class ResetandExit : MonoBehaviour
     
     public static void ResetGame()
     {
+        Time.timeScale = 1f;
+
+        //playerstate reset
+        PlayerStateList.ResetPlayerState();
+
         //inputmanager reset
         InputManager.ResetInputValues();
         DualSenseInput.Instance = null;
@@ -20,20 +25,20 @@ public class ResetandExit : MonoBehaviour
         SceneSwapManager.Instance = null;
 
         //MapManager reset
+        MapManager.instance?.CloseLargeMap();
         MapManager.instance = null;
 
         //SoundFxManager reset 
         SoundFXManager.instance = null;
 
         //MenuManager reset
-        MainMenuManager.instance.Unpause();
+        MainMenuManager.instance = null;
 
         //Fade/Bright Manager reset
         SceneFadeManager.instance = null;
         SceneBrightManager.instance = null;
 
-        //playerstate reset
-        PlayerStateList.ResetPlayerState();
+        
 
         
 

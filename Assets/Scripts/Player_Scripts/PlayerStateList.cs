@@ -19,9 +19,9 @@ public class PlayerStateList : MonoBehaviour
     public static bool keyOne = false;
     public static bool headBtn = false;
     public static bool isDead = false;
-    public static bool firstKeyFounded = true;
-    public static bool secondKeyFounded = true;
-    public static bool thirdKeyFounded = true;
+    public static bool firstKeyFounded = false;
+    public static bool secondKeyFounded = false;
+    public static bool thirdKeyFounded = false;
     public static bool keyReady = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -49,6 +49,7 @@ public class PlayerStateList : MonoBehaviour
         {
             keyReady = false;
         }
+        
     }
     public static void ResetPlayerState()
     {

@@ -63,7 +63,7 @@ public class MapManager : MonoBehaviour
         _largeMap.SetActive(true);
         IsLargeMapOpen = true;
     }
-    private void CloseLargeMap()
+    public void CloseLargeMap()
     {
         Time.timeScale = 1f;
         PlayerStateList.isView = false;
