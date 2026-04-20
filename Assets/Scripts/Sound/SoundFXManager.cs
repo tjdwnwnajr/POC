@@ -24,9 +24,6 @@ public class SoundFXManager : MonoBehaviour
         up = 14,
         arrive = 15,
         
-        
-        
-        
     }
     public static SoundFXManager instance;
     [SerializeField] private AudioSource soundFXObject;
