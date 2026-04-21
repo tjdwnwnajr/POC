@@ -207,6 +207,9 @@ public class OpenLastDoor : TriggerInteractionBase
         {
             yield return null;
         }
+        yield return new WaitForSeconds(1f);
+        //Reset 
+        ResetandExit.ResetGame();
     }
 
     private IEnumerator NoKeySequence()

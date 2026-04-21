@@ -6,8 +6,9 @@ public class ButtonInteract : MonoBehaviour
     [SerializeField] private InputActionReference interactAction;
     [SerializeField] private GameObject buttonHeadVisual;
     [SerializeField] private WallFadeOut targetWall;
+    
     [SerializeField] private GameObject needHeadUI;
-
+    
     private bool playerInRange;
     private bool isFixed = false;
 
@@ -66,6 +67,7 @@ public class ButtonInteract : MonoBehaviour
 
         if (targetWall != null)
             targetWall.FadeOut();
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)

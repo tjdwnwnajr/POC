@@ -5,7 +5,7 @@ public class FakeWallButton : MonoBehaviour
 {
     [SerializeField] private InputActionReference interactAction;
     [SerializeField] private WallFadeOut targetWall;
-
+    [SerializeField] private GameObject wallCollider;
     private bool playerInRange = false;
     private bool pressed = false;
 
@@ -18,6 +18,11 @@ public class FakeWallButton : MonoBehaviour
             if (targetWall != null)
                 targetWall.FadeOut();
         }
+    }
+    private void Update()
+    {
+        if(wallCollider != null)
+            wallCollider.SetActive(!WorldStateManager.Instance.fakeWallOpened);
     }
 
     private void OnEnable()
