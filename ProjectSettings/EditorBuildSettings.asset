@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SJTest.unity
     guid: edd2a014d340f024f933c6e74c01b4e2
   - enabled: 1
+    path: Assets/Scenes/TheEndScene.unity
+    guid: 4e3fbebcb4fe9c14b9620b8e377ed1d8
+  - enabled: 1
     path: Assets/Scenes/Room1toDream1.unity
     guid: e89ac48dfc5c43a4b8624e68cfef80cc
   - enabled: 1

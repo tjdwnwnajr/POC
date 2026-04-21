@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class NextScene : MonoBehaviour
 {
+    
     [SerializeField] private SceneField nextScene;
     [SerializeField] private float BrightOutSpeed = 1f;
     [SerializeField] private float waitTime = 1f;

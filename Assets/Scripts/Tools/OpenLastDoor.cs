@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class OpenLastDoor : TriggerInteractionBase
@@ -50,6 +51,8 @@ public class OpenLastDoor : TriggerInteractionBase
 
     [Header("Open Door - Animation")]
     [SerializeField] private Animator doorAnim;
+    [SerializeField] private GameObject doorminimap;
+    [SerializeField] private NextScene sceneChange;
 
     [Header("UISettings")]
     [SerializeField] private UITriggerObject uiObj;
@@ -73,13 +76,13 @@ public class OpenLastDoor : TriggerInteractionBase
             {
                 InputManager.DeactivatePlayerControls();
                 isTriggered = true;
-                CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
-                StartCoroutine(VibrateTimes());
+                
+               
 
-
+                
                 if (doorRenderer != null)
                     StartCoroutine(doorOff());
-                StartCoroutine(ActivateControll());
+                
             }
             else if (PlayerStateList.keyReady == false && !isTriggered)
             {
@@ -173,6 +176,10 @@ public class OpenLastDoor : TriggerInteractionBase
     }
     private IEnumerator doorOff()
     {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.key, transform, 0.5f);
+        //yield return new WaitForSeconds(3f);
+        CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);
+        StartCoroutine(VibrateTimes());
         Color a = doorRenderer.color;
         float t = 0;
         while (t < 3f)
@@ -187,8 +194,10 @@ public class OpenLastDoor : TriggerInteractionBase
         }
 
         doorRenderer.color = new Color(a.r, a.g, a.b, 0f);
+        if(doorminimap != null)
+            doorminimap.SetActive(false);
         uiObj.isDone = true;
-
+        StartCoroutine(ActivateControll());
     }
     private IEnumerator BirghtOutAndTheEnd() {
         InputManager.DeactivatePlayerControls();
@@ -199,17 +208,20 @@ public class OpenLastDoor : TriggerInteractionBase
         }
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.door, transform, 0.8f);
         yield return new WaitForSeconds(4f);
-        
-        SceneBrightManager.instance.StartBrightOut();
 
-        //keep fading out
-        while (SceneBrightManager.instance.IsBrightOut)
-        {
-            yield return null;
-        }
-        yield return new WaitForSeconds(1f);
-        //Reset 
-        ResetandExit.ResetGame();
+        sceneChange.SwapSceneFromCutScene();
+        //SceneBrightManager.instance.StartBrightOut();
+
+        ////keep fading out
+        //while (SceneBrightManager.instance.IsBrightOut)
+        //{
+        //    yield return null;
+        //}
+        //yield return new WaitForSeconds(1f);
+
+        //SceneManager.LoadScene("TheEndScene");
+
+        //SceneBrightManager.instance.StartBrightIn();
     }
 
     private IEnumerator NoKeySequence()

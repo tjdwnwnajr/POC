@@ -23,7 +23,7 @@ public class SoundFXManager : MonoBehaviour
         fadeout = 13,
         up = 14,
         arrive = 15,
-        
+        key = 16,
     }
     public static SoundFXManager instance;
     [SerializeField] private AudioSource soundFXObject;
