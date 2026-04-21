@@ -101,11 +101,13 @@ public class RotateMap : MonoBehaviour
         {
             InputManager.ActivatePlayerControls();
             rotateEnd = false;
+            PlayerStateList.mapRotation = false;
         }
 
         // 입력 대기 중 취소
         if (isWaitingForInput && !isRotating && InputManager.UseToolWasPressed)
         {
+            PlayerStateList.mapRotation = false;
             isWaitingForInput = false;
             inputWaitTimer = 0f;
             HideArrows();
@@ -119,6 +121,7 @@ public class RotateMap : MonoBehaviour
             // ⭐ (MapParent.eulerAngles.z + Device 초기 Z각도) % 360 == 0이면 사용 가능
             if (IsDeviceUsable())
             {
+                PlayerStateList.mapRotation = true;
                 isWaitingForInput = true;
                 inputWaitTimer = 0f;
                 _playerAnim.SetBool("isWalk", false);
@@ -143,6 +146,7 @@ public class RotateMap : MonoBehaviour
 
             if (inputWaitTimer >= inputWaitDuration)
             {
+                PlayerStateList.mapRotation = false;
                 isWaitingForInput = false;
                 inputWaitTimer = 0f;
                 HideArrows();

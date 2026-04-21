@@ -58,6 +58,8 @@ public class MapManager : MonoBehaviour
 
     private void OpenLargeMap()
     {
+        if (PlayerStateList.mapRotation)
+            return;
         Time.timeScale = 0f;
         PlayerStateList.isView = true;
         _largeMap.SetActive(true);

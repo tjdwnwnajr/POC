@@ -44,6 +44,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Pause()
     {
+        if (PlayerStateList.mapRotation)
+            return;
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         player = playerObj.GetComponent<PlayerController>();
         isPaused = true;

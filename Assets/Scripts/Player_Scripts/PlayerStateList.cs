@@ -13,7 +13,8 @@ public class PlayerStateList : MonoBehaviour
     public static bool isGrounded = true;
     public static bool canMove = true;
     public static bool isView = false;
-    [SerializeField]public static bool isMirror = false;
+    public static bool isMirror = false;
+    public static bool mapRotation = false;
     //public bool mirrorOn = false;
     public static bool isRotate = false;
     public static bool keyOne = false;
