@@ -24,7 +24,7 @@ public class ElevatorArrival : MonoBehaviour
         // ── 1. 초기 세팅
         InputManager.DeactivatePlayerControls();
         PlayerStateList.isView = true;
-
+        PlayerStateList.mapRotation = true;
         // 플레이어를 ElevatorParent 자식으로 (같이 올라오게)
         PlayerController.Instance.transform.position = elevatorParent.position + new Vector3(-4.4702f, -2f, 0f); // 1f는 엘리베이터 위
         PlayerController.Instance.transform.SetParent(elevatorParent);
@@ -52,7 +52,7 @@ public class ElevatorArrival : MonoBehaviour
         }
 
         elevatorParent.position = arrivalPos;
-
+        PlayerStateList.mapRotation = false;
         // ── 4. 도착 연출 (진동 + 흔들림)
         DualSenseInput.Instance?.Vibrate(0.7f, 1.0f, 0.5f);
         CameraEventManager.instance.CameraShakeEvent(arrivalShake, impulseSource);

@@ -34,7 +34,7 @@ public class CutsceneWalker : MonoBehaviour
     {
         // 씬 시작 시 입력 비활성화 (컷씬 자동 시작)
         InputManager.DeactivatePlayerControls();
-
+        PlayerStateList.mapRotation = true;
         // 씬 시작 시 플레이어 바라보는 방향 세팅
         SetFacingDirection();
 

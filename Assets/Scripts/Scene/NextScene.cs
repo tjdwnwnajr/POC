@@ -14,6 +14,7 @@ public class NextScene : MonoBehaviour
 
     public void SwapSceneFromCutScene()
     {
+        PlayerStateList.mapRotation = false;
        if (selectBrightOut)
        {
            StartCoroutine(BrightOutAndChangeScene());
@@ -22,6 +23,7 @@ public class NextScene : MonoBehaviour
         {
             StartCoroutine(FadeOutAndChangeScene());
         }
+
     }
 
     IEnumerator BrightOutAndChangeScene()
