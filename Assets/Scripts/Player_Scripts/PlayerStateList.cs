@@ -48,7 +48,7 @@ public class PlayerStateList : MonoBehaviour
         }
         else
         {
-            keyReady = true;
+            keyReady = false;
         }
         
     }
