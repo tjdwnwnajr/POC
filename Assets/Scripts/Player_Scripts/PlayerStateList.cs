@@ -22,7 +22,7 @@ public class PlayerStateList : MonoBehaviour
     public static bool isDead = false;
     public static bool firstKeyFounded = false;
     public static bool secondKeyFounded = false;
-    public static bool thirdKeyFounded = false;
+    public static bool thirdKeyFounded = true;
     public static bool keyReady = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
