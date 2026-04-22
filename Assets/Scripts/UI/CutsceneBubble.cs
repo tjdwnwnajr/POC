@@ -40,7 +40,6 @@ public class CutsceneBubble : MonoBehaviour
     private int dialogueIndex = 0;
     private GameObject currentBubble;
     private Camera mainCam;
-
     private void Awake()
     {
         mainCam = Camera.main;
@@ -65,7 +64,7 @@ public class CutsceneBubble : MonoBehaviour
             StopAllCoroutines();
             Destroy(currentBubble);
         }
-
+        
         StartCoroutine(SpawnBubble(line));
     }
 
@@ -121,6 +120,7 @@ public class CutsceneBubble : MonoBehaviour
 
         Destroy(currentBubble);
         currentBubble = null;
+        
     }
 
     // 월드 좌표 → 스크린 좌표 → Canvas 로컬 좌표로 변환해서 위치 업데이트
@@ -130,5 +130,10 @@ public class CutsceneBubble : MonoBehaviour
 
         // World Space Canvas면 그냥 월드 좌표로 직접 배치
         currentBubble.transform.position = player.position + new Vector3(offset.x, offset.y, 0f);
+    }
+    public void Skip()
+    {
+        StopAllCoroutines();
+        dialogueIndex = bubbleDialogues.Length;
     }
 }

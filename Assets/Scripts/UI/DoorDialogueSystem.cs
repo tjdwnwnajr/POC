@@ -36,7 +36,7 @@ public class DoorDialogueSystem : MonoBehaviour
     };
 
     private Coroutine dialogueCoroutine;
-
+    [HideInInspector] public bool isPlaying = false;
     // 대사 완료 시 호출할 콜백
     private System.Action onComplete;
 
@@ -55,6 +55,7 @@ public class DoorDialogueSystem : MonoBehaviour
     // =============================================
     public void StartDialogue()
     {
+        isPlaying = true;
         StartDialogueWithLines(dialogues, null);
     }
 
@@ -85,6 +86,7 @@ public class DoorDialogueSystem : MonoBehaviour
     {
         HideImmediate();
         currentText = dialogueText;
+        isPlaying = false;
     }
 
     // =============================================
@@ -152,5 +154,13 @@ public class DoorDialogueSystem : MonoBehaviour
         currentText.text = "";
         SetAlpha(0f);
         currentText.gameObject.SetActive(false);
+    }
+    public void Skip()
+    {
+        StopAllCoroutines();
+
+        HideImmediate();
+
+        onComplete = null;
     }
 }

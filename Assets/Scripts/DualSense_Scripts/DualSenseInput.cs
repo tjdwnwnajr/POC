@@ -48,7 +48,7 @@ public class DualSenseInput : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         controllerCount = JSL.JslConnectDevices();
 
