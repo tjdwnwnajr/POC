@@ -75,7 +75,7 @@ public class RopeGrabtest : MonoBehaviour
     {
         //anim.SetBool("isRope",PlayerStateList.isRope);
 
-        if ((InputManager.RopeWasPressed) && PlayerStateList.isRope)
+        if (InputManager.JumpWasPressed && PlayerStateList.isRope)
         {
             ReleaseRope();
             StartCoroutine(ResetRotation());
