@@ -4,9 +4,9 @@ using UnityEngine;
 [System.Serializable]
 public class GyroRangeMapping
 {
-    public float minGyro;      // ±¸°£ ½ÃÀÛ°ª
-    public float maxGyro;      // ±¸°£ ³¡°ª
-    public float forceOutput;  // ÀÌ ±¸°£¿¡¼­ Ãâ·ÂÇÒ Èû
+    public float minGyro;      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û°ï¿½
+    public float maxGyro;      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public float forceOutput;  // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 }
 
 public class RopeGrabtest : MonoBehaviour
@@ -54,7 +54,7 @@ public class RopeGrabtest : MonoBehaviour
     
     
 
-    // ÀâÀ» ¼ö ÀÖ´Â ¹åÁÙ ÈÄº¸µé
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Äºï¿½ï¿½ï¿½
     private List<Rigidbody2D> nearbyRopes = new List<Rigidbody2D>();
 
 
@@ -75,15 +75,18 @@ public class RopeGrabtest : MonoBehaviour
     {
         //anim.SetBool("isRope",PlayerStateList.isRope);
 
-        if (InputManager.RopeIsHeld&&!PlayerStateList.isRope&&hand.canGrab)
-        {          
-            Grab(hand.hangedRope);
-        }
-        if (InputManager.RopeWasReleased && PlayerStateList.isRope)
+        if (InputManager.RopeWasPressed && PlayerStateList.isRope)
         {
             ReleaseRope();
             StartCoroutine(ResetRotation());
+            return;
         }
+
+        if (InputManager.RopeWasPressed &&!PlayerStateList.isRope&&hand.canGrab)
+        {          
+            Grab(hand.hangedRope);
+        }
+        
         if (PlayerStateList.isRope && !isMovingChain)
         {
             if (InputManager.UpWasPressed)
@@ -134,7 +137,7 @@ public class RopeGrabtest : MonoBehaviour
     }
     void ReleaseRope()
     {
-        //¼Óµµ ÀúÀå
+        //ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector2 releaseVelocity = swingTarget.linearVelocity;
         if (releaseVelocity.y < 1f)
         {
@@ -173,7 +176,7 @@ public class RopeGrabtest : MonoBehaviour
     {
         if (PlayerStateList.isGrounded)
         {
-            //Debug.Log("ÂøÁö");
+            //Debug.Log("ï¿½ï¿½ï¿½ï¿½");
             PlayerStateList.canMove = true;
         }
     }
@@ -184,13 +187,13 @@ public class RopeGrabtest : MonoBehaviour
         float gyroY = imu.gyroY;
         float absGyroY = Mathf.Abs(gyroY);
 
-        // ³ëÀÌÁî Á¦°Å
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (absGyroY < deadZone)
             return;
         float outputForce = MapGyroToForce(absGyroY);
         float signedForce = outputForce * Mathf.Sign(gyroY);
 
-        // ÀÚÀÌ·Î  ¼öÆò Èû
+        // ï¿½ï¿½ï¿½Ì·ï¿½  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         Vector2 forceX = new Vector2(-signedForce, 0f);
         forceX.x = Mathf.Clamp(forceX.x, -maxForce, maxForce);
         
@@ -198,10 +201,10 @@ public class RopeGrabtest : MonoBehaviour
 
         float velocityY = swingTarget.linearVelocityY;
         float velocityX = swingTarget.linearVelocityX;
-        // 1º¸´Ù Å¬ ¶§: Áøµ¿
+        // 1ï¿½ï¿½ï¿½ï¿½ Å¬ ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½
         //if (velocityY > 1f)
         //{
-        //    //if (!wasAbovePositiveOne)  // ¹æ±Ý 1À» ³Ñ¾úÀ» ¶§¸¸
+        //    //if (!wasAbovePositiveOne)  // ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         //    //{
         //    //    if (DualSenseInput.Instance != null)
         //    //    {
@@ -221,7 +224,7 @@ public class RopeGrabtest : MonoBehaviour
 
     private float MapGyroToForce(float absoluteGyroValue)
     {
-        // °¢ ±¸°£À» ¼øÈ¸ÇÏ¸ç ¸ÅÄªµÇ´Â ±¸°£ Ã£±â
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï¸ï¿½ ï¿½ï¿½Äªï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
         foreach (GyroRangeMapping mapping in gyroRangeMappings)
         {
             if (absoluteGyroValue >= mapping.minGyro && absoluteGyroValue < mapping.maxGyro)
@@ -230,7 +233,7 @@ public class RopeGrabtest : MonoBehaviour
             }
         }
 
-        // ¸ðµç ±¸°£À» ÃÊ°úÇÑ °æ¿ì ¸¶Áö¸· ±¸°£ÀÇ Èû ¹ÝÈ¯
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È¯
         if (gyroRangeMappings.Length > 0)
         {
             return gyroRangeMappings[gyroRangeMappings.Length - 1].forceOutput;
@@ -263,14 +266,14 @@ public class RopeGrabtest : MonoBehaviour
                 yield return null;
             }
 
-        transform.rotation = targetRot; // ¿ÀÂ÷ º¸Á¤
+        transform.rotation = targetRot; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
     private void MoveToChain(bool moveUp)
     {
 
         if (Mathf.Abs(swingTarget.linearVelocityX) > ropeVelocityThreshold)
         {
-            //Debug.Log("¹åÁÙÀÌ ¿òÁ÷ÀÌ´Â Áß. ¼Óµµ: " + swingTarget.linearVelocityX);
+            //Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½. ï¿½Óµï¿½: " + swingTarget.linearVelocityX);
             return;
         }
         Rigidbody2D nextChain = null;
@@ -302,7 +305,7 @@ public class RopeGrabtest : MonoBehaviour
         if (nextChain == null) return;
         if(nextChain.linearVelocityX > ropeVelocityThreshold)
         {
-            //Debug.Log("¹åÁÙÀÌ ¿òÁ÷ÀÌ´Â Áß. ¼Óµµ: " + swingTarget.linearVelocityX);
+            //Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½. ï¿½Óµï¿½: " + swingTarget.linearVelocityX);
             return;
         }
         isMovingChain = true;
@@ -336,7 +339,7 @@ public class RopeGrabtest : MonoBehaviour
             }
 
             isMovingChain = false;
-            //Debug.Log("Ã¼ÀÎ ÀÌµ¿ ¿Ï·á!");
+            //Debug.Log("Ã¼ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½Ï·ï¿½!");
         }
         else
         {
