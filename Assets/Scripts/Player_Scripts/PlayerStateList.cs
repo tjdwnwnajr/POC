@@ -15,6 +15,7 @@ public class PlayerStateList : MonoBehaviour
     public static bool isView = false;
     public static bool isMirror = false;
     public static bool mapRotation = false;
+    public static bool mapOpen = false;
     //public bool mirrorOn = false;
     public static bool isRotate = false;
     public static bool keyOne = false;

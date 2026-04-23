@@ -13,12 +13,14 @@ public class ElevatorActivate : TriggerInteractionBase
     public override void Interact()
     {
         if (activated) return;
+        if(PlayerStateList.mapOpen) return;
         activated = true;
         StartCoroutine(ActivateSequence());
     }
 
     private IEnumerator ActivateSequence()
     {
+        
         InputManager.DeactivatePlayerControls();
         PlayerStateList.isView = true;
 
