@@ -5,13 +5,18 @@ public class UITriggerObject : MonoBehaviour
 {
     [SerializeField] private GameObject uiObject;
     [SerializeField] private GameObject interactionUI;
-    
+    [SerializeField] private bool isDevice = false;
+    private RotateMap device;
     private bool hasShownOnce = false;
     private bool playerInRange = false;
     private MoveBlock moveBlock;
     public bool isDone = false;
+
     private void Awake()
     {
+        if(isDevice) 
+            device = GetComponent<RotateMap>();
+
         if(uiObject ==null && interactionUI == null)
         {
             foreach (Transform child in transform)
@@ -25,7 +30,7 @@ public class UITriggerObject : MonoBehaviour
             }
         }
         HideUI();
-        HideInteractionUI(); // nullÀÌ¾îµµ ¾ÈÀü
+        HideInteractionUI(); // nullï¿½Ì¾îµµ ï¿½ï¿½ï¿½ï¿½
         moveBlock = GetComponent<MoveBlock>();
         
     }
@@ -35,7 +40,9 @@ public class UITriggerObject : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         playerInRange = true;
-
+        if(isDevice&&!device !=null){
+                if(!device.ShowUITrigger) return;
+        }
         if (!hasShownOnce)
         {
             ShowUI();
@@ -43,7 +50,7 @@ public class UITriggerObject : MonoBehaviour
         }
         else
         {
-            ShowInteractionUI(); // nullÀÌ¸é ¾Æ¹« ÀÏµµ ¾È ÇÔ
+            ShowInteractionUI(); // nullï¿½Ì¸ï¿½ ï¿½Æ¹ï¿½ ï¿½Ïµï¿½ ï¿½ï¿½ ï¿½ï¿½
         }
     }
 
@@ -53,7 +60,7 @@ public class UITriggerObject : MonoBehaviour
 
         playerInRange = false;
         HideUI();
-        HideInteractionUI(); // null ¾ÈÀü
+        HideInteractionUI(); // null ï¿½ï¿½ï¿½ï¿½
     }
 
     private void Update()
@@ -85,7 +92,7 @@ public class UITriggerObject : MonoBehaviour
 
         if (pressed)
         {
-            HideInteractionUI(); // null ¾ÈÀü
+            HideInteractionUI(); // null ï¿½ï¿½ï¿½ï¿½
             ShowUI();
         }
     }

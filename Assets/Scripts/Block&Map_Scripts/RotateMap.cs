@@ -51,6 +51,9 @@ public class RotateMap : MonoBehaviour
     [SerializeField] private GameObject rightSelectedPrefab;
     private GameObject selectedImageInstance;
 
+     public bool ShowUITrigger = true;
+
+
     private GameObject _player;
     private Rigidbody2D _playerRb;
     private float _originalGravityScale;
@@ -96,6 +99,7 @@ public class RotateMap : MonoBehaviour
 
     void Update()
     {
+        ShowUITrigger = IsDeviceUsable();
         // 회전 완료 후 플레이어 컨트롤 활성화
         if (!isRotating && PlayerStateList.isGrounded && rotateEnd)
         {

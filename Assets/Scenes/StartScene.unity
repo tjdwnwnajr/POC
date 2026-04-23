@@ -7008,7 +7008,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540007017}
   m_CullTransparentMesh: 1
---- !u!43 &623753143
+--- !u!43 &851218963
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14049,7 +14049,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uADFC\uB370 \uC9C4\uC9DC \uAFC8\uC18D\uC5D0 \uC5F4\uC1E0\uAC00 \uC788\uB294\uAC78\uAE4C..?"
+  m_text: "\uB3C4\uB300\uCCB4 \uBA87 \uBC88\uC9F8 \uC774 \uAFC8\uC774\uC9C0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
   m_sharedMaterial: {fileID: 6967578422815155229, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
@@ -14556,7 +14556,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uADF8\uB798...\uC774\uB807\uAC8C \uC788\uC744 \uBC14\uC5D4"
+  m_text: "\uADF8\uB188\uC758 \uC5F4\uC1E0.."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
   m_sharedMaterial: {fileID: 6967578422815155229, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
@@ -17453,7 +17453,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB098\uAC00\uC790"
+  m_text: "\uC601\uAC10\uB2D8\uC774\uB77C\uBA74.."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
   m_sharedMaterial: {fileID: 6967578422815155229, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
@@ -19201,7 +19201,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 1
   m_ShadowMesh:
-    m_Mesh: {fileID: 623753143}
+    m_Mesh: {fileID: 851218963}
     m_LocalBounds:
       m_Center: {x: -0.020559788, y: 0.013262451, z: 0}
       m_Extent: {x: 0.29962778, y: 0.8988602, z: 0}
