@@ -66,7 +66,7 @@ public class PlayerStateList : MonoBehaviour
         isDead = false;
         firstKeyFounded = false;
         secondKeyFounded = false;
-        thirdKeyFounded = false;
+        thirdKeyFounded = true;
         keyReady = false;
     }
 }
