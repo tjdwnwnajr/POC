@@ -99,6 +99,8 @@ public class RotateMap : MonoBehaviour
 
     void Update()
     {
+        if (PlayerStateList.mapOpen)
+            return;
         ShowUITrigger = IsDeviceUsable();
         // 회전 완료 후 플레이어 컨트롤 활성화
         if (!isRotating && PlayerStateList.isGrounded && rotateEnd)
