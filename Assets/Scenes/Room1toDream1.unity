@@ -21468,6 +21468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UITriggerObject
   uiObject: {fileID: 0}
   interactionUI: {fileID: 0}
+  isDevice: 0
   isDone: 0
 --- !u!1 &1488328584
 GameObject:
@@ -21635,7 +21636,7 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 1488328584}
---- !u!43 &1550654606
+--- !u!43 &1508524574
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22168,6 +22169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UITriggerObject
   uiObject: {fileID: 0}
   interactionUI: {fileID: 0}
+  isDevice: 0
   isDone: 0
 --- !u!1 &1752308308
 GameObject:
@@ -24297,7 +24299,7 @@ Transform:
   m_GameObject: {fileID: 8317182324156068923}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.4847097, y: 2.55351, z: -10}
+  m_LocalPosition: {x: 5.489352, y: 2.55351, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24858,7 +24860,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC774 \uBC29\uC740 \uBB50\uC9C0...?"
+  m_text: "\uC5EC\uAE30\uAC00 \uC601\uAC10\uB2D8\uC774 \n\uB9D0\uD55C \uADF8 \uBC29\uC778\uAC00...?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
   m_sharedMaterial: {fileID: 6967578422815155229, guid: bbf69486f5fad31438853cb23ff0703c, type: 2}
