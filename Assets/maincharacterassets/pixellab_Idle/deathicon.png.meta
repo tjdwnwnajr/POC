@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0f1d479fd4469a841a769e35db6b289f
+guid: 38a31e4be9d69844eb5c21a5af094b9f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2394624091221599445
-    second: 45degree_0
+      213: 7715225763760996026
+    second: deathicon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 45degree_0
+      name: deathicon_0
       rect:
         serializedVersion: 2
-        x: 36
-        y: 41
-        width: 55
-        height: 55
+        x: 22
+        y: 35
+        width: 20
+        height: 20
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5d42bd77ce96b3120800000000000000
-      internalID: 2394624091221599445
+      spriteID: abe7ae284fcf11b60800000000000000
+      internalID: 7715225763760996026
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3d66e7ec3fadd764398b85279b1db346
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      45degree_0: 2394624091221599445
+      deathicon_0: 7715225763760996026
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -11,6 +11,8 @@ public class ResetandExit : MonoBehaviour
         //playerstate reset
         PlayerStateList.ResetPlayerState();
 
+        PlaytimeManager.instance.ResetTimer();
+
         //inputmanager reset
         InputManager.ResetInputValues();
         DualSenseInput.Instance = null;

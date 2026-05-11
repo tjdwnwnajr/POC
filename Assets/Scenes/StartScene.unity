@@ -7008,7 +7008,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540007017}
   m_CullTransparentMesh: 1
---- !u!43 &851218963
+--- !u!43 &553464974
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14643,6 +14643,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2199479677960320859, guid: 689ff04e405b17b46b16fe249893909f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144766356074545864, guid: 689ff04e405b17b46b16fe249893909f, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 6493660054167783683, guid: 689ff04e405b17b46b16fe249893909f, type: 3}
       propertyPath: m_Name
       value: PERSISTOBJECTS_R
@@ -19201,7 +19209,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 1
   m_ShadowMesh:
-    m_Mesh: {fileID: 851218963}
+    m_Mesh: {fileID: 553464974}
     m_LocalBounds:
       m_Center: {x: -0.020559788, y: 0.013262451, z: 0}
       m_Extent: {x: 0.29962778, y: 0.8988602, z: 0}

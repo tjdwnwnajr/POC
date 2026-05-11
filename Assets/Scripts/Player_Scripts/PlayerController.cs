@@ -648,6 +648,8 @@ public class PlayerController : MonoBehaviour
     }
     private void Respawn()
     {
+        PlayerStateList.deathCount++;
+        PlaytimeManager.instance.AddTime(PlaytimeManager.instance.addtime);
         transform.position = SavePoint.GetRespawnPosition();
         anim.SetTrigger("isAlive");
         // 입력 재활성화

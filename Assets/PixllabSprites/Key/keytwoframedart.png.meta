@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0f1d479fd4469a841a769e35db6b289f
+guid: 40c394d9d094c15498439a7ffeedbd0a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2394624091221599445
-    second: 45degree_0
+      213: 3431449820973583517
+    second: keytwoframedart_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 45degree_0
+      name: keytwoframedart_0
       rect:
         serializedVersion: 2
-        x: 36
-        y: 41
-        width: 55
-        height: 55
+        x: 312
+        y: 345
+        width: 380
+        height: 380
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5d42bd77ce96b3120800000000000000
-      internalID: 2394624091221599445
+      spriteID: d9c45bb7e65fe9f20800000000000000
+      internalID: 3431449820973583517
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3d66e7ec3fadd764398b85279b1db346
+    spriteID: aa2556ecb30051c46b7417c3e21712fd
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      45degree_0: 2394624091221599445
+      keytwoframedart_0: 3431449820973583517
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
