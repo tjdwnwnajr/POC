@@ -112,7 +112,7 @@ public class RopeGrabtest : MonoBehaviour
 
     void Grab(Rigidbody2D rope)
     {
-        
+        if(rope == null) return;
         ropePosX = rope.gameObject.transform.position.x;
 
         ropePosY = hand.handPos.y;

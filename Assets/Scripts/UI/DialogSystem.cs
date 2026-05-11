@@ -54,6 +54,7 @@ public class DialogSystem : MonoBehaviour
 
         PlayerStateList.canMove = false;
         PlayerStateList.isView = true;
+        PlayerStateList.isDialogue = true;
         InputManager.DeactivatePlayerControls();
 
         SetNextDialog();
@@ -134,6 +135,7 @@ public class DialogSystem : MonoBehaviour
 
         PlayerStateList.canMove = true;
         PlayerStateList.isView = false;
+        PlayerStateList.isDialogue = false;
         InputManager.ActivatePlayerControls();
 
         StartCoroutine(ExitCooldownRoutine());

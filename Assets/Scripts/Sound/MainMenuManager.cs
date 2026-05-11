@@ -44,6 +44,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void Pause()
     {
+        PlayerStateList.menuOpen = true;
         if (PlayerStateList.mapRotation)
             return;
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -57,6 +58,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void Unpause()
     {
+        PlayerStateList.menuOpen = false;
         isPaused = false;
         Time.timeScale = 1f;
         player.enabled = true;

@@ -133,6 +133,7 @@ public class VideoTrigger : MonoBehaviour
 
     public void PlayVideo()
     {
+        PlayerStateList.isDialogue = true;
         if (currentVideoIndex < 0 || currentVideoIndex >= videoPlayers.Length)
         {
             Debug.LogWarning("VideoIndex°¡ ¹üÀ§¸¦ ¹þ¾î³µ¾î¿ä!");
@@ -160,6 +161,7 @@ public class VideoTrigger : MonoBehaviour
 
     public void CloseVideo()
     {
+        PlayerStateList.isDialogue = false;
         isPlaying = false;
         CurrentVideo.Stop();
 

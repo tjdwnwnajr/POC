@@ -17,6 +17,8 @@ public class PlayerStateList : MonoBehaviour
     public static bool mapRotation = false;
     public static bool mapOpen = false;
     //public bool mirrorOn = false;
+    public static bool isDialogue = false;
+    public static bool menuOpen = false;
     public static bool isRotate = false;
     public static bool keyOne = false;
     public static bool headBtn = false;
@@ -25,6 +27,7 @@ public class PlayerStateList : MonoBehaviour
     public static bool secondKeyFounded = false;
     public static bool thirdKeyFounded = true;
     public static bool keyReady = false;
+    public static int deathCount = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -68,5 +71,8 @@ public class PlayerStateList : MonoBehaviour
         secondKeyFounded = false;
         thirdKeyFounded = true;
         keyReady = false;
+        deathCount = 0;
+        isDialogue = false;
+        menuOpen = false;
     }
 }

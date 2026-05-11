@@ -20,7 +20,7 @@ public class SimpleUseUI : MonoBehaviour
     {
         PlayerStateList.canMove = false;
         PlayerStateList.isView = true;
-
+        PlayerStateList.isDialogue = true;
         canClose = false;
         StartCoroutine(EnableCloseNextFrame());
     }
@@ -46,6 +46,7 @@ public class SimpleUseUI : MonoBehaviour
     {
         PlayerStateList.canMove = true;
         PlayerStateList.isView = false;
+        PlayerStateList.isDialogue = false;
         gameObject.SetActive(false);
     }
 }
