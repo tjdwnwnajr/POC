@@ -21,7 +21,7 @@ public class CutsceneWalker : MonoBehaviour
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator anim;
-
+    [SerializeField] private bool setStart = false;
     private bool isWalking = false;
 
     private void Awake()
@@ -36,9 +36,13 @@ public class CutsceneWalker : MonoBehaviour
         InputManager.DeactivatePlayerControls();
         PlayerStateList.mapRotation = true;
         // 씬 시작 시 플레이어 바라보는 방향 세팅
-        SetFacingDirection();
+        if (setStart)
+        {
+            SetFacingDirection();
 
-        PlayCutSceneWalkSound();
+            PlayCutSceneWalkSound();
+        }
+        
     }
 
     private void FixedUpdate()
@@ -90,7 +94,12 @@ public class CutsceneWalker : MonoBehaviour
         anim.SetTrigger("isAlive");
         
     }
-
+    public void SetFacingRight()
+    {
+        Transform t = PlayerController.Instance.transform;
+        t.rotation = Quaternion.Euler(0f, 0f, 0f);
+        PlayerStateList.lookingRight = true;
+    }
 
     private void SetFacingDirection()
     {

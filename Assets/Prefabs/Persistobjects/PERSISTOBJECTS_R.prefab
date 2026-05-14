@@ -1816,8 +1816,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   keyoneObject: {fileID: 1099560499821205914}
   keytwoObject: {fileID: 8617284365848694187}
-  keyoneSprite: {fileID: 2706436652832540631, guid: 5ae781a304546674aae5db94b2641990, type: 3}
-  keytwoSprite: {fileID: 3431449820973583517, guid: 40c394d9d094c15498439a7ffeedbd0a, type: 3}
+  keyoneSprite: {fileID: -8273530079721900991, guid: 0b1ca281cae8f4142ad7d90ce925b9cd, type: 3}
+  keytwoSprite: {fileID: -5938955533537472066, guid: 02fc36089d0a4a943b125aee272a8778, type: 3}
   deathFaceObject: {fileID: 8016661197341884626}
   deathCountText: {fileID: 2489758555891668587}
   timerText: {fileID: 8108797457623927321}

@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
@@ -56,6 +57,8 @@ public class OpenLastDoor : TriggerInteractionBase
 
     [Header("UISettings")]
     [SerializeField] private UITriggerObject uiObj;
+    [SerializeField] private PlayableDirector director;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
@@ -100,6 +103,7 @@ public class OpenLastDoor : TriggerInteractionBase
                 InputManager.DeactivatePlayerControls();
                 isTriggered = true;
                 StartCoroutine(BirghtOutAndTheEnd());
+                
             }
             else
             {
@@ -208,8 +212,8 @@ public class OpenLastDoor : TriggerInteractionBase
         }
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.door, transform, 0.8f);
         yield return new WaitForSeconds(4f);
-
-        sceneChange.SwapSceneFromCutScene();
+        director.Play();
+        //sceneChange.SwapSceneFromCutScene();
         //SceneBrightManager.instance.StartBrightOut();
 
         ////keep fading out
