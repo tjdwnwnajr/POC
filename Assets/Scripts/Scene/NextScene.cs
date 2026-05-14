@@ -58,4 +58,8 @@ public class NextScene : MonoBehaviour
     {
         SceneFadeManager.instance.ChangeSpeedSettings(BrightOutSpeed, BrightInSpeed);
     }
+    public void FadeOut()
+    {
+        SceneFadeManager.instance.StartFadeOut();
+    }
 }
