@@ -23,7 +23,8 @@ public class CutsceneWalker : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private bool setStart = false;
     private bool isWalking = false;
-
+    [SerializeField] private bool isAlive = true;
+    [SerializeField] private bool lastScene = false;
     private void Awake()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
@@ -83,15 +84,25 @@ public class CutsceneWalker : MonoBehaviour
     {
         // 입력 차단
         InputManager.DeactivatePlayerControls();
-
-        // 죽음 애니메이션 재생
-        anim.SetTrigger("isDie");
+        if (lastScene)
+        {
+            anim.SetTrigger("isLastDie");
+        }
+        else
+        {
+            // 죽음 애니메이션 재생
+            anim.SetTrigger("isDie");
+        }
+            
 
         // 모션 끝날 때까지 대기
         yield return new WaitForSeconds(2.5f);
 
-
-        anim.SetTrigger("isAlive");
+        if (isAlive)
+        {
+            anim.SetTrigger("isAlive");
+        }
+        
         
     }
     public void SetFacingRight()

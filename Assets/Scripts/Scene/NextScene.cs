@@ -36,7 +36,7 @@ public class NextScene : MonoBehaviour
         }
         yield return new WaitForSeconds(waitTime);
         SceneManager.LoadScene(nextScene);
-        SceneBrightManager.instance.StartBrightIn();
+        SceneBrightManager.instance.StartBrightIn(); 
 
     }
 
@@ -53,5 +53,9 @@ public class NextScene : MonoBehaviour
         SceneFadeManager.instance.StartFadeIn();
         
         
+    }
+    public void FadeSpeedChange()
+    {
+        SceneFadeManager.instance.ChangeSpeedSettings(BrightOutSpeed, BrightInSpeed);
     }
 }

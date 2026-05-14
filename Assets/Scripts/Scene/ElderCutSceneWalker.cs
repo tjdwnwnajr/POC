@@ -21,6 +21,7 @@ public class ElderCutsceneWalker : MonoBehaviour
     [SerializeField] private float walkTerm = 0.4f;
     [SerializeField] private float appearDelay = 0.5f;
     [SerializeField] private PlayableDirector director;
+    
 
     [Header("Stop Points")]
     [SerializeField] private Transform[] stopPoints; // 인스펙터에서 순서대로 지정
@@ -182,5 +183,13 @@ public class ElderCutsceneWalker : MonoBehaviour
             }
             yield return new WaitForSeconds(walkTerm);
         }
+    }
+    public void PauseDirector(PlayableDirector d)
+    {
+        d.Pause();
+    }
+    public void ResumeDirector(PlayableDirector d)
+    {
+        d.Resume();
     }
 }

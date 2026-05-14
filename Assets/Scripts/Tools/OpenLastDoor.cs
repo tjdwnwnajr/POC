@@ -71,7 +71,7 @@ public class OpenLastDoor : TriggerInteractionBase
     }
     public override void Interact()
     {
-        
+        if (PlayerStateList.mapOpen || PlayerStateList.menuOpen) return;
         if (!isDoor)
         {
             CheckWhichKeyIsNotReady();
