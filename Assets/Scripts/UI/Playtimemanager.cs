@@ -110,9 +110,9 @@ public class PlaytimeManager : MonoBehaviour
                     deathFaceObject.SetActive(true);
                 if (deathCountText != null)
                     deathCountText.gameObject.SetActive(true);
-                if(keyoneObject != null&&!PlayerStateList.keyReady)
+                if(keyoneObject != null)
                     keyoneObject.SetActive(true);
-                if(keytwoObject != null&&!PlayerStateList.keyReady)
+                if(keytwoObject != null)
                     keytwoObject.SetActive(true);
                 
                 break;

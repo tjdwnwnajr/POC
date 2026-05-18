@@ -3547,12 +3547,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 475473972}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
-  m_LocalPosition: {x: 41.28, y: 2.9, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
+  m_LocalPosition: {x: 0.06803894, y: 4.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1593508689}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!1 &639049744
 GameObject:
@@ -22963,6 +22963,7 @@ MonoBehaviour:
   completeUI: {fileID: 0}
   uiDuration: 2
   keyObj: {fileID: 0}
+  alreadyOpened: 0
 --- !u!61 &1374174955
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23419,15 +23420,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorTriggerInteraction
   _doorToSpawnTo: 1
   _sceneToLoad:
-    _sceneAsset: {fileID: 102900000, guid: 33498d63d8222f641a7513ce65cb3f82, type: 3}
-    _sceneName: SjScene
+    _sceneAsset: {fileID: 102900000, guid: 4725d65c946c4e346800ba985905a87a, type: 3}
+    _sceneName: SjScene 1
   isBox: 0
   isForRespawn: 0
   CurrentDoorPosition: 2
-  _doorType: 3
+  _doorType: 2
   completeUI: {fileID: 0}
   uiDuration: 2
   keyObj: {fileID: 0}
+  alreadyOpened: 0
 --- !u!61 &1593508687
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23545,6 +23547,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 475473974}
   - {fileID: 1119262255}
   m_Father: {fileID: 1358768554}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -23564,7 +23567,7 @@ MonoBehaviour:
   interactionUI: {fileID: 0}
   isDevice: 0
   isDone: 0
---- !u!43 &1657922290
+--- !u!43 &1625280280
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -26137,6 +26140,7 @@ MonoBehaviour:
   completeUI: {fileID: 0}
   uiDuration: 2
   keyObj: {fileID: 0}
+  alreadyOpened: 0
 --- !u!61 &2001232537
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -28816,7 +28820,6 @@ SceneRoots:
   - {fileID: 1358768554}
   - {fileID: 423952244}
   - {fileID: 1860263644}
-  - {fileID: 475473974}
   - {fileID: 122401473}
   - {fileID: 2032329869}
   - {fileID: 1338575276}

@@ -33,6 +33,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Room1toDream1.unity
     guid: e89ac48dfc5c43a4b8624e68cfef80cc
   - enabled: 1
+    path: Assets/Scenes/SjScene 1.unity
+    guid: 4725d65c946c4e346800ba985905a87a
+  - enabled: 1
     path: Assets/Scenes/ElevatorArrival.unity
     guid: b429f4e9059f0534f9c263139d724300
   - enabled: 1

@@ -46,6 +46,7 @@ public class DoorTriggerInteraction : TriggerInteractionBase
     [SerializeField] private GameObject completeUI;
     [SerializeField] private float uiDuration = 2f;
     [SerializeField] private GameObject keyObj;
+    [SerializeField] private bool alreadyOpened = false;
 
     protected override void Start()
     {
@@ -97,7 +98,8 @@ public class DoorTriggerInteraction : TriggerInteractionBase
         //열쇠를 찾는 애니메이션 재생
         Animator anim = GetComponent<Animator>();
         //상자 여는 소리
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.chest, transform, 1f);
+        if(!alreadyOpened)
+            SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.chest, transform, 1f);
 
         anim.SetTrigger("isOpen");
         yield return new WaitForSeconds(0.1f);

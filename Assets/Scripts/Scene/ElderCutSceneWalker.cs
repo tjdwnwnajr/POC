@@ -156,6 +156,10 @@ public class ElderCutsceneWalker : MonoBehaviour
             float newY = Mathf.Lerp(startPos.y, goalY, elapsed / duration);
             float newX = Mathf.Lerp(startPos.x, goalX, elapsed / duration);
             transform.position = new Vector3(newX, newY, transform.position.z);
+            if(newX <= goalX + 0.2f)
+            {
+                anim.SetBool("isWalk", false);
+            }
             yield return null;
         }
 
