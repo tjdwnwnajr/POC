@@ -62,4 +62,14 @@ public class NextScene : MonoBehaviour
     {
         SceneFadeManager.instance.StartFadeOut();
     }
+    public void SceneChange()
+    {
+        SceneManager.LoadScene(nextScene);
+        if (selectBrightOut)
+        {
+            SceneBrightManager.instance.StartBrightIn();
+        }
+        else
+            SceneFadeManager.instance.StartFadeIn();
+    }
 }
