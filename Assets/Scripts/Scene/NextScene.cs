@@ -72,4 +72,8 @@ public class NextScene : MonoBehaviour
         else
             SceneFadeManager.instance.StartFadeIn();
     }
+    public void BGMChange2Ending()
+    {
+               BGMplayandstop.instance.SwitchBGMtoEnding();
+    }
 }

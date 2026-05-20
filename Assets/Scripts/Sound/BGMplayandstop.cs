@@ -4,6 +4,7 @@ using System.Collections;
 
 public class BGMplayandstop : MonoBehaviour
 {
+    public static BGMplayandstop instance { get; private set; }
     [SerializeField] private AudioClip clip1;
     [SerializeField] private AudioClip clip2;
     [SerializeField] private AudioClip endingclip;
@@ -23,7 +24,10 @@ public class BGMplayandstop : MonoBehaviour
 
     private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -120,4 +124,5 @@ public class BGMplayandstop : MonoBehaviour
             if (s == sceneName) return true;
         return false;
     }
+    
 }

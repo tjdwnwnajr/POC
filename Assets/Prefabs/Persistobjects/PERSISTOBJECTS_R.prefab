@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   clip1: {fileID: 8300000, guid: 8f1721c93a5851546817e63efb47c96b, type: 3}
   clip2: {fileID: 8300000, guid: 0209b4e0511eecc4ba86a50ce85bb17e, type: 3}
-  endingclip: {fileID: 8300000, guid: 080105570976d7a4d820feb63a0a13e5, type: 3}
+  endingclip: {fileID: 8300000, guid: fa685187724dd1349a0f15b187bd55d0, type: 3}
   bgm2Scenes:
   - firstDream
   - Jwtest
