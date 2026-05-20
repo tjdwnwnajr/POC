@@ -180,6 +180,7 @@ public class OpenLastDoor : TriggerInteractionBase
     }
     private IEnumerator doorOff()
     {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.wall, transform, 0.5f);
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.key, transform, 0.5f);
         //yield return new WaitForSeconds(3f);
         CameraEventManager.instance.CameraShakeEvent(profile, impulseSource);

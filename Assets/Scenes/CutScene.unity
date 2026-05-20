@@ -625,6 +625,8 @@ MonoBehaviour:
   - 22
   typeWriter: {fileID: 361312928}
   walker: {fileID: 0}
+  bubble: {fileID: 0}
+  isCutSceneCanInput: 0
   skipEntries: []
 --- !u!1 &959399357
 GameObject:
