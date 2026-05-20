@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 // sideAttackArea, upAttackArea, downAttackArea, damage
 {   // �̵����� ����
 
+    private GameObject speechBubble;
 
     [SerializeField] private float walkTerm; // 발걸음 소리 간격
     private Rigidbody2D rb;
@@ -156,6 +157,15 @@ public class PlayerController : MonoBehaviour
         gravity = rb.gravityScale;
         _fallSpeedYDampingChangeThreshold = CameraManager.Instance._fallSpeedYDampingChangeThresholde;
         PlaySoundOn();
+        foreach (Transform child in GetComponentsInChildren<Transform>(true))
+        {
+            if (child.CompareTag("SpeechBubble"))
+            {
+                speechBubble = child.gameObject;
+                break;
+            }
+        }
+
     }
 
     private void FixedUpdate()
@@ -340,6 +350,17 @@ public class PlayerController : MonoBehaviour
             PlayerStateList.lookingRight = !PlayerStateList.lookingRight;
            
             //_cameraFollowObject.CallTurn();
+        }
+        if (speechBubble != null)
+        {
+            Vector3 bubbleRot = speechBubble.transform.localEulerAngles;
+            bubbleRot.y = PlayerStateList.lookingRight ? 0f : 180f;
+            speechBubble.transform.localEulerAngles = bubbleRot;
+
+            // 
+            Vector3 bubblePos = speechBubble.transform.localPosition;
+            bubblePos.x = PlayerStateList.lookingRight ? Mathf.Abs(bubblePos.x) : -Mathf.Abs(bubblePos.x);
+            speechBubble.transform.localPosition = bubblePos;
         }
     }
 
