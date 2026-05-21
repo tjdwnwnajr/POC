@@ -3,15 +3,15 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 /// <summary>
-/// ¿£µù ÄÆ¾À - ³ëÀÎÀÌ ¹® ¿À¸¥ÂÊ¿¡¼­ °É¾î¿Í ¸ØÃß´Â ÄÄÆ÷³ÍÆ®
+/// ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¾ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½É¾ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 /// 
-/// [Unity ¼¼ÆÃ ¹æ¹ý]
-/// 1. ³ëÀÎ ¿ÀºêÁ§Æ®¿¡ ÀÌ ÄÄÆ÷³ÍÆ® Ãß°¡
-/// 2. PlayableDirector°¡ ÀÖ´Â ¿ÀºêÁ§Æ®ÀÇ SignalReceiver¿¡ ¿¬°á
+/// [Unity ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½]
+/// 1. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
+/// 2. PlayableDirectorï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ SignalReceiverï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 /// 3. Timeline Signal Track:
-///    - "OldManStartWalk" ¡æ OldManCutsceneWalker.StartWalking()
-///    - "OldManStopWalk"  ¡æ OldManCutsceneWalker.StopWalking()
-///    - "OldManEnterDoor" ¡æ OldManCutsceneWalker.EnterDoor()
+///    - "OldManStartWalk" ï¿½ï¿½ OldManCutsceneWalker.StartWalking()
+///    - "OldManStopWalk"  ï¿½ï¿½ OldManCutsceneWalker.StopWalking()
+///    - "OldManEnterDoor" ï¿½ï¿½ OldManCutsceneWalker.EnterDoor()
 /// </summary>
 public class ElderCutsceneWalker : MonoBehaviour
 {
@@ -21,10 +21,10 @@ public class ElderCutsceneWalker : MonoBehaviour
     [SerializeField] private float walkTerm = 0.4f;
     [SerializeField] private float appearDelay = 0.5f;
     [SerializeField] private PlayableDirector director;
-    
+    [SerializeField] private BoxCollider2D col;
 
     [Header("Stop Points")]
-    [SerializeField] private Transform[] stopPoints; // ÀÎ½ºÆåÅÍ¿¡¼­ ¼ø¼­´ë·Î ÁöÁ¤
+    [SerializeField] private Transform[] stopPoints; // ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private float stopDistance = 0.1f;
     private int currentStopIndex = 0;
 
@@ -40,10 +40,14 @@ public class ElderCutsceneWalker : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (anim == null) anim = GetComponent<Animator>();
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();   
+        col = GetComponent<BoxCollider2D>();
     }
 
     private void Start()
-    {
+    {   
+        
+        col.enabled = false;
+        isWalking = false;
         spriteRenderer.color = new Color(1f, 1f, 1f, 0f);
         SetFacingDirection();
         StartCoroutine(PlayWalkSoundLoop());
@@ -78,6 +82,9 @@ public class ElderCutsceneWalker : MonoBehaviour
     }
     IEnumerator Appear()
     {
+        
+        col.enabled = true;
+        
         float duration = appearDelay;
         float elapsed = 0f;
         float alpha = 0f;
@@ -126,7 +133,7 @@ public class ElderCutsceneWalker : MonoBehaviour
         isWalking = false;
         rb.linearVelocity = new Vector2(0f, rb.linearVelocityY);
         anim.SetBool("isWalk", false);
-        // ´ëÈ­´Â Timeline SignalÀÌ µû·Î Ã³¸®
+        // ï¿½ï¿½È­ï¿½ï¿½ Timeline Signalï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     }
 
     public void KeepWalking()
