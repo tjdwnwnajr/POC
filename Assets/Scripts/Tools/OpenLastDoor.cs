@@ -79,8 +79,8 @@ public class OpenLastDoor : TriggerInteractionBase
             {
                 InputManager.DeactivatePlayerControls();
                 isTriggered = true;
-                
-               
+
+
 
                 
                 if (doorRenderer != null)
@@ -102,6 +102,7 @@ public class OpenLastDoor : TriggerInteractionBase
             {
                 InputManager.DeactivatePlayerControls();
                 isTriggered = true;
+                BGMplayandstop.instance.SwitchBGMtoEnding();
                 StartCoroutine(BirghtOutAndTheEnd());
                 
             }
@@ -180,6 +181,7 @@ public class OpenLastDoor : TriggerInteractionBase
     }
     private IEnumerator doorOff()
     {
+        
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.wall, transform, 0.5f);
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.key, transform, 0.5f);
         //yield return new WaitForSeconds(3f);
@@ -203,7 +205,7 @@ public class OpenLastDoor : TriggerInteractionBase
             doorminimap.SetActive(false);
         uiObj.isDone = true;
         StartCoroutine(ActivateControll());
-    }
+    } 
     private IEnumerator BirghtOutAndTheEnd() {
         InputManager.DeactivatePlayerControls();
         uiObj.isDone = true;
