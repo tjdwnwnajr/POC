@@ -58,6 +58,7 @@ public class OpenLastDoor : TriggerInteractionBase
     [Header("UISettings")]
     [SerializeField] private UITriggerObject uiObj;
     [SerializeField] private PlayableDirector director;
+    [SerializeField] private GameObject changeBGM;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
@@ -102,7 +103,12 @@ public class OpenLastDoor : TriggerInteractionBase
             {
                 InputManager.DeactivatePlayerControls();
                 isTriggered = true;
-                BGMplayandstop.instance.SwitchBGMtoEnding();
+                if (changeBGM != null)
+                {
+                    PlayableDirector d = changeBGM.GetComponent<PlayableDirector>();
+                    d.Play();
+                }
+                
                 StartCoroutine(BirghtOutAndTheEnd());
                 
             }
@@ -123,7 +129,7 @@ public class OpenLastDoor : TriggerInteractionBase
     {
         if (doorRenderer != null)
         {
-            if (doorRenderer.color.a == 0f)
+            if (doorRenderer.color.a <= 0.01f)
             {
                 return true;
             }
@@ -208,11 +214,14 @@ public class OpenLastDoor : TriggerInteractionBase
     } 
     private IEnumerator BirghtOutAndTheEnd() {
         InputManager.DeactivatePlayerControls();
-        uiObj.isDone = true;
+        if(uiObj !=null)
+            uiObj.isDone = true;
+
         if(doorAnim != null)
         {
             doorAnim.SetTrigger("isOpen");
         }
+        
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.SFX.door, transform, 0.8f);
         yield return new WaitForSeconds(4f);
         director.Play();

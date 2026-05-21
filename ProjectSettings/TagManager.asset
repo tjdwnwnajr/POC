@@ -12,6 +12,7 @@ TagManager:
   - Canvas
   - DDOL
   - SpeechBubble
+  - Music
   layers:
   - Default
   - TransparentFX

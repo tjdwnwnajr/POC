@@ -40,7 +40,7 @@ public class UITriggerObject : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         playerInRange = true;
-        if(isDevice&&!device !=null){
+        if(isDevice&& device !=null){
                 if(!device.ShowUITrigger) return;
         }
         if (!hasShownOnce)

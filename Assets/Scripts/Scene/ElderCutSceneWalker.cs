@@ -44,8 +44,8 @@ public class ElderCutsceneWalker : MonoBehaviour
     }
 
     private void Start()
-    {   
-        
+    {
+        rb.bodyType = RigidbodyType2D.Static;
         col.enabled = false;
         isWalking = false;
         spriteRenderer.color = new Color(1f, 1f, 1f, 0f);
@@ -84,7 +84,7 @@ public class ElderCutsceneWalker : MonoBehaviour
     {
         
         col.enabled = true;
-        
+        rb.bodyType = RigidbodyType2D.Dynamic;
         float duration = appearDelay;
         float elapsed = 0f;
         float alpha = 0f;
