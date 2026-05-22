@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class FadeInText : MonoBehaviour
 {
@@ -70,7 +71,8 @@ public class FadeInText : MonoBehaviour
         yield return new WaitForSeconds(statsFadeIn);
 
         // 4. THE END + 스탯 모두 유지
-        yield return new WaitForSeconds(statsHold);
+        //yield return new WaitForSeconds(statsHold);
+        yield return new WaitUntil(() => Gamepad.current != null && Gamepad.current.buttonWest.wasPressedThisFrame);
 
         // 5. THE END + 스탯 동시 페이드 아웃
         StartCoroutine(FadeText(text, 1f, 0f, statsFadeOut));
