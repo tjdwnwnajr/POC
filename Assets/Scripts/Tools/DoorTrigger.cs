@@ -121,6 +121,7 @@ public class DoorTrigger : MonoBehaviour
 
         PlayerStateList.canMove = true;
         PlayerStateList.isView = false;
+        PlayerStateList.isDialogue = false;
     }
 
     public void OnClickYes()

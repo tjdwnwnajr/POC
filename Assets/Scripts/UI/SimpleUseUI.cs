@@ -44,9 +44,10 @@ public class SimpleUseUI : MonoBehaviour
 
     private void CloseUI()
     {
+        PlayerStateList.isDialogue = false;
         PlayerStateList.canMove = true;
         PlayerStateList.isView = false;
-        PlayerStateList.isDialogue = false;
+        
         gameObject.SetActive(false);
     }
 }
