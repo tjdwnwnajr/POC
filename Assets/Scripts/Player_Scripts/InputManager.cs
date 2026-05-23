@@ -48,6 +48,12 @@ public class InputManager : MonoBehaviour
     //Setting Open and close
     public static bool settingOpenPressed;
 
+    //for bug
+    public static bool l2IsHeld;
+    public static bool setwasPressed;
+    private InputAction _l2Action;
+    private InputAction _setAction;
+
     private InputAction _moveAction;
     private InputAction _jumpAction;
     private InputAction _runAction;
@@ -91,6 +97,8 @@ public class InputManager : MonoBehaviour
         _mapAction = PlayerInput.actions["Map"];
         _mapSizeAction = PlayerInput.actions["MapSize"];
         _settingOpentAction = PlayerInput.actions["Setting"];
+        _l2Action = PlayerInput.actions["L2"];
+        _setAction = PlayerInput.actions["Set"];
     }
 
     // Update is called once per frame
@@ -134,6 +142,9 @@ public class InputManager : MonoBehaviour
         MapSizeDirection = _mapSizeAction.ReadValue<Vector2>();
 
         settingOpenPressed = _settingOpentAction.WasPressedThisFrame();
+
+        l2IsHeld = _l2Action.IsPressed();
+        setwasPressed = _setAction.WasPressedThisFrame();
 
         if (resetPressed)
         {
