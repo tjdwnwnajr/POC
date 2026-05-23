@@ -174,9 +174,20 @@ public class InputManager : MonoBehaviour
     public static void DeactivatePlayerControls()
     {
         PlayerInput.currentActionMap.Disable();
-     
+
+    }
+    public static void DeactivateUseAction()
+    {
+        PlayerInput.actions["Use"].Disable();
+        Debug.Log("사용 비활성");
+    }
+    public static void ActivateUseAction()
+    {
+        if (InputManager.PlayerInput != null)
+            PlayerInput.actions["Use"].Enable();
     }
     
+
     public static void ResetInputValues()
     {
         Movement = Vector2.zero;

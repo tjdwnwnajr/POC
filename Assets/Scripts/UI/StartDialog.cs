@@ -37,6 +37,7 @@ public class StartDialog : MonoBehaviour
     {
         if (!hasAutoStartedOnce && pendingAutoStart && player.Grounded() && !dialogSystem.isDialogActive)
         {
+            if (MapManager.instance.IsLargeMapOpen) return;
             pendingAutoStart = false;
             hasAutoStartedOnce = true;
             interactionUI.SetActive(false);
@@ -46,6 +47,7 @@ public class StartDialog : MonoBehaviour
 
         if (hasAutoStartedOnce && isPlayerInside && !dialogSystem.isDialogActive)
         {
+            if (MapManager.instance.IsLargeMapOpen) return;
             interactionUI.SetActive(true);
 
             if (useAction.WasPressedThisFrame())

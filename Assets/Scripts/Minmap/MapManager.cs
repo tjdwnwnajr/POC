@@ -61,6 +61,7 @@ public class MapManager : MonoBehaviour
         if (PlayerStateList.mapRotation)
             return;
         PlayerStateList.mapOpen = true;
+        InputManager.DeactivateUseAction();
         Time.timeScale = 0f;
         PlayerStateList.isView = true;
         _largeMap.SetActive(true);
@@ -69,6 +70,7 @@ public class MapManager : MonoBehaviour
     public void CloseLargeMap()
     {
         PlayerStateList.mapOpen = false;
+        InputManager.ActivateUseAction();
         Time.timeScale = 1f;
         PlayerStateList.isView = false;
         _largeMap.SetActive(false);

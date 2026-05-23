@@ -46,6 +46,7 @@ public class DialogSystem : MonoBehaviour
 
     public void StartDialog()
     {
+        if (MapManager.instance.IsLargeMapOpen) return;
         if (isDialogActive || isExitCooldown) return;
 
         isDialogActive = true;
