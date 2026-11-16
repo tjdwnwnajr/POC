@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class CameraControlTrigger : MonoBehaviour
 {
-    public CustomInspectorOvjects customInspectorObjects;
+    public CustomInspectorObjects customInspectorObjects;
 
     private Collider2D _coll;
     private void Start()
@@ -48,7 +48,7 @@ public class CameraControlTrigger : MonoBehaviour
     }
 }
 [System.Serializable]
-public class CustomInspectorOvjects
+public class CustomInspectorObjects
 {
 
     public bool swapCameras = false;
